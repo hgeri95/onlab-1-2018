@@ -1,8 +1,0 @@
-bme\cateringunitmonitor\entities\user\entity\UserInfo.class
-bme\cateringunitmonitor\entities\BaseDTO.class
-bme\cateringunitmonitor\entities\user\entity\Gender.class
-bme\cateringunitmonitor\entities\user\entity\User.class
-bme\cateringunitmonitor\entities\cateringunit\entity\opening\Opening.class
-bme\cateringunitmonitor\entities\cateringunit\entity\CateringUnit.class
-bme\cateringunitmonitor\entities\BaseEntity.class
-bme\cateringunitmonitor\entities\cateringunit\entity\category\CategoryParameters.class
