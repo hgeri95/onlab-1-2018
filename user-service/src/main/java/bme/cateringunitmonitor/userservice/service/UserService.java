@@ -1,4 +1,4 @@
-package bme.cateringunitmonitor.userservice;
+package bme.cateringunitmonitor.userservice.service;
 
 import bme.cateringunitmonitor.entities.user.entity.User;
 import bme.cateringunitmonitor.userservice.exception.UserServiceException;
@@ -30,8 +30,8 @@ public class UserService {
 
     public User create(User user) {
         logger.debug("User to create: {}", user.getUsername());
-        if (userRepository.exists(user)) {
-            throw new UserServiceException("User already exist.");
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new UserServiceException("User already exists.");
         }
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -40,16 +40,28 @@ public class UserService {
             throw new IllegalArgumentException(violations.toString());
         }
 
-        String encodedPassworg = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassworg);
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
 
         logger.debug("User {} created", user.getUsername());
-        return user;
+        return userRepository.save(user);
+    }
+
+    public int delete(User user) {
+        logger.debug("User to delete: {}", user.getUsername());
+
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            logger.debug("User {} deleted", user.getUsername());
+            return userRepository.deleteByUsername(user.getUsername());
+        } else {
+            throw new UserServiceException("User does not exist: " + user.getUsername());
+        }
     }
 
     public User login(User user) {
         logger.debug("Login user: {}", user.getUsername());
         User savedUser = userRepository.findByUsername(user.getUsername());
+
         if (savedUser != null) {
             if (passwordEncoder.matches(user.getPassword(), savedUser.getPassword())) {
                 return savedUser;
@@ -59,5 +71,9 @@ public class UserService {
         } else {
             throw new BadCredentialsException("User does not exist: " + user.getUsername());
         }
+    }
+
+    public User findUser(String username) {
+        return userRepository.findByUsername(username);
     }
 }

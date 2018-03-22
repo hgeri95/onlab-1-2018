@@ -1,4 +1,6 @@
 package bme.cateringunitmonitor.entities.cateringunit.entity.category;
 
-public class CategoryParameters {
+import java.io.Serializable;
+
+public class CategoryParameters implements Serializable {
 }
