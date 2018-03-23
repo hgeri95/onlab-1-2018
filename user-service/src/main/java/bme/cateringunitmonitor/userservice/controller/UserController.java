@@ -19,4 +19,6 @@ public class UserController {
     public void signUp(@RequestBody User user) {
         userService.create(user);
     }
+
+    //TODO GetUserInfo, SetUserInfo
 }

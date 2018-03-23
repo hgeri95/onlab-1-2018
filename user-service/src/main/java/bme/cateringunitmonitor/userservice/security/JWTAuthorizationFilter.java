@@ -31,7 +31,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .setSigningKey(SecurityConstants.SECRET)
                     .parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, ""))
                     .getBody()
-                    .getSubject();
+                    .getSubject();//TODO Test it @ Check exception if token is bad
 
             UsernamePasswordAuthenticationToken authenticationToken = null;
             if (username != null) {
