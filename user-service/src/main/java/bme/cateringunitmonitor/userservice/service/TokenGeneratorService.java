@@ -2,6 +2,7 @@ package bme.cateringunitmonitor.userservice.service;
 
 import bme.cateringunitmonitor.entities.user.api.LoginResponse;
 import bme.cateringunitmonitor.entities.user.entity.User;
+import bme.cateringunitmonitor.userservice.security.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.time.DateUtils;
@@ -14,13 +15,8 @@ import java.util.List;
 
 public class TokenGeneratorService {
 
-    private static final String symbols = "ABCDEFGJKLMNPRSTUVWXYZ0123456789";
-
     @Value("${jwt.accessTokenValidity.minutes:1}")
     private int accessTokenValidity;
-
-    @Value("${jwt.secret}")
-    private String secret;
 
     @Value("${jwt.refreshTokenLength:16}")
     private int refreshTokenLength;
@@ -36,10 +32,11 @@ public class TokenGeneratorService {
         Date tokenExpireDate = DateUtils.addMinutes(now, accessTokenValidity);
 
         String token = Jwts.builder()
+                .setSubject(user.getUsername())
                 .setExpiration(tokenExpireDate)
-                .claim("ROLES", roles)
-                .claim("USERNAME", user.getUsername())
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
+                .claim(SecurityConstants.ROLES_KEY, roles)
+                .claim(SecurityConstants.USERNAME_KEY, user.getUsername())
+                .signWith(SignatureAlgorithm.HS256, SecurityConstants.SECRET).compact();
 
         String refreshToken = generateRandomSecureString(refreshTokenLength);
         Date refreshTokenExpireDate = DateUtils.addMinutes(now, refreshTokenValidity);
@@ -57,7 +54,8 @@ public class TokenGeneratorService {
 
         char[] buffer = new char[length];
         for (int i = 0; i < buffer.length; i++) {
-            buffer[i] = symbols.charAt(secureRandom.nextInt(symbols.length()));
+            buffer[i] = SecurityConstants.SYMBOLS.charAt(
+                    secureRandom.nextInt(SecurityConstants.SYMBOLS.length()));
         }
 
         return new String(buffer);

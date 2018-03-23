@@ -36,7 +36,7 @@ public class AuthService {
         tokenService.invalidateToken(username);
     }
 
-    public LoginResponse refresh(AuthRefreshRequest refreshRequest) throws AuthServiceException {
+    public LoginResponse refresh(AuthRefreshRequest refreshRequest) {
         logger.debug("Refresh token for user: {}", refreshRequest.getUsername());
 
         Date now = new Date();

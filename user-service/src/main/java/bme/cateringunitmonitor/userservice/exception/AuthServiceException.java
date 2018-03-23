@@ -1,15 +1,23 @@
 package bme.cateringunitmonitor.userservice.exception;
 
-import javax.naming.AuthenticationException;
+public class AuthServiceException extends RuntimeException {
 
-public class AuthServiceException extends AuthenticationException {
-
-    public AuthServiceException(String explanation) {
-        super(explanation);
+    public AuthServiceException() {
     }
 
-    @Override
-    public String getExplanation() {
-        return super.getExplanation();
+    public AuthServiceException(String message) {
+        super(message);
+    }
+
+    public AuthServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public AuthServiceException(Throwable cause) {
+        super(cause);
+    }
+
+    public AuthServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
