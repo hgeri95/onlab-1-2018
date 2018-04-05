@@ -7,12 +7,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class TokenGeneratorService {
 
     @Value("${jwt.accessTokenValidity.minutes:1}")
@@ -21,18 +23,17 @@ public class TokenGeneratorService {
     @Value("${jwt.refreshTokenLength:16}")
     private int refreshTokenLength;
 
-    @Value("${jwt.refreshTokenValidity.minutes}")
+    @Value("${jwt.refreshTokenValidity.minutes:100}")
     private int refreshTokenValidity;
 
     public LoginResponse createTokens(User user) {
-        List<String> roles = new ArrayList<>();
-        user.getRoles().forEach(role -> roles.add(role.getRoleName()));
+        List<String> roles = user.getRoles();
 
         Date now = new Date();
         Date tokenExpireDate = DateUtils.addMinutes(now, accessTokenValidity);
 
         String token = Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(String.valueOf(user.getId()))
                 .setExpiration(tokenExpireDate)
                 .claim(SecurityConstants.ROLES_KEY, roles)
                 .claim(SecurityConstants.USERNAME_KEY, user.getUsername())

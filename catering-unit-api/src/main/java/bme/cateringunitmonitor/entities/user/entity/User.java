@@ -28,7 +28,7 @@ public class User implements Serializable {
     private String password;
 
     @ElementCollection(targetClass = Role.class)
-    private List<Role> roles;
+    private List<String> roles;
 
     public User() {
     }
@@ -39,7 +39,7 @@ public class User implements Serializable {
         this.roles = new ArrayList<>();
     }
 
-    public User(String username, String password, List<Role> roles) {
+    public User(String username, String password, List<String> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;

@@ -25,7 +25,7 @@ public class AuthService {
     private TokenService tokenService;
 
     public LoginResponse authenticate(LoginRequest loginRequest) {
-        logger.debug("Authenticating for user: {}", loginRequest.getUsername());
+        logger.debug("Authenticating user: {}", loginRequest.getUsername());
 
         User user = userService.login(new User(loginRequest.getUsername(), loginRequest.getPassword()));
         return tokenService.generateAndStoreTokens(user);
@@ -36,7 +36,7 @@ public class AuthService {
         tokenService.invalidateToken(username);
     }
 
-    public LoginResponse refresh(AuthRefreshRequest refreshRequest) {
+    public LoginResponse refresh(AuthRefreshRequest refreshRequest) throws AuthServiceException {
         logger.debug("Refresh token for user: {}", refreshRequest.getUsername());
 
         Date now = new Date();
