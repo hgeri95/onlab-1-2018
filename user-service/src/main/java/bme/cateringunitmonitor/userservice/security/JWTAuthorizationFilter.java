@@ -1,8 +1,9 @@
 package bme.cateringunitmonitor.userservice.security;
 
 import io.jsonwebtoken.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -11,10 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+
+    private static Logger logger = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -24,34 +26,32 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         String header = request.getHeader(SecurityConstants.HEADER_STRING);
+        logger.debug("Authorization header in request: {}", header);
 
         if (header != null && header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             final String token = header.substring(SecurityConstants.TOKEN_PREFIX.length());
+            logger.debug("Token in header: {}", token);
+            UserAuthentication authentication = getAuthentication(token);
 
-            UsernamePasswordAuthenticationToken authentication = getAuthentication(token);
-
+            logger.debug("Set security context: {}", authentication.toString());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(request, response);
+            //  SecurityContextHolder.getContext().setAuthentication(null);
         } else {
             chain.doFilter(request, response);
             SecurityContextHolder.getContext().setAuthentication(null);
         }
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(String token) {
+    private UserAuthentication getAuthentication(String token) {
         if (token != null) {
             try {
                 final Claims claims = Jwts.parser()
                         .setSigningKey(SecurityConstants.SECRET)
-                        .parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, ""))
+                        .parseClaimsJws(token)
                         .getBody();
-                String username = claims.getSubject();
-                //TODO extend with expDate, rigths...
-                if (username != null) {
-                    return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
-                } else {
-                    return null;
-                }
+
+                return new UserAuthentication(claims);
             } catch (SignatureException ex) {
                 logger.error("Invalid JWT signature");
             } catch (MalformedJwtException ex) {

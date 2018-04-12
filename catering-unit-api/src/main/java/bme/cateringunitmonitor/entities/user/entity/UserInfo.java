@@ -39,7 +39,7 @@ public class UserInfo implements Serializable {
     }
 
     public UserInfo(String username, String firstName, String lastName, String address, String email,
-        Date birthDate, Gender gender) {
+                    Date birthDate, Gender gender) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;

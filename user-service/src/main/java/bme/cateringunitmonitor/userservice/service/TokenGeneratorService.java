@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class TokenGeneratorService {
     @Value("${jwt.refreshTokenLength:16}")
     private int refreshTokenLength;
 
-    @Value("${jwt.refreshTokenValidity.minutes:100}")
+    @Value("${jwt.refreshTokenValidity.minutes:10}")
     private int refreshTokenValidity;
 
     public LoginResponse createTokens(User user) {

@@ -1,7 +1,9 @@
 package bme.cateringunitmonitor.userservice.service;
 
 import bme.cateringunitmonitor.entities.user.entity.User;
+import bme.cateringunitmonitor.entities.user.entity.UserInfo;
 import bme.cateringunitmonitor.userservice.exception.UserServiceException;
+import bme.cateringunitmonitor.userservice.repository.UserInfoRepository;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -75,5 +80,13 @@ public class UserService {
 
     public User findUser(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public UserInfo setUserInfo(UserInfo userInfo) {
+        return userInfoRepository.save(userInfo);
+    }
+
+    public UserInfo getUserInfo(String username) {
+        return userInfoRepository.findByUsername(username);
     }
 }

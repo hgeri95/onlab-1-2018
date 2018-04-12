@@ -1,18 +1,17 @@
 package bme.cateringunitmonitor.userservice.controller;
 
+import bme.cateringunitmonitor.entities.user.api.UserInfoRequest;
 import bme.cateringunitmonitor.entities.user.entity.User;
+import bme.cateringunitmonitor.entities.user.entity.UserInfo;
+import bme.cateringunitmonitor.userservice.security.SecurityUtil;
 import bme.cateringunitmonitor.userservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import javax.management.relation.Role;
 import java.util.Collections;
 
 @RestController
@@ -25,15 +24,38 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/sign-up")
-    @Secured("ROLE_ADMIN") //TODO Anybody
-    public void signUp(@RequestBody User user) {
-        userService.create(user);
+    public User signUp(@RequestBody User user) {
+        logger.debug("Sign up new user: {}", user);
+        return userService.create(user);
+    }
+
+    @PostMapping("/userinfo")
+    @Secured("ROLE_USER")
+    public UserInfo setUserInfo(@RequestBody UserInfoRequest userInfoRequest) {
+        logger.debug("Set user info: {}", userInfoRequest);
+        String activeUser = SecurityUtil.getActiveUser();
+        UserInfo userInfo = new UserInfo(
+                activeUser,
+                userInfoRequest.getFirstName(),
+                userInfoRequest.getLastName(),
+                userInfoRequest.getAddress(),
+                userInfoRequest.getEmail(),
+                userInfoRequest.getBirthDate(),
+                userInfoRequest.getGender()
+        );
+
+        return userService.setUserInfo(userInfo);
+    }
+
+    @GetMapping("/userinfo")
+    public UserInfo getUserInfo() {
+        String activeUser = SecurityUtil.getActiveUser();
+        return userService.getUserInfo(activeUser);
     }
 
     @PostConstruct
     public void createDefaultAdminUser() {
         userService.create(new User("admin", "12345", Collections.singletonList("ROLE_ADMIN")));
-        logger.info("ADMIN USER CREATED: admin 12345");
+        logger.info("\n////////\n////////\nADMIN USER CREATED: admin 12345\n////////\n////////");
     }
-    //TODO GetUserInfo, SetUserInfo
 }

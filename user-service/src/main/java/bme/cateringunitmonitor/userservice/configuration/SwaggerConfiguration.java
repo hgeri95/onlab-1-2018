@@ -19,11 +19,13 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
+    private static final String AUTHORIZATION = "Authorization";
+
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Lists.newArrayList(new SecurityReference("Authorization", authorizationScopes));
+        return Lists.newArrayList(new SecurityReference(AUTHORIZATION, authorizationScopes));
     }
 
     private SecurityContext securityContext() {
@@ -33,7 +35,7 @@ public class SwaggerConfiguration {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Authorization", "header");
+        return new ApiKey(AUTHORIZATION, AUTHORIZATION, "header");
     }
 
     @Bean
