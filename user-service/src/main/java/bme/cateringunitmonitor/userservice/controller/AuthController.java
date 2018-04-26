@@ -27,6 +27,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) {
+        logger.debug("Login with user: {}", loginRequest.getUsername());
         try {
             return ResponseEntity.ok(authService.authenticate(loginRequest));
         } catch (AuthServiceException ex) {
@@ -37,6 +38,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity logout() {
         String activeUser = SecurityUtil.getActiveUser();
+        logger.debug("Logout with user: {}", activeUser);
         authService.logout(activeUser);
         return ResponseEntity.ok().build();
 
@@ -44,6 +46,7 @@ public class AuthController {
 
     @PostMapping("refresh")
     public ResponseEntity refresh(@RequestBody AuthRefreshRequest authRefreshRequest) {
+        logger.debug("Refresh token for user: {}", authRefreshRequest.getUsername());
         try {
             return ResponseEntity.ok(authService.refresh(authRefreshRequest));
         } catch (AuthServiceException ex) {

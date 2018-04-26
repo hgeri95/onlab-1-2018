@@ -1,13 +1,12 @@
-package bme.cateringunitmonitor.userservice;
+package bme.cateringunitmonitor.cateringunitservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@SpringBootApplication(scanBasePackages = "bme.cateringunitmonitor.userservice")
+@SpringBootApplication(scanBasePackages = "bme.cateringunitmonitor.cateringunitservice")
 @EntityScan(basePackages = "bme.cateringunitmonitor.entities")
 public class Application {
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

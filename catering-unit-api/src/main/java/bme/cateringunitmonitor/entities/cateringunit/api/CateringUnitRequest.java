@@ -1,4 +1,4 @@
-package bme.cateringunitmonitor.entities.cateringunit.entity;
+package bme.cateringunitmonitor.entities.cateringunit.api;
 
 import bme.cateringunitmonitor.entities.cateringunit.entity.address.Address;
 import bme.cateringunitmonitor.entities.cateringunit.entity.category.CategoryParameters;
@@ -6,23 +6,13 @@ import bme.cateringunitmonitor.entities.cateringunit.entity.opening.OpeningHours
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
 @Setter
-@Entity
-public class CateringUnit implements Serializable {
+public class CateringUnitRequest implements Serializable {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -33,8 +23,8 @@ public class CateringUnit implements Serializable {
 
     private CategoryParameters categoryParameters;
 
-    public CateringUnit(String name, String description, OpeningHours openingHours, Address address,
-                        CategoryParameters categoryParameters) {
+    public CateringUnitRequest(String name, String description, OpeningHours openingHours, Address address,
+                               CategoryParameters categoryParameters) {
         this.name = name;
         this.description = description;
         this.openingHours = openingHours;
@@ -45,10 +35,9 @@ public class CateringUnit implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CateringUnit)) return false;
-        CateringUnit that = (CateringUnit) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
+        if (!(o instanceof CateringUnitRequest)) return false;
+        CateringUnitRequest that = (CateringUnitRequest) o;
+        return Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(openingHours, that.openingHours) &&
                 Objects.equals(address, that.address) &&
@@ -58,14 +47,13 @@ public class CateringUnit implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, description, openingHours, address, categoryParameters);
+        return Objects.hash(name, description, openingHours, address, categoryParameters);
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("CateringUnit{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
+        final StringBuffer sb = new StringBuffer("CateringUnitRequest{");
+        sb.append("name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", openingHours=").append(openingHours);
         sb.append(", address=").append(address);
@@ -73,5 +61,4 @@ public class CateringUnit implements Serializable {
         sb.append('}');
         return sb.toString();
     }
-    //TODO pictures
 }
