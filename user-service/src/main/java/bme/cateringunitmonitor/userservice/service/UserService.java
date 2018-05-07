@@ -1,8 +1,10 @@
 package bme.cateringunitmonitor.userservice.service;
 
+import bme.cateringunitmonitor.entities.exception.UserServiceException;
+import bme.cateringunitmonitor.entities.user.entity.Role;
 import bme.cateringunitmonitor.entities.user.entity.User;
 import bme.cateringunitmonitor.entities.user.entity.UserInfo;
-import bme.cateringunitmonitor.userservice.exception.UserServiceException;
+import bme.cateringunitmonitor.remoting.service.IUserService;
 import bme.cateringunitmonitor.userservice.repository.UserInfoRepository;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import org.slf4j.Logger;
@@ -12,13 +14,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.Collections;
 import java.util.Set;
 
 @Service
-public class UserService {
+public class UserService implements IUserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -32,6 +36,12 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
+    @PostConstruct
+    public void createDefaultAdminUser() {
+        create(new User("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN.toString())));
+        logger.info("\n////////\n////////\nADMIN USER CREATED: admin 12345\n////////\n////////");
+    }
 
     public User create(User user) {
         logger.debug("User to create: {}", user.getUsername());

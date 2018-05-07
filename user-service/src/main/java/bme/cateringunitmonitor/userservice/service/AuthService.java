@@ -1,11 +1,12 @@
 package bme.cateringunitmonitor.userservice.service;
 
+import bme.cateringunitmonitor.entities.exception.AuthServiceException;
 import bme.cateringunitmonitor.entities.user.api.AuthRefreshRequest;
 import bme.cateringunitmonitor.entities.user.api.LoginRequest;
 import bme.cateringunitmonitor.entities.user.api.LoginResponse;
 import bme.cateringunitmonitor.entities.user.entity.User;
 import bme.cateringunitmonitor.entities.user.wrapper.RefreshToken;
-import bme.cateringunitmonitor.userservice.exception.AuthServiceException;
+import bme.cateringunitmonitor.remoting.service.IAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class AuthService {
+public class AuthService implements IAuthService {
 
     private static Logger logger = LoggerFactory.getLogger(AuthService.class);
 
@@ -25,9 +26,11 @@ public class AuthService {
     private TokenService tokenService;
 
     public LoginResponse authenticate(LoginRequest loginRequest) {
-        logger.debug("Authenticating user: {}", loginRequest.getUsername());
+        logger.debug("Authenticating user: {}, {}", loginRequest.getUsername(), loginRequest.getPassword());
 
-        User user = userService.login(new User(loginRequest.getUsername(), loginRequest.getPassword()));
+        User user = userService.login(
+                new User(loginRequest.getUsername(),
+                        loginRequest.getPassword()));
         return tokenService.generateAndStoreTokens(user);
     }
 

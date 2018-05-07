@@ -1,16 +1,16 @@
 package bme.cateringunitmonitor.entities.cateringunit.entity;
 
 import bme.cateringunitmonitor.entities.cateringunit.entity.address.Address;
-import bme.cateringunitmonitor.entities.cateringunit.entity.category.CategoryParameters;
+import bme.cateringunitmonitor.entities.cateringunit.entity.category.CategoryParameter;
 import bme.cateringunitmonitor.entities.cateringunit.entity.opening.OpeningHours;
+import bme.cateringunitmonitor.entities.cateringunit.entity.opening.OpeningPerDay;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 @Getter
@@ -27,14 +27,15 @@ public class CateringUnit implements Serializable {
 
     private String description;
 
-    private OpeningHours openingHours;
+    @ElementCollection
+    private List<OpeningPerDay> openingHours;
 
     private Address address;
 
-    private CategoryParameters categoryParameters;
+    @ElementCollection
+    private List<CategoryParameter> categoryParameters;
 
-    public CateringUnit(String name, String description, OpeningHours openingHours, Address address,
-                        CategoryParameters categoryParameters) {
+    public CateringUnit(String name, String description, List<OpeningPerDay> openingHours, Address address, List<CategoryParameter> categoryParameters) {
         this.name = name;
         this.description = description;
         this.openingHours = openingHours;
@@ -73,5 +74,6 @@ public class CateringUnit implements Serializable {
         sb.append('}');
         return sb.toString();
     }
+
     //TODO pictures
 }

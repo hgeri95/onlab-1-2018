@@ -29,4 +29,16 @@ public class LoginResponse implements Serializable {
         this.refreshTokenExpireDate = refreshTokenExpireDate;
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("LoginResponse{");
+        sb.append("accessToken='").append(accessToken).append('\'');
+        sb.append(", tokenExpireDate=").append(tokenExpireDate);
+        sb.append(", refreshToken='").append(refreshToken).append('\'');
+        sb.append(", refreshTokenExpireDate=").append(refreshTokenExpireDate);
+        sb.append(", user=").append(user);
+        sb.append('}');
+        return sb.toString();
+    }
 }

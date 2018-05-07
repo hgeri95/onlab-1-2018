@@ -2,7 +2,7 @@ package bme.cateringunitmonitor.userservice.service;
 
 import bme.cateringunitmonitor.entities.user.api.LoginResponse;
 import bme.cateringunitmonitor.entities.user.entity.User;
-import bme.cateringunitmonitor.userservice.security.SecurityConstants;
+import bme.cateringunitmonitor.security.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.time.DateUtils;

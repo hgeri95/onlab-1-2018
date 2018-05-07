@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>catering-unit-service</artifactId>
-    <name>Catering unit Service</name>
+    <artifactId>api-gateway</artifactId>
+    <name>API Gateway</name>
 
     <dependencies>
         <dependency>
@@ -20,7 +20,7 @@
     </dependencies>
 
     <build>
-        <finalName>CateringUnitService</finalName>
+        <finalName>APIGateway</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -28,4 +28,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

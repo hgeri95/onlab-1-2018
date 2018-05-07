@@ -3,13 +3,14 @@ package bme.cateringunitmonitor.cateringunitservice.service;
 import bme.cateringunitmonitor.cateringunitservice.repository.CateringUnitRepository;
 import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitRequest;
 import bme.cateringunitmonitor.entities.cateringunit.entity.CateringUnit;
+import bme.cateringunitmonitor.remoting.service.ICateringUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CateringUnitService {
+public class CateringUnitService implements ICateringUnitService {
 
     @Autowired
     private CateringUnitRepository cateringUnitRepository;
