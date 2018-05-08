@@ -1,5 +1,7 @@
 package bme.cateringunitmonitor.entities.cateringunit.entity.category;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +15,10 @@ public class CategoryParameter implements Serializable {
     private String key;
     private String value;
 
-    public CategoryParameter(String key, String value) {
+    @JsonCreator
+    public CategoryParameter(
+            @JsonProperty("key") String key,
+            @JsonProperty("value") String value) {
         this.key = key;
         this.value = value;
     }

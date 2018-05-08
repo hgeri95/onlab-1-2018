@@ -1,5 +1,7 @@
 package bme.cateringunitmonitor.entities.cateringunit.entity.address;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +16,12 @@ public class Address implements Serializable {
     private int number;
     private String otherInformation;
 
-    public Address(String country, String street, int number, String otherInformation) {
+    @JsonCreator
+    public Address(
+            @JsonProperty("country") String country,
+            @JsonProperty("street") String street,
+            @JsonProperty("number") int number,
+            @JsonProperty("otherInformation") String otherInformation) {
         this.country = country;
         this.street = street;
         this.number = number;

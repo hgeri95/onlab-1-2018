@@ -4,11 +4,16 @@ import bme.cateringunitmonitor.entities.cateringunit.entity.address.Address;
 import bme.cateringunitmonitor.entities.cateringunit.entity.category.CategoryParameter;
 import bme.cateringunitmonitor.entities.cateringunit.entity.opening.OpeningHours;
 import bme.cateringunitmonitor.entities.cateringunit.entity.opening.OpeningPerDay;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -27,15 +32,30 @@ public class CateringUnit implements Serializable {
 
     private String description;
 
-    @ElementCollection
-    private List<OpeningPerDay> openingHours;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Lob
+    @Column(length = 100000)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<OpeningPerDay> openingHours = new ArrayList<>();
 
     private Address address;
 
-    @ElementCollection
-    private List<CategoryParameter> categoryParameters;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Lob
+    @Column(length = 100000)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<CategoryParameter> categoryParameters = new ArrayList<>();
 
-    public CateringUnit(String name, String description, List<OpeningPerDay> openingHours, Address address, List<CategoryParameter> categoryParameters) {
+    public CateringUnit() {
+    }
+
+    @JsonCreator
+    public CateringUnit(
+            @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("openingHours") List<OpeningPerDay> openingHours,
+            @JsonProperty("address") Address address,
+            @JsonProperty("categoryParameters") List<CategoryParameter> categoryParameters) {
         this.name = name;
         this.description = description;
         this.openingHours = openingHours;

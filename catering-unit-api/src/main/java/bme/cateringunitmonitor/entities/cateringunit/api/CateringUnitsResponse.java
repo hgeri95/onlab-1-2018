@@ -1,6 +1,8 @@
 package bme.cateringunitmonitor.entities.cateringunit.api;
 
 import bme.cateringunitmonitor.entities.cateringunit.entity.CateringUnit;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +16,9 @@ public class CateringUnitsResponse implements Serializable {
 
     private List<CateringUnit> cateringUnits;
 
-    public CateringUnitsResponse(List<CateringUnit> cateringUnits) {
+    @JsonCreator
+    public CateringUnitsResponse(
+            @JsonProperty("cateringUnits") List<CateringUnit> cateringUnits) {
         this.cateringUnits = cateringUnits;
     }
 

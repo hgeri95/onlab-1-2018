@@ -59,4 +59,6 @@ public class UserController implements IUserController {
         String activeUser = SecurityUtil.getActiveUser();
         return userService.getUserInfo(activeUser);
     }
+
+    //TODO Update
 }

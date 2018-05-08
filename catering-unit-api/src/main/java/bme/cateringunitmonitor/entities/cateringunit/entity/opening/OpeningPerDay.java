@@ -1,5 +1,7 @@
 package bme.cateringunitmonitor.entities.cateringunit.entity.opening;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +15,11 @@ public class OpeningPerDay implements Serializable {
     private String open;
     private String close;
 
-    public OpeningPerDay(WeekDays weekDay, String open, String close) {
+    @JsonCreator
+    public OpeningPerDay(
+            @JsonProperty("weekDay") WeekDays weekDay,
+            @JsonProperty("open") String open,
+            @JsonProperty("close") String close) {
         this.weekDay = weekDay;
         this.open = open;
         this.close = close;

@@ -3,6 +3,8 @@ package bme.cateringunitmonitor.entities.cateringunit.api;
 import bme.cateringunitmonitor.entities.cateringunit.entity.address.Address;
 import bme.cateringunitmonitor.entities.cateringunit.entity.category.CategoryParameter;
 import bme.cateringunitmonitor.entities.cateringunit.entity.opening.OpeningPerDay;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +26,13 @@ public class CateringUnitRequest implements Serializable {
 
     private List<CategoryParameter> categoryParameters;
 
-    public CateringUnitRequest(String name, String description, List<OpeningPerDay> openingHours, Address address, List<CategoryParameter> categoryParameters) {
+    @JsonCreator
+    public CateringUnitRequest(
+            @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("openingHours") List<OpeningPerDay> openingHours,
+            @JsonProperty("address") Address address,
+            @JsonProperty("categoryParameters") List<CategoryParameter> categoryParameters) {
         this.name = name;
         this.description = description;
         this.openingHours = openingHours;

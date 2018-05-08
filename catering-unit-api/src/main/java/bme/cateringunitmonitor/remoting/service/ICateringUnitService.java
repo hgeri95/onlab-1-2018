@@ -2,6 +2,7 @@ package bme.cateringunitmonitor.remoting.service;
 
 import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitRequest;
 import bme.cateringunitmonitor.entities.cateringunit.entity.CateringUnit;
+import bme.cateringunitmonitor.entities.exception.CateringUnitServiceException;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface ICateringUnitService {
 
     public List<CateringUnit> getAll();
 
-    public boolean create(CateringUnitRequest cateringUnitRequest);
+    public CateringUnit create(CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException;
 
-    public boolean update(CateringUnitRequest cateringUnitRequest);
+    public CateringUnit update(CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException;
 }

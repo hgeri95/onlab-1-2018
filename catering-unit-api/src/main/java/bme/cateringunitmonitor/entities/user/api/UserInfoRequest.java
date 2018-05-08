@@ -1,6 +1,8 @@
 package bme.cateringunitmonitor.entities.user.api;
 
 import bme.cateringunitmonitor.entities.user.entity.Gender;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +32,14 @@ public class UserInfoRequest implements Serializable {
     @NotNull
     private Gender gender;
 
-    public UserInfoRequest(@NotNull String firstName, @NotNull String lastName, String address, @NotNull String email, Date birthDate, @NotNull Gender gender) {
+    @JsonCreator
+    public UserInfoRequest(
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("address") String address,
+            @JsonProperty("email") String email,
+            @JsonProperty("birthDate") Date birthDate,
+            @JsonProperty("gender") Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

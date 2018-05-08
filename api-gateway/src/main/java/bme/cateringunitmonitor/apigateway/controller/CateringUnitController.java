@@ -2,6 +2,8 @@ package bme.cateringunitmonitor.apigateway.controller;
 
 import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitRequest;
 import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitsResponse;
+import bme.cateringunitmonitor.entities.cateringunit.entity.CateringUnit;
+import bme.cateringunitmonitor.entities.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.entities.user.entity.Role;
 import bme.cateringunitmonitor.remoting.controller.ICateringUnitController;
 import bme.cateringunitmonitor.remoting.service.ICateringUnitService;
@@ -29,19 +31,31 @@ public class CateringUnitController implements ICateringUnitController {
         return new CateringUnitsResponse(cateringUnitService.getAll());
     }
 
-    //Search
+    //Search nice to have
+
+    //TODO Delete
 
     @PostMapping("/create")
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity create(@RequestBody CateringUnitRequest cateringUnitRequest) {
-        boolean success = cateringUnitService.create(cateringUnitRequest);
-        return success ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        try {
+            CateringUnit cateringUnit = cateringUnitService.create(cateringUnitRequest);
+            return ResponseEntity.ok().body(cateringUnit);
+        } catch (CateringUnitServiceException ex) {
+            logger.error("Error in catering unit creation: {}", ex);
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PutMapping("/update")
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity update(@RequestBody CateringUnitRequest cateringUnitRequest) {
-        boolean success = cateringUnitService.update(cateringUnitRequest);
-        return success ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        try {
+            CateringUnit cateringUnit = cateringUnitService.update(cateringUnitRequest);
+            return ResponseEntity.ok().body(cateringUnit);
+        } catch (CateringUnitServiceException ex) {
+            logger.error("Error in catering unit update: {}", ex);
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }
