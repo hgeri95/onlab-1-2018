@@ -14,5 +14,7 @@ public interface ICateringUnitService {
 
     public CateringUnit create(CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException;
 
-    public CateringUnit update(CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException;
+    public CateringUnit update(Long id, CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException;
+
+    public void delete(Long id) throws CateringUnitServiceException;
 }

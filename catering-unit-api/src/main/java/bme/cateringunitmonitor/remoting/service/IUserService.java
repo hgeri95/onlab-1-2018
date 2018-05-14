@@ -18,4 +18,6 @@ public interface IUserService {
     public UserInfo setUserInfo(UserInfo userInfo);
 
     public UserInfo getUserInfo(String username);
+
+    public UserInfo updateUserInfo(UserInfo userInfo);
 }

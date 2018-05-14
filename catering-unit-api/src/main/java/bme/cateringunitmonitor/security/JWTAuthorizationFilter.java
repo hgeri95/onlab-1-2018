@@ -28,15 +28,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String header = request.getHeader(SecurityConstants.HEADER_STRING);
         logger.debug("Authorization header in request: {}", header);
 
-        if (header != null && header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        if (header != null && header.startsWith(SecurityConstants.TOKEN_PREFIX) && !header.contains("undefined")) {
             final String token = header.substring(SecurityConstants.TOKEN_PREFIX.length());
             logger.debug("Token in header: {}", token);
             UserAuthentication authentication = getAuthentication(token, response);
 
-            logger.debug("Set security context: {}", authentication.toString());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            chain.doFilter(request, response);
-            SecurityContextHolder.getContext().setAuthentication(null);
+            if (authentication != null) {
+                logger.debug("Set security context: {}", authentication.toString());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                chain.doFilter(request, response);
+                SecurityContextHolder.getContext().setAuthentication(null);
+            }
         } else {
             chain.doFilter(request, response);
             SecurityContextHolder.getContext().setAuthentication(null);

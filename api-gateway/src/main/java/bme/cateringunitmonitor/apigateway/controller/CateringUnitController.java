@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 @RestController
 @RequestMapping("/cateringunit")
 public class CateringUnitController implements ICateringUnitController {
@@ -31,9 +33,19 @@ public class CateringUnitController implements ICateringUnitController {
         return new CateringUnitsResponse(cateringUnitService.getAll());
     }
 
-    //Search nice to have
+    //TODO Search nice to have
 
-    //TODO Delete
+    @DeleteMapping("/delete/{id}")
+    @Secured(Role.Values.ROLE_OWNER)
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        try {
+            cateringUnitService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (CateringUnitServiceException ex) {
+            logger.error("Error in catering unit delete: {}", ex);
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
 
     @PostMapping("/create")
     @Secured(Role.Values.ROLE_OWNER)
@@ -47,11 +59,11 @@ public class CateringUnitController implements ICateringUnitController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @Secured(Role.Values.ROLE_OWNER)
-    public ResponseEntity update(@RequestBody CateringUnitRequest cateringUnitRequest) {
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitRequest cateringUnitRequest) {
         try {
-            CateringUnit cateringUnit = cateringUnitService.update(cateringUnitRequest);
+            CateringUnit cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
             return ResponseEntity.ok().body(cateringUnit);
         } catch (CateringUnitServiceException ex) {
             logger.error("Error in catering unit update: {}", ex);

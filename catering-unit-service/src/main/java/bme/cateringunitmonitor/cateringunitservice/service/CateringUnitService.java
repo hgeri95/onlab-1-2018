@@ -5,14 +5,17 @@ import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitRequest;
 import bme.cateringunitmonitor.entities.cateringunit.entity.CateringUnit;
 import bme.cateringunitmonitor.entities.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.remoting.service.ICateringUnitService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class CateringUnitService implements ICateringUnitService {
 
     @Autowired
@@ -39,20 +42,36 @@ public class CateringUnitService implements ICateringUnitService {
         return cateringUnitRepository.save(cateringUnit);
     }
 
-    public CateringUnit update(CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException {
-        if (!cateringUnitRepository.existsByName(cateringUnitRequest.getName())) {
-            throw new CateringUnitServiceException("Catering unit does not exists");
-        }
-        //TODO validate new datas
-        cateringUnitRepository.deleteByName(cateringUnitRequest.getName());
-        CateringUnit cateringUnit = new CateringUnit(
-                cateringUnitRequest.getName(),
-                cateringUnitRequest.getDescription(),
-                cateringUnitRequest.getOpeningHours(),
-                cateringUnitRequest.getAddress(),
-                cateringUnitRequest.getCategoryParameters()
-        );
+    public CateringUnit update(Long id, CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException {
+        log.debug("Catering unit to update: {}, with id: {}", cateringUnitRequest, id);
+        Optional<CateringUnit> cateringUnitFromDb = cateringUnitRepository.findById(id);
+        if (cateringUnitFromDb.isPresent()) {
+            CateringUnit cateringUnitToUpdate = cateringUnitFromDb.get();
+            cateringUnitToUpdate.setAddress(cateringUnitRequest.getAddress());
+            cateringUnitToUpdate.setCategoryParameters(cateringUnitRequest.getCategoryParameters());
+            cateringUnitToUpdate.setDescription(cateringUnitRequest.getDescription());
+            cateringUnitToUpdate.setName(cateringUnitRequest.getName());
+            cateringUnitToUpdate.setOpeningHours(cateringUnitRequest.getOpeningHours());
 
-        return cateringUnitRepository.save(cateringUnit);
+            return cateringUnitRepository.save(cateringUnitToUpdate);
+        } else {
+            CateringUnit cateringUnit = new CateringUnit(
+                    cateringUnitRequest.getName(),
+                    cateringUnitRequest.getDescription(),
+                    cateringUnitRequest.getOpeningHours(),
+                    cateringUnitRequest.getAddress(),
+                    cateringUnitRequest.getCategoryParameters()
+            );
+            return cateringUnitRepository.save(cateringUnit);
+        }
+    }
+
+    public void delete(Long id) throws CateringUnitServiceException {
+        try {
+            cateringUnitRepository.deleteById(id);
+        } catch (IllegalArgumentException ex) {
+            log.error("Failed to delete Catering unit with id: {}, exception: {}", id, ex);
+            throw new CateringUnitServiceException(ex.getMessage());
+        }
     }
 }

@@ -99,4 +99,21 @@ public class UserService implements IUserService {
     public UserInfo getUserInfo(String username) {
         return userInfoRepository.findByUsername(username);
     }
+
+    @Override
+    public UserInfo updateUserInfo(UserInfo userInfo) {
+        logger.debug("User info to update: {}", userInfo);
+        if (userInfoRepository.existsByUsername(userInfo.getUsername())) {
+            UserInfo userInfoToUpdate = userInfoRepository.findByUsername(userInfo.getUsername());
+            userInfoToUpdate.setAddress(userInfo.getAddress());
+            userInfoToUpdate.setBirthDate(userInfo.getBirthDate());
+            userInfoToUpdate.setEmail(userInfo.getEmail());
+            userInfoToUpdate.setFirstName(userInfo.getFirstName());
+            userInfoToUpdate.setLastName(userInfo.getLastName());
+            userInfoToUpdate.setGender(userInfo.getGender());
+            return userInfoRepository.save(userInfoToUpdate);
+        } else {
+            return userInfoRepository.save(userInfo);
+        }
+    }
 }

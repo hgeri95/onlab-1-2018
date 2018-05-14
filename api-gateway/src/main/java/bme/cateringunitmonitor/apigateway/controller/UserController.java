@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -60,5 +61,18 @@ public class UserController implements IUserController {
         return userService.getUserInfo(activeUser);
     }
 
-    //TODO Update
+    @PutMapping("/userinfo")
+    @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
+    public UserInfo updateUserInfo(@RequestBody UserInfoRequest userInfoRequest) {
+        String activeUser = SecurityUtil.getActiveUser();
+        return userService.updateUserInfo(new UserInfo(
+                SecurityUtil.getActiveUser(),
+                userInfoRequest.getFirstName(),
+                userInfoRequest.getLastName(),
+                userInfoRequest.getAddress(),
+                userInfoRequest.getEmail(),
+                userInfoRequest.getBirthDate(),
+                userInfoRequest.getGender()
+        ));
+    }
 }
