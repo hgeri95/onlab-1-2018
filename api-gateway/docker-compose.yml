@@ -1,0 +1,26 @@
+version: '2'
+services:
+    user-service:
+        container_name: user-service
+        image: user-service-build
+        ports:
+            - "8081:8081"
+        networks:
+            - custom-network
+    catering-service:
+            container_name: catering-service
+            image: catering-service-build
+            ports:
+                - "8082:8082"
+            networks:
+                - custom-network
+    gateway-service:
+            container_name: gateway-service
+            image: gateway-service-build
+            ports:
+                - "8080:8080"
+            networks:
+                - custom-network
+networks:
+    custom-network:
+        driver: bridge
