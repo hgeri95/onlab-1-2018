@@ -19,8 +19,18 @@ services:
             image: gateway-service-build
             ports:
                 - "8080:8080"
+            depends_on:
+              - user-service
+              - catering-service
             networks:
                 - custom-network
+            links:
+              - user-service:user_service
+              - catering-service:catering_service
+            environment:
+              - authServiceUrl=http://user_service:8081
+              - userServiceUrl=http://user_service:8081
+              - cateringServiceZrl=http://catering_service:8082
 networks:
     custom-network:
         driver: bridge
