@@ -16,9 +16,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.management.relation.Role;
-import java.util.ArrayList;
-
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Import(UserServiceTestConfig.class)

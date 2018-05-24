@@ -3,7 +3,6 @@ package bme.cateringunitmonitor.entities.user.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -27,7 +26,7 @@ public class User implements Serializable {
     @NotNull
     private String password;
 
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = String.class)
     private List<String> roles;
 
     public User() {
