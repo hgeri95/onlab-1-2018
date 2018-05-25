@@ -52,9 +52,16 @@ class App extends Component {
             <Navbar.Toggle/>
           </Navbar.Header>
           <Nav>
-            {this.state.role === "ROLE_OWNER" ? 
-              <NavItem eventKey={1}>List all</NavItem> :
-              <NavItem eventKey={1}>List all2</NavItem>
+            {this.state.isAuthenticated ? 
+              <Fragment>
+                <LinkContainer to="listall">
+                  <NavItem>ListAll</NavItem>
+                </LinkContainer>
+                <NavItem eventKey={2}>Search</NavItem>
+                <NavItem eventKey={3}>UserInfo</NavItem>
+              </Fragment>
+               :
+              <NavItem/>
             }
           </Nav>
           <Navbar.Collapse>

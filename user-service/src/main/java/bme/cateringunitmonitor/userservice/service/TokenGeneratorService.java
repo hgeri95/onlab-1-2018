@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class TokenGeneratorService {
 
-    @Value("${jwt.accessTokenValidity.minutes:1}")
+    @Value("${jwt.accessTokenValidity.minutes:5}")
     private int accessTokenValidity;
 
     @Value("${jwt.refreshTokenLength:16}")
