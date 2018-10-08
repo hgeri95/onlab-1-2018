@@ -1,89 +1,31 @@
-import React, { Component, Fragment } from 'react';
-import { Link } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
-import './App.css';
-import Routes from "./Routes";
-import { withRouter } from "react-router-dom";
-import setAuthToken from './utils/SetAuthToken';
-import API from './utils/api';
+import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from "./store/store";
+
+import Navbar from './components/Navbar';
+import Register from './components/Register';
+import Login from './components/Login';
+import Home from './components/Home';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isAuthenticated: false,
-      isAuthenticating: true,
-      role: ""
-    };
-  }
-
-
-  userHasAuthenticated = authenticated => {
-    this.setState({ isAuthenticated: authenticated });
-  }
-
-  userChangeRole = role => {
-    this.setState({ role: role});
-  }
-
-  handleLogout = event => {
-    API.post('/authenticate/logout');
-    this.userHasAuthenticated(false);
-    setAuthToken(false);
-    this.props.history.push("/login");
-  }
-
   render() {
-    const childProps = {
-      isAuthenticated: this.state.isAuthenticated,
-      userHasAuthenticated: this.userHasAuthenticated,
-      userChangeRole: this.userChangeRole
-    };
-
     return (
-      <div className="App container">
-        <Navbar fluid collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to="/">Catering Unit Monitor</Link>
-            </Navbar.Brand>
-            <Navbar.Toggle/>
-          </Navbar.Header>
-          <Nav>
-            {this.state.isAuthenticated ? 
-              <Fragment>
-                <LinkContainer to="listall">
-                  <NavItem>ListAll</NavItem>
-                </LinkContainer>
-                <NavItem eventKey={2}>Search</NavItem>
-                <NavItem eventKey={3}>UserInfo</NavItem>
-              </Fragment>
-               :
-              <NavItem/>
-            }
-          </Nav>
-          <Navbar.Collapse>
-            <Nav pullRight>
-            {this.state.isAuthenticated
-              ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
-              : <Fragment>
-                  <LinkContainer to="sign-up">
-                    <NavItem>Signup</NavItem>
-                  </LinkContainer>
-                  <LinkContainer to="/login">
-                    <NavItem>Login</NavItem>
-                  </LinkContainer>
-                </Fragment>
-            }
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <Routes childProps={childProps} />
-      </div>
-    );
+      <Provider store = { store }>
+        <Router>
+          <div>
+            <Navbar />
+              <Route exact path="/" component={ Home } />
+              <div className="container">
+                <Route exact path="/register" component={ Register } />
+                <Route exact path="/login" component={ Login } />
+              </div>
+          </div>
+        </Router>
+      </Provider>
+    )
   }
 }
 
-export default withRouter(App);
+export default App;
