@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { registerUserAction } from '../actions/authentication';
+import {withRouter} from 'react-router-dom';
+import {registerUserAction} from '../actions/authentication';
 import classnames from 'classnames';
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
@@ -10,7 +10,7 @@ import 'react-dropdown/style.css'
 class Register extends Component {
     constructor() {
         super();
-        
+
         this.state = {
             name: '',
             password: '',
@@ -47,10 +47,10 @@ class Register extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.authentication.authenticated) {
+        if (nextProps.authentication.authenticated) {
             this.props.history.push('/')
         }
-        if(nextProps.errors) {
+        if (nextProps.errors) {
             this.setState({
                 errors: nextProps.errors
             });
@@ -58,38 +58,41 @@ class Register extends Component {
     }
 
     componentDidMount() {
-        if(this.props.authentication.authenticated) {
+        if (this.props.authentication.authenticated) {
             this.props.history.push('/');
         }
     }
 
     render() {
-        const { errors } = this.state;
-        const roles = [{value: 'ROLE_ADMIN', label: 'ADMIN'}, {value: 'ROLE_OWNER', label: 'OWNER'}, {value: 'ROLE_USER', label: 'USER'}];
-        const { role } = this.state;
-        return(
+        const {errors} = this.state;
+        const roles = [{value: 'ROLE_ADMIN', label: 'ADMIN'}, {
+            value: 'ROLE_OWNER',
+            label: 'OWNER'
+        }, {value: 'ROLE_USER', label: 'USER'}];
+        const {role} = this.state;
+        return (
             <div className="container">
                 <h2>Registration</h2>
-                <form onSubmit={ this.handleSubmit }>
+                <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <input type="text" placeholder="Username" 
-                        className={classnames('form-control form-control-lg',{ 'is-valid': errors.name})}
-                        name="name" value={ this.state.name } onChange={ this.handleInputChange } />
+                        <input type="text" placeholder="Username"
+                               className={classnames('form-control form-control-lg', {'is-valid': errors.name})}
+                               name="name" value={this.state.name} onChange={this.handleInputChange}/>
                     </div>
                     <div className="form-group">
-                        <input type="text" placeholder="Password" 
-                        className={classnames('form-control form-control-lg',{ 'is-valid': errors.password})}
-                        name="password" onChange={ this.handleInputChange } />
+                        <input type="text" placeholder="Password"
+                               className={classnames('form-control form-control-lg', {'is-valid': errors.password})}
+                               name="password" onChange={this.handleInputChange}/>
                     </div>
                     <div className="form-group">
-                        <input type="text" placeholder="Password confirmation" 
-                        className="form-control"
-                        name="password_confirm" onChange={ this.handleInputChange } />
+                        <input type="text" placeholder="Password confirmation"
+                               className="form-control"
+                               name="password_confirm" onChange={this.handleInputChange}/>
                     </div>
                     <Dropdown options={roles} onChange={this.handleSelect} value={role} placeholder="Roles"/>
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary" 
-                        disabled={!this.validateForm()}>
+                        <button type="submit" className="btn btn-primary"
+                                disabled={!this.validateForm()}>
                             Register
                         </button>
                     </div>
@@ -109,4 +112,4 @@ const mapStateToProps = state => ({
     authentication: state.authentication
 });
 
-export default connect(mapStateToProps, { registerUserAction })(withRouter(Register))
+export default connect(mapStateToProps, {registerUserAction})(withRouter(Register))

@@ -3,11 +3,11 @@ import {userConstants} from '../constants/user.constants';
 import setAuthToken from '../utils/setAuthToken';
 
 export const loginAction = ({username, password}) => dispatch => {
-    API.post('/authenticate/login', 
+    API.post('/authenticate/login',
         {"username": username, "password": password})
         .then(res => {
             const accessToken = res.data.accessToken;
-            localStorage.setItem('jwtToken', accessToken);
+            //localStorage.setItem('jwtToken', accessToken);
             setAuthToken(accessToken);
 
             const loggedInUser = res.data.user.username;
@@ -15,7 +15,8 @@ export const loginAction = ({username, password}) => dispatch => {
             const roles = res.data.user.roles;
             dispatch({
                 type: userConstants.AUTHENTICATED,
-                payload: {username: loggedInUser, refreshToken: refreshToken, roles: roles}})
+                payload: {username: loggedInUser, refreshToken: refreshToken, roles: roles}
+            })
         })
         .catch(err => {
             dispatch({
@@ -23,7 +24,7 @@ export const loginAction = ({username, password}) => dispatch => {
                 payload: 'Wrong username or password'
             });
         });
-}
+};
 
 export const registerUserAction = (user, history) => dispatch => {
     API.post('/users/sign-up', {username: user.name, password: user.password, roles: [user.role]})
@@ -36,12 +37,12 @@ export const registerUserAction = (user, history) => dispatch => {
                 payload: 'Failed to register user'
             })
         });
-}
+};
 
 export const logoutAction = (history) => dispatch => {
     API.post('/authenticate/logout')
         .then(res => {
-            localStorage.removeItem('jwtToken');
+            //localStorage.removeItem('jwtToken');
             setAuthToken(false);
             history.push('/login');
             dispatch({
@@ -55,4 +56,4 @@ export const logoutAction = (history) => dispatch => {
                 payload: 'Failed to logout'
             })
         });
-}
+};
