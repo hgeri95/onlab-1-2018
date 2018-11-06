@@ -39,11 +39,11 @@ class Login extends Component {
         }
     }
 
-    componentWillReveiceProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
         if(nextProps.authentication.authenticated) {
             this.props.history.push('/');
         }
-        if(nextProps.erros) {
+        if(nextProps.errors) {
             this.setState({
                 errors: nextProps.errors
             });

@@ -7,8 +7,8 @@ export const loginAction = ({username, password}) => dispatch => {
         {"username": username, "password": password})
         .then(res => {
             const accessToken = res.data.accessToken;
-            //localStorage.setItem('jwtToken', accessToken);
-            setAuthToken(accessToken);
+            localStorage.setItem('jwtToken', accessToken);
+            setAuthToken(true);
 
             const loggedInUser = res.data.user.username;
             const refreshToken = res.data.refreshToken;
@@ -42,7 +42,7 @@ export const registerUserAction = (user, history) => dispatch => {
 export const logoutAction = (history) => dispatch => {
     API.post('/authenticate/logout')
         .then(res => {
-            //localStorage.removeItem('jwtToken');
+            localStorage.removeItem('jwtToken');
             setAuthToken(false);
             history.push('/login');
             dispatch({
