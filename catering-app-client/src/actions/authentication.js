@@ -16,7 +16,7 @@ export const loginAction = ({username, password}) => dispatch => {
             dispatch({
                 type: userConstants.AUTHENTICATED,
                 payload: {username: loggedInUser, refreshToken: refreshToken, roles: roles}
-            })
+            });
         })
         .catch(err => {
             dispatch({
