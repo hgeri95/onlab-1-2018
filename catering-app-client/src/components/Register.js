@@ -80,16 +80,18 @@ class Register extends Component {
                                name="name" value={this.state.name} onChange={this.handleInputChange}/>
                     </div>
                     <div className="form-group">
-                        <input type="text" placeholder="Password"
+                        <input type="password" placeholder="Password"
                                className={classnames('form-control form-control-lg', {'is-valid': errors.password})}
                                name="password" onChange={this.handleInputChange}/>
                     </div>
                     <div className="form-group">
-                        <input type="text" placeholder="Password confirmation"
-                               className="form-control"
+                        <input type="password" placeholder="Password confirmation"
+                               className={classnames('form-control form-control-lg')}
                                name="password_confirm" onChange={this.handleInputChange}/>
                     </div>
-                    <Dropdown options={roles} onChange={this.handleSelect} value={role} placeholder="Roles"/>
+                    <div className="form-group">
+                        <Dropdown options={roles} onChange={this.handleSelect} value={role} placeholder="Roles"/>
+                    </div>
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary"
                                 disabled={!this.validateForm()}>

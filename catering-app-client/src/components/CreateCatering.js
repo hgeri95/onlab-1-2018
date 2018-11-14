@@ -10,7 +10,7 @@ class CreateCatering extends Component {
     render() {
         return(
             <div className="container">
-                <h1>CreateUnit</h1>
+                <h2>Register Catering Unit</h2>
             </div>
         );
     }
