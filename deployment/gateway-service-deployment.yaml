@@ -17,7 +17,7 @@ spec:
           value: http://catering-service:8082
         - name: userServiceUrl
           value: http://user_-ervice:8081
-        image: gateway-service-build
+        image: eu.gcr.io/cateringunitmonitor/gateway-service-build
         name: gateway-service
         ports:
         - containerPort: 8080

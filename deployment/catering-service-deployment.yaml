@@ -10,7 +10,7 @@ spec:
         app: catering-service-app
     spec:
       containers:
-      - image: catering-service-build
+      - image: eu.gcr.io/cateringunitmonitor/catering-service-build
         name: catering-service-app
         ports:
         - containerPort: 8082

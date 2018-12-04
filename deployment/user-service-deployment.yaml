@@ -9,7 +9,7 @@ spec:
         run: user-service-app
     spec:
       containers:
-      - image: user-service-build
+      - image: eu.gcr.io/cateringunitmonitor/user-service-build
         name: user-service-app
         ports:
         - containerPort: 8081
