@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway-service-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gateway-service-app
+    spec:
+      containers:
+      - env:
+        - name: authServiceUrl
+          value: http://user-service:8081
+        - name: cateringServiceZrl
+          value: http://catering-service:8082
+        - name: userServiceUrl
+          value: http://user_-ervice:8081
+        image: gateway-service-build
+        name: gateway-service
+        ports:
+        - containerPort: 8080

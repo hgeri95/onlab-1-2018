@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+  name: user-service-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: user-service-app
+    spec:
+      containers:
+      - image: user-service-build
+        name: user-service-app
+        ports:
+        - containerPort: 8081
+          name: server
+
