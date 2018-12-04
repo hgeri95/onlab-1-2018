@@ -9,4 +9,4 @@ spec:
     targetPort: 8081
   selector:
     app: user-service-app
-  type: NodePort
+  type: LoadBalancer

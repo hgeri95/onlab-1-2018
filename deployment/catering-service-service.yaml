@@ -9,4 +9,4 @@ spec:
     targetPort: 8082
   selector:
     app: catering-service-app
-  type: NodePort
+  type: LoadBalancer
