@@ -1,5 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
+metadata:
   name: user-service-deployment
 spec:
   replicas: 1
@@ -13,5 +14,4 @@ spec:
         name: user-service-app
         ports:
         - containerPort: 8081
-          name: server
 
