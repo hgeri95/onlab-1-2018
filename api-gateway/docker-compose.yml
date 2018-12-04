@@ -30,7 +30,7 @@ services:
             environment:
               - authServiceUrl=http://user_service:8081
               - userServiceUrl=http://user_service:8081
-              - cateringServiceZrl=http://catering_service:8082
+              - cateringServiceUrl=http://catering_service:8082
 networks:
     custom-network:
         driver: bridge
