@@ -21,7 +21,7 @@ spec:
         - name: cateringServiceUrl
           value: http://catering-service:8082
         - name: userServiceUrl
-          value: http://user-ervice:8081
+          value: http://user-service:8081
         image: eu.gcr.io/cateringunitmonitor/gateway-service-build
         name: gateway-service
         ports:

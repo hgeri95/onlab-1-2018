@@ -17,6 +17,10 @@
             <groupId>bme.cateringunitmonitor</groupId>
             <artifactId>catering-unit-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency><!--TODO Delete -->
     </dependencies>
 
     <build>

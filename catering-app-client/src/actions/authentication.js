@@ -1,6 +1,6 @@
 import API from '../utils/api';
 import {userConstants} from '../constants/user.constants';
-import setAuthToken from '../utils/setAuthToken';
+import setAuthToken from '../utils/SetAuthToken';
 
 export const loginAction = ({username, password}) => dispatch => {
     API.post('/authenticate/login',
