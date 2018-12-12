@@ -1,16 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: catering-service-deployment
+  name: catering-service
+  labels:
+    app: catering-service
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: catering-service
   template:
     metadata:
       labels:
-        app: catering-service-app
+        app: catering-service
     spec:
       containers:
       - image: eu.gcr.io/cateringunitmonitor/catering-service-build
-        name: catering-service-app
+        name: catering-service
         ports:
-        - containerPort: 8082
+        - name: http
+          containerPort: 8082

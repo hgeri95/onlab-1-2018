@@ -1,17 +1,23 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: user-service-deployment
+  name: user-service
+  labels:
+    app: user-service
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
   template:
     metadata:
       labels:
-        run: user-service-app
+        app: user-service
     spec:
       containers:
       - image: eu.gcr.io/cateringunitmonitor/user-service-build
-        name: user-service-app
+        name: user-service
         ports:
-        - containerPort: 8081
+        - name: http
+          containerPort: 8081
 
