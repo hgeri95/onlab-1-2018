@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: catering-ui
+  labels:
+    app: catering-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catering-ui
+  template:
+    metadata:
+      labels:
+        app: catering-ui
+    spec:
+      containers:
+      - image: eu.gcr.io/cateringunitmonitor/catering-ui
+        name: catering-ui
+        ports:
+        - name: http
+          containerPort: 80

@@ -1,5 +1,12 @@
 version: '2'
 services:
+    mysql-server:
+        container_name: mysql-server
+        image: mysql-server
+        ports:
+          - "3036:3036"
+        networks:
+          - custom-network
     user-service:
         container_name: user-service
         image: user-service-build
@@ -7,6 +14,8 @@ services:
             - "8081:8081"
         networks:
             - custom-network
+        depends_on:
+          - mysql-server
     catering-service:
             container_name: catering-service
             image: catering-service-build
@@ -14,6 +23,8 @@ services:
                 - "8082:8082"
             networks:
                 - custom-network
+            depends_on:
+              - mysql-server
     gateway-service:
             container_name: gateway-service
             image: gateway-service-build
@@ -22,6 +33,7 @@ services:
             depends_on:
               - user-service
               - catering-service
+              - mysql-server
             networks:
                 - custom-network
             links:
