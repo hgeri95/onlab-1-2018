@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: catering-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: user-service
+          servicePort: 8081
+      - path: /*
+        backend:
+          serviceName: catering-service
+          servicePort: 8082
