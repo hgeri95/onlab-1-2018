@@ -1,11 +1,11 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.entities.user.wrapper.RefreshToken;
+import bme.cateringunitmonitor.api.wrapper.RefreshToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,21 +13,19 @@ import java.util.Map;
 public class TokenStore {
 
     private static Logger logger = LoggerFactory.getLogger(TokenStore.class);
-    private Map<String, RefreshToken> tokens = new HashMap<>();
+    private Map<Long, RefreshToken> tokens = new HashMap<>();
 
-    public void storeRefreshToken(String id, String refreshToken, Date expireDate) {
+    public void storeRefreshToken(Long id, String refreshToken, LocalDateTime expireDate) {
         logger.debug("Refresh token to store for user: {}", id);
         tokens.put(id, new RefreshToken(refreshToken, expireDate));
     }
 
-    public void deleteRefreshToken(String id) {
-        logger.debug("Delete token for user: {}", id);
-        tokens.remove(id);
+    public void deleteRefreshToken(Long userId) {
+        logger.debug("Delete token for user with id: {}", userId);
+        tokens.remove(userId);
     }
 
-    public RefreshToken getRefreshToken(String id) {
-        return tokens.get(id);
+    public RefreshToken getRefreshToken(Long userId) {
+        return tokens.get(userId);
     }
-
-
 }

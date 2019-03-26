@@ -1,15 +1,17 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.entities.user.api.LoginResponse;
-import bme.cateringunitmonitor.entities.user.entity.User;
+import bme.cateringunitmonitor.api.dao.User;
+import bme.cateringunitmonitor.api.dto.LoginResponse;
 import bme.cateringunitmonitor.security.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -28,22 +30,23 @@ public class TokenGeneratorService {
     public LoginResponse createTokens(User user) {
         List<String> roles = user.getRoles();
 
-        Date now = new Date();
-        Date tokenExpireDate = DateUtils.addMinutes(now, accessTokenValidity);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tokenExpireDate = now.plusMinutes(accessTokenValidity);
+        ZonedDateTime zdt = tokenExpireDate.atZone(ZoneId.systemDefault());
+        Date tokenExpireDateToSet = Date.from(zdt.toInstant());
 
         String token = Jwts.builder()
                 .setSubject(String.valueOf(user.getId()))
-                .setExpiration(tokenExpireDate)
+                .setExpiration(tokenExpireDateToSet)
                 .claim(SecurityConstants.ROLES_KEY, roles)
                 .claim(SecurityConstants.USERNAME_KEY, user.getUsername())
                 .signWith(SignatureAlgorithm.HS256, SecurityConstants.SECRET).compact();
 
         String refreshToken = generateRandomSecureString(refreshTokenLength);
-        Date refreshTokenExpireDate = DateUtils.addMinutes(now, refreshTokenValidity);
+        LocalDateTime refreshTokenExpireDate = now.plusMinutes(refreshTokenValidity);
 
         return new LoginResponse(token, tokenExpireDate,
-                refreshToken, refreshTokenExpireDate,
-                user);
+                refreshToken, refreshTokenExpireDate);
     }
 
     private String generateRandomSecureString(int length) {

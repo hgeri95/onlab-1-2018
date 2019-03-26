@@ -1,9 +1,9 @@
 package bme.cateringunitmonitor.apigateway.configuration;
 
-import bme.cateringunitmonitor.remoting.SecureRemoteInocationFactory;
-import bme.cateringunitmonitor.remoting.service.IAuthService;
-import bme.cateringunitmonitor.remoting.service.ICateringUnitService;
-import bme.cateringunitmonitor.remoting.service.IUserService;
+import bme.cateringunitmonitor.SecureRemoteInocationFactory;
+import bme.cateringunitmonitor.api.remoting.service.IAuthService;
+import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
+import bme.cateringunitmonitor.api.remoting.service.IUserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

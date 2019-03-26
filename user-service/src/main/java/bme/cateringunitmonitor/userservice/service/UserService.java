@@ -1,10 +1,10 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.entities.exception.UserServiceException;
-import bme.cateringunitmonitor.entities.user.entity.Role;
-import bme.cateringunitmonitor.entities.user.entity.User;
-import bme.cateringunitmonitor.entities.user.entity.UserInfo;
-import bme.cateringunitmonitor.remoting.service.IUserService;
+import bme.cateringunitmonitor.api.Role;
+import bme.cateringunitmonitor.api.dao.User;
+import bme.cateringunitmonitor.api.dao.UserInfo;
+import bme.cateringunitmonitor.api.exception.UserServiceException;
+import bme.cateringunitmonitor.api.remoting.service.IUserService;
 import bme.cateringunitmonitor.userservice.repository.UserInfoRepository;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import org.slf4j.Logger;
@@ -84,7 +84,7 @@ public class UserService implements IUserService {
                 throw new BadCredentialsException("Incorrect password for user: " + user.getUsername());
             }
         } else {
-            throw new BadCredentialsException("User does not exist: " + user.getUsername());
+            throw new BadCredentialsException("User does not exists: " + user.getUsername());
         }
     }
 
@@ -92,7 +92,11 @@ public class UserService implements IUserService {
         return userRepository.findByUsername(username);
     }
 
-    public UserInfo setUserInfo(UserInfo userInfo) {
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public UserInfo saveUserInfo(UserInfo userInfo) {
         return userInfoRepository.save(userInfo);
     }
 
@@ -100,18 +104,12 @@ public class UserService implements IUserService {
         return userInfoRepository.findByUsername(username);
     }
 
-    @Override
     public UserInfo updateUserInfo(UserInfo userInfo) {
         logger.debug("User info to update: {}", userInfo);
         if (userInfoRepository.existsByUsername(userInfo.getUsername())) {
             UserInfo userInfoToUpdate = userInfoRepository.findByUsername(userInfo.getUsername());
-            userInfoToUpdate.setAddress(userInfo.getAddress());
-            userInfoToUpdate.setBirthDate(userInfo.getBirthDate());
-            userInfoToUpdate.setEmail(userInfo.getEmail());
-            userInfoToUpdate.setFirstName(userInfo.getFirstName());
-            userInfoToUpdate.setLastName(userInfo.getLastName());
-            userInfoToUpdate.setGender(userInfo.getGender());
-            return userInfoRepository.save(userInfoToUpdate);
+            UserInfo updatedUserInfo = new UserInfo(userInfoToUpdate.getId(), userInfo);
+            return userInfoRepository.save(updatedUserInfo);
         } else {
             return userInfoRepository.save(userInfo);
         }

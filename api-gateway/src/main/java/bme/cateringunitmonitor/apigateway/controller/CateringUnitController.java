@@ -1,21 +1,18 @@
 package bme.cateringunitmonitor.apigateway.controller;
 
-import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitRequest;
-import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitsResponse;
-import bme.cateringunitmonitor.entities.cateringunit.entity.CateringUnit;
-import bme.cateringunitmonitor.entities.exception.CateringUnitServiceException;
-import bme.cateringunitmonitor.entities.user.entity.Role;
-import bme.cateringunitmonitor.remoting.controller.ICateringUnitController;
-import bme.cateringunitmonitor.remoting.service.ICateringUnitService;
+import bme.cateringunitmonitor.api.Role;
+import bme.cateringunitmonitor.api.dao.CateringUnit;
+import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
+import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
+import bme.cateringunitmonitor.api.remoting.controller.ICateringUnitController;
+import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-
-import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/cateringunit")

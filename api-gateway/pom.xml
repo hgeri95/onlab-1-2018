@@ -18,9 +18,17 @@
             <artifactId>catering-unit-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency><!--TODO Delete -->
+            <groupId>bme.cateringunitmonitor</groupId>
+            <artifactId>user-service-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -30,10 +38,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
+            <plugin><!-- Upload image to GCloud -->
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>0.9.0</version>
+                <version>1.0.2</version>
                 <configuration>
                     <to>
                         <image>eu.gcr.io/cateringunitmonitor/gateway-service-build</image>

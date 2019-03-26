@@ -18,6 +18,10 @@
             <artifactId>catering-unit-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>bme.cateringunitmonitor</groupId>
+            <artifactId>user-service-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
@@ -25,6 +29,15 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -35,10 +48,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
+            <plugin><!-- Upload image to GCloud -->
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>0.9.0</version>
+                <version>1.0.2</version>
                 <configuration>
                     <to>
                         <image>eu.gcr.io/cateringunitmonitor/user-service-build</image>

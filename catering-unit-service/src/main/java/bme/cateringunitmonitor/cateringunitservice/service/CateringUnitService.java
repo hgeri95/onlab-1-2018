@@ -1,10 +1,10 @@
 package bme.cateringunitmonitor.cateringunitservice.service;
 
 import bme.cateringunitmonitor.cateringunitservice.repository.CateringUnitRepository;
-import bme.cateringunitmonitor.entities.cateringunit.api.CateringUnitRequest;
-import bme.cateringunitmonitor.entities.cateringunit.entity.CateringUnit;
-import bme.cateringunitmonitor.entities.exception.CateringUnitServiceException;
-import bme.cateringunitmonitor.remoting.service.ICateringUnitService;
+import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dao.CateringUnit;
+import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
+import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

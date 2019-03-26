@@ -1,7 +1,7 @@
 package bme.cateringunitmonitor.cateringunitservice.configuration.remoting;
 
-import bme.cateringunitmonitor.remoting.SecureHttpInvokerServiceExporter;
-import bme.cateringunitmonitor.remoting.service.ICateringUnitService;
+import bme.cateringunitmonitor.SecureHttpInvokerServiceExporter;
+import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

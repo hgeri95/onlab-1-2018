@@ -1,6 +1,6 @@
 package bme.cateringunitmonitor.userservice;
 
-import bme.cateringunitmonitor.entities.user.entity.User;
+import bme.cateringunitmonitor.api.dao.User;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import bme.cateringunitmonitor.userservice.service.UserService;
 import org.assertj.core.util.Lists;

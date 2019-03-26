@@ -1,6 +1,6 @@
 package bme.cateringunitmonitor.userservice.repository;
 
-import bme.cateringunitmonitor.entities.user.entity.User;
+import bme.cateringunitmonitor.api.dao.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

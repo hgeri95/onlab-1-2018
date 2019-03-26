@@ -1,11 +1,11 @@
 package bme.cateringunitmonitor.apigateway.controller;
 
 
-import bme.cateringunitmonitor.entities.exception.AuthServiceException;
-import bme.cateringunitmonitor.entities.user.api.AuthRefreshRequest;
-import bme.cateringunitmonitor.entities.user.api.LoginRequest;
-import bme.cateringunitmonitor.remoting.controller.IAuthController;
-import bme.cateringunitmonitor.remoting.service.IAuthService;
+import bme.cateringunitmonitor.api.dto.AuthRefreshRequest;
+import bme.cateringunitmonitor.api.dto.LoginRequest;
+import bme.cateringunitmonitor.api.exception.AuthServiceException;
+import bme.cateringunitmonitor.api.remoting.controller.IAuthController;
+import bme.cateringunitmonitor.api.remoting.service.IAuthService;
 import bme.cateringunitmonitor.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class AuthController implements IAuthController {
 
     @PostMapping("refresh")
     public ResponseEntity refresh(@RequestBody AuthRefreshRequest authRefreshRequest) {
-        logger.debug("Refresh token for user: {}", authRefreshRequest.getUsername());
+        logger.debug("Refresh token for user with id: {}", authRefreshRequest.getUserId());
         try {
             return ResponseEntity.ok(authService.refresh(authRefreshRequest));
         } catch (AuthServiceException ex) {
