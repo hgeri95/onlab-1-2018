@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Entity
-public class User implements Serializable {
+public class UserDAO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,16 +32,16 @@ public class User implements Serializable {
     @ElementCollection(targetClass = String.class)
     private List<String> roles;
 
-    public User() {
+    public UserDAO() {
     }
 
-    public User(String username, String password) {
+    public UserDAO(String username, String password) {
         this.username = username;
         this.password = password;
         this.roles = new ArrayList<>();
     }
 
-    public User(String username, String password, List<String> roles) {
+    public UserDAO(String username, String password, List<String> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;

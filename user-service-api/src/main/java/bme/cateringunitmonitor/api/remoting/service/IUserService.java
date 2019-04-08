@@ -1,25 +1,25 @@
 package bme.cateringunitmonitor.api.remoting.service;
 
-import bme.cateringunitmonitor.api.dao.User;
-import bme.cateringunitmonitor.api.dao.UserInfo;
+import bme.cateringunitmonitor.api.dao.UserDAO;
+import bme.cateringunitmonitor.api.dao.UserInfoDAO;
 
 public interface IUserService {
 
     public static final String REMOTE_ENDPOINT = "/remoteUserService";
 
-    public User create(User user);
+    public UserDAO create(UserDAO user);
 
-    public int delete(User user);
+    public int delete(UserDAO user);
 
-    public User login(User user);
+    public UserDAO login(UserDAO user);
 
-    public User findUser(String username);
+    public UserDAO findUser(String username);
 
-    public User findUserById(Long id);
+    public UserDAO findUserById(Long id);
 
-    public UserInfo saveUserInfo(UserInfo userInfo);
+    public UserInfoDAO saveUserInfo(UserInfoDAO userInfo);
 
-    public UserInfo getUserInfo(String username);
+    public UserInfoDAO getUserInfo(String username);
 
-    public UserInfo updateUserInfo(UserInfo userInfo);
+    public UserInfoDAO updateUserInfo(UserInfoDAO userInfo);
 }

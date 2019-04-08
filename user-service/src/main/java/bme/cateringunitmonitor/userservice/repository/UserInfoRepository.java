@@ -1,10 +1,10 @@
 package bme.cateringunitmonitor.userservice.repository;
 
-import bme.cateringunitmonitor.api.dao.UserInfo;
+import bme.cateringunitmonitor.api.dao.UserInfoDAO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
+public interface UserInfoRepository extends JpaRepository<UserInfoDAO, Long> {
 
-    UserInfo findByUsername(String username);
+    UserInfoDAO findByUsername(String username);
     boolean existsByUsername(String username);
 }

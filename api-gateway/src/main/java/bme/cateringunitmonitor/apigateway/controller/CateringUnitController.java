@@ -1,7 +1,7 @@
 package bme.cateringunitmonitor.apigateway.controller;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dao.CateringUnit;
+import bme.cateringunitmonitor.api.dao.CateringUnitDAO;
 import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
@@ -48,7 +48,7 @@ public class CateringUnitController implements ICateringUnitController {
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity create(@RequestBody CateringUnitRequest cateringUnitRequest) {
         try {
-            CateringUnit cateringUnit = cateringUnitService.create(cateringUnitRequest);
+            CateringUnitDAO cateringUnit = cateringUnitService.create(cateringUnitRequest);
             return ResponseEntity.ok().body(cateringUnit);
         } catch (CateringUnitServiceException ex) {
             logger.error("Error in catering unit creation: {}", ex);
@@ -60,7 +60,7 @@ public class CateringUnitController implements ICateringUnitController {
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitRequest cateringUnitRequest) {
         try {
-            CateringUnit cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
+            CateringUnitDAO cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
             return ResponseEntity.ok().body(cateringUnit);
         } catch (CateringUnitServiceException ex) {
             logger.error("Error in catering unit update: {}", ex);

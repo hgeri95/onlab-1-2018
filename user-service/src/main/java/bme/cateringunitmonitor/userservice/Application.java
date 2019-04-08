@@ -14,6 +14,6 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        log.info("User service started!");
+        log.info("UserDAO service started!");
     }
 }

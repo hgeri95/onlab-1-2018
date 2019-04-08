@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @Entity
-public class UserInfo implements Serializable {
+public class UserInfoDAO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class UserInfo implements Serializable {
     @Column(nullable = false)
     private final Gender gender;
 
-    public UserInfo(String username, String fullName, String city, @Email String email, LocalDate birthDate, Gender gender) {
+    public UserInfoDAO(String username, String fullName, String city, @Email String email, LocalDate birthDate, Gender gender) {
         this.username = username;
         this.fullName = fullName;
         this.city = city;
@@ -47,7 +47,7 @@ public class UserInfo implements Serializable {
         this.gender = gender;
     }
 
-    public UserInfo(Long id, UserInfo userInfo) {
+    public UserInfoDAO(Long id, UserInfoDAO userInfo) {
         this.id = id;
         this.username = userInfo.getUsername();
         this.fullName = userInfo.getFullName();

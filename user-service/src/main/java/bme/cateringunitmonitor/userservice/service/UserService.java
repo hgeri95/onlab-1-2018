@@ -1,8 +1,8 @@
 package bme.cateringunitmonitor.userservice.service;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dao.User;
-import bme.cateringunitmonitor.api.dao.UserInfo;
+import bme.cateringunitmonitor.api.dao.UserDAO;
+import bme.cateringunitmonitor.api.dao.UserInfoDAO;
 import bme.cateringunitmonitor.api.exception.UserServiceException;
 import bme.cateringunitmonitor.api.remoting.service.IUserService;
 import bme.cateringunitmonitor.userservice.repository.UserInfoRepository;
@@ -39,17 +39,17 @@ public class UserService implements IUserService {
 
     @PostConstruct
     public void createDefaultAdminUser() {
-        create(new User("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN.toString())));
+        create(new UserDAO("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN.toString())));
         logger.info("\n////////\n////////\nADMIN USER CREATED: admin 12345\n////////\n////////");
     }
 
-    public User create(User user) {
-        logger.debug("User to create: {}", user.getUsername());
+    public UserDAO create(UserDAO user) {
+        logger.debug("UserDAO to create: {}", user.getUsername());
         if (userRepository.findByUsername(user.getUsername()) != null) {
-            throw new UserServiceException("User already exists.");
+            throw new UserServiceException("UserDAO already exists.");
         }
 
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDAO>> violations = validator.validate(user);
 
         if (!violations.isEmpty()) {
             throw new IllegalArgumentException(violations.toString());
@@ -58,24 +58,24 @@ public class UserService implements IUserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        logger.debug("User {} created", user.getUsername());
+        logger.debug("UserDAO {} created", user.getUsername());
         return userRepository.save(user);
     }
 
-    public int delete(User user) {
-        logger.debug("User to delete: {}", user.getUsername());
+    public int delete(UserDAO user) {
+        logger.debug("UserDAO to delete: {}", user.getUsername());
 
         if (userRepository.findByUsername(user.getUsername()) != null) {
-            logger.debug("User {} deleted", user.getUsername());
+            logger.debug("UserDAO {} deleted", user.getUsername());
             return userRepository.deleteByUsername(user.getUsername());
         } else {
-            throw new UserServiceException("User does not exist: " + user.getUsername());
+            throw new UserServiceException("UserDAO does not exist: " + user.getUsername());
         }
     }
 
-    public User login(User user) {
+    public UserDAO login(UserDAO user) {
         logger.debug("Login user: {}", user.getUsername());
-        User savedUser = userRepository.findByUsername(user.getUsername());
+        UserDAO savedUser = userRepository.findByUsername(user.getUsername());
 
         if (savedUser != null) {
             if (passwordEncoder.matches(user.getPassword(), savedUser.getPassword())) {
@@ -84,31 +84,31 @@ public class UserService implements IUserService {
                 throw new BadCredentialsException("Incorrect password for user: " + user.getUsername());
             }
         } else {
-            throw new BadCredentialsException("User does not exists: " + user.getUsername());
+            throw new BadCredentialsException("UserDAO does not exists: " + user.getUsername());
         }
     }
 
-    public User findUser(String username) {
+    public UserDAO findUser(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public User findUserById(Long id) {
+    public UserDAO findUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public UserInfo saveUserInfo(UserInfo userInfo) {
+    public UserInfoDAO saveUserInfo(UserInfoDAO userInfo) {
         return userInfoRepository.save(userInfo);
     }
 
-    public UserInfo getUserInfo(String username) {
+    public UserInfoDAO getUserInfo(String username) {
         return userInfoRepository.findByUsername(username);
     }
 
-    public UserInfo updateUserInfo(UserInfo userInfo) {
-        logger.debug("User info to update: {}", userInfo);
+    public UserInfoDAO updateUserInfo(UserInfoDAO userInfo) {
+        logger.debug("UserDAO info to update: {}", userInfo);
         if (userInfoRepository.existsByUsername(userInfo.getUsername())) {
-            UserInfo userInfoToUpdate = userInfoRepository.findByUsername(userInfo.getUsername());
-            UserInfo updatedUserInfo = new UserInfo(userInfoToUpdate.getId(), userInfo);
+            UserInfoDAO userInfoToUpdate = userInfoRepository.findByUsername(userInfo.getUsername());
+            UserInfoDAO updatedUserInfo = new UserInfoDAO(userInfoToUpdate.getId(), userInfo);
             return userInfoRepository.save(updatedUserInfo);
         } else {
             return userInfoRepository.save(userInfo);

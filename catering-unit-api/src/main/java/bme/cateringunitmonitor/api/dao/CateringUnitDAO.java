@@ -20,7 +20,7 @@ import java.util.Objects;
 @ToString
 @EqualsAndHashCode
 @Entity
-public class CateringUnit implements Serializable {
+public class CateringUnitDAO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +45,11 @@ public class CateringUnit implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<CategoryParameter> categoryParameters = new ArrayList<>();
 
-    public CateringUnit() {
+    public CateringUnitDAO() {
     }
 
     @JsonCreator
-    public CateringUnit(
+    public CateringUnitDAO(
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
             @JsonProperty("openingHours") List<OpeningPerDay> openingHours,

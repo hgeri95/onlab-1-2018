@@ -1,6 +1,6 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.api.dao.User;
+import bme.cateringunitmonitor.api.dao.UserDAO;
 import bme.cateringunitmonitor.api.dto.AuthRefreshRequest;
 import bme.cateringunitmonitor.api.dto.LoginRequest;
 import bme.cateringunitmonitor.api.dto.LoginResponse;
@@ -28,17 +28,17 @@ public class AuthService implements IAuthService {
     public LoginResponse authenticate(LoginRequest loginRequest) {
         logger.debug("Authenticating user: {}, {}", loginRequest.getUsername(), loginRequest.getPassword());
 
-        User user = userService.login(
-                new User(loginRequest.getUsername(),
+        UserDAO user = userService.login(
+                new UserDAO(loginRequest.getUsername(),
                         loginRequest.getPassword()));
         return tokenService.generateAndStoreTokens(user);
     }
 
     public void logout(String username) {
         logger.debug("Logging out user: {}", username);
-        User userToLogout = userService.findUser(username);
+        UserDAO userToLogout = userService.findUser(username);
         if (userToLogout == null) {
-            throw new AuthServiceException("User does not exists");
+            throw new AuthServiceException("UserDAO does not exists");
         }
         tokenService.invalidateToken(userToLogout.getId());
     }
@@ -55,11 +55,11 @@ public class AuthService implements IAuthService {
             throw new AuthServiceException("Invalid token!");
         } else {
             if (refreshToken.equals(storedRefreshToken.getRefreshToken())) {
-                User user = userService.findUserById(refreshRequest.getUserId());
+                UserDAO user = userService.findUserById(refreshRequest.getUserId());
                 if (user != null) {
                     return tokenService.generateAndStoreTokens(user);
                 } else {
-                    throw new AuthServiceException("User not found!");
+                    throw new AuthServiceException("UserDAO not found!");
                 }
             } else {
                 throw new AuthServiceException("Bad or invalid token!");

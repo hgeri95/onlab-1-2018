@@ -1,6 +1,6 @@
 package bme.cateringunitmonitor.userservice;
 
-import bme.cateringunitmonitor.api.dao.User;
+import bme.cateringunitmonitor.api.dao.UserDAO;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import bme.cateringunitmonitor.userservice.service.UserService;
 import org.assertj.core.util.Lists;
@@ -35,7 +35,7 @@ public class UserServiceTest {
 
     @Test
     public void testUserRepositoryMethods() {
-        User user = new User("test", "123", Lists.emptyList());
+        UserDAO user = new UserDAO("test", "123", Lists.emptyList());
         Assert.assertEquals(user, userRepository.save(user));
 
         Assert.assertNotNull(userRepository.findByUsername(user.getUsername()));
@@ -47,15 +47,15 @@ public class UserServiceTest {
 
     @Test
     public void testUserServiceMethods() {
-        User user = new User("dummyUser", "123", Lists.emptyList());
+        UserDAO user = new UserDAO("dummyUser", "123", Lists.emptyList());
         userService.create(user);
 
         Assert.assertNotNull(userRepository.findByUsername(user.getUsername()));
 
         expectedException.expect(BadCredentialsException.class);
-        userService.login(new User(user.getUsername(), "badPassword", Lists.emptyList()));
+        userService.login(new UserDAO(user.getUsername(), "badPassword", Lists.emptyList()));
 
         Assert.assertEquals(user.getUsername(),
-                userService.login(new User(user.getUsername(), "123", Lists.emptyList())).getUsername());
+                userService.login(new UserDAO(user.getUsername(), "123", Lists.emptyList())).getUsername());
     }
 }

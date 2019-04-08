@@ -1,6 +1,6 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.api.dao.User;
+import bme.cateringunitmonitor.api.dao.UserDAO;
 import bme.cateringunitmonitor.api.dto.LoginResponse;
 import bme.cateringunitmonitor.api.wrapper.RefreshToken;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public class TokenService {
     @Autowired
     private TokenStore tokenStore;
 
-    public LoginResponse generateAndStoreTokens(User user) {
+    public LoginResponse generateAndStoreTokens(UserDAO user) {
         logger.debug("Generate token for user: {}", user.toString());
         LoginResponse response = tokenGeneratorService.createTokens(user);
         tokenStore.storeRefreshToken(user.getId(),
