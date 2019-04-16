@@ -1,7 +1,7 @@
 package bme.cateringunitmonitor.api.remoting.controller;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -15,11 +15,11 @@ public interface ICateringUnitController {
 
     @PostMapping("/create")
     @Secured(Role.Values.ROLE_OWNER)
-    public ResponseEntity create(@RequestBody CateringUnitRequest cateringUnitRequest);
+    public ResponseEntity create(@RequestBody CateringUnitDTO cateringUnitRequest);
 
     @PutMapping("/update/{id}")
     @Secured(Role.Values.ROLE_OWNER)
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitRequest cateringUnitRequest);
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitDTO cateringUnitRequest);
 
     @DeleteMapping("/delete/{id}")
     @Secured(Role.Values.ROLE_OWNER)

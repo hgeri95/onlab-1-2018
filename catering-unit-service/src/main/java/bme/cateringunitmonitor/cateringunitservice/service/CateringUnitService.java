@@ -1,10 +1,11 @@
 package bme.cateringunitmonitor.cateringunitservice.service;
 
-import bme.cateringunitmonitor.api.dao.CateringUnitDAO;
-import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
+import bme.cateringunitmonitor.cateringunitservice.dao.CateringUnitDAO;
 import bme.cateringunitmonitor.cateringunitservice.repository.CateringUnitRepository;
+import bme.cateringunitmonitor.cateringunitservice.util.CateringUnitConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,48 +23,40 @@ public class CateringUnitService implements ICateringUnitService {
     @Autowired
     private CateringUnitRepository cateringUnitRepository;
 
-    public List<CateringUnitDAO> getAll() {
-        return cateringUnitRepository.findAll();
+    @Autowired
+    private CateringUnitConverter cateringUnitConverter;
+
+    public List<CateringUnitDTO> getAll() {
+        return cateringUnitRepository.findAll().stream()
+                .map(c -> cateringUnitConverter.convertToDTO(c))
+                .collect(Collectors.toList());
     }
 
-    public CateringUnitDAO create(CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException {
+    public CateringUnitDTO create(CateringUnitDTO cateringUnitDTO) throws CateringUnitServiceException {
         //TODO Validate datas
-        if (cateringUnitRepository.existsByName(cateringUnitRequest.getName())) {
+        if (cateringUnitRepository.existsByName(cateringUnitDTO.getName())) {
             throw new CateringUnitServiceException("Catering unit already exists");
         }
 
-        CateringUnitDAO cateringUnit = new CateringUnitDAO(
-                cateringUnitRequest.getName(),
-                cateringUnitRequest.getDescription(),
-                cateringUnitRequest.getOpeningHours(),
-                cateringUnitRequest.getAddress(),
-                cateringUnitRequest.getCategoryParameters()
-        );
-
-        return cateringUnitRepository.save(cateringUnit);
+        CateringUnitDAO cateringUnit = cateringUnitConverter.convertToEntity(cateringUnitDTO);
+        return cateringUnitConverter.convertToDTO(cateringUnitRepository.save(cateringUnit));
     }
 
-    public CateringUnitDAO update(Long id, CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException {
-        log.debug("Catering unit to update: {}, with id: {}", cateringUnitRequest, id);
+    public CateringUnitDTO update(Long id, CateringUnitDTO cateringUnitDTO) throws CateringUnitServiceException {
+        log.debug("Catering unit to update: {}, with id: {}", cateringUnitDTO, id);
         Optional<CateringUnitDAO> cateringUnitFromDb = cateringUnitRepository.findById(id);
         if (cateringUnitFromDb.isPresent()) {
             CateringUnitDAO cateringUnitToUpdate = cateringUnitFromDb.get();
-            cateringUnitToUpdate.setAddress(cateringUnitRequest.getAddress());
-            cateringUnitToUpdate.setCategoryParameters(cateringUnitRequest.getCategoryParameters());
-            cateringUnitToUpdate.setDescription(cateringUnitRequest.getDescription());
-            cateringUnitToUpdate.setName(cateringUnitRequest.getName());
-            cateringUnitToUpdate.setOpeningHours(cateringUnitRequest.getOpeningHours());
+            cateringUnitToUpdate.setAddress(cateringUnitDTO.getAddress());
+            cateringUnitToUpdate.setCategoryParameters(cateringUnitDTO.getCategoryParameters());
+            cateringUnitToUpdate.setDescription(cateringUnitDTO.getDescription());
+            cateringUnitToUpdate.setName(cateringUnitDTO.getName());
+            cateringUnitToUpdate.setOpeningHours(cateringUnitDTO.getOpeningHours());
 
-            return cateringUnitRepository.save(cateringUnitToUpdate);
+            return cateringUnitConverter.convertToDTO(cateringUnitRepository.save(cateringUnitToUpdate));
         } else {
-            CateringUnitDAO cateringUnit = new CateringUnitDAO(
-                    cateringUnitRequest.getName(),
-                    cateringUnitRequest.getDescription(),
-                    cateringUnitRequest.getOpeningHours(),
-                    cateringUnitRequest.getAddress(),
-                    cateringUnitRequest.getCategoryParameters()
-            );
-            return cateringUnitRepository.save(cateringUnit);
+            CateringUnitDAO cateringUnitDAO = cateringUnitConverter.convertToEntity(cateringUnitDTO);
+            return cateringUnitConverter.convertToDTO(cateringUnitRepository.save(cateringUnitDAO));
         }
     }
 

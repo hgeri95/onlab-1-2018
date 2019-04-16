@@ -1,9 +1,8 @@
 package bme.cateringunitmonitor.apigateway.controller;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dao.UserDAO;
-import bme.cateringunitmonitor.api.dao.UserInfoDAO;
-import bme.cateringunitmonitor.api.dto.UserInfoRequest;
+import bme.cateringunitmonitor.api.dto.UserDTO;
+import bme.cateringunitmonitor.api.dto.UserInfoDTO;
 import bme.cateringunitmonitor.api.remoting.controller.IUserController;
 import bme.cateringunitmonitor.api.remoting.service.IUserService;
 import bme.cateringunitmonitor.security.SecurityUtil;
@@ -25,7 +24,7 @@ public class UserController implements IUserController {
     private IUserService userService;
 
     @PostMapping("/sign-up")
-    public UserDAO signUp(@RequestBody UserDAO user) {
+    public UserDTO signUp(@RequestBody UserDTO user) {
         logger.debug("Sign up new user: {}", user);
         return userService.create(user);
     }
@@ -37,10 +36,10 @@ public class UserController implements IUserController {
 
     @PostMapping("/userinfo")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
-    public UserInfoDAO setUserInfo(@RequestBody UserInfoRequest userInfoRequest) {
+    public UserInfoDTO setUserInfo(@RequestBody UserInfoDTO userInfoRequest) {
         logger.debug("Set user info: {}", userInfoRequest);
         String activeUser = SecurityUtil.getActiveUser();
-        UserInfoDAO userInfo = new UserInfoDAO(
+        UserInfoDTO userInfo = new UserInfoDTO(
                 activeUser,
                 userInfoRequest.getFullName(),
                 userInfoRequest.getCity(),
@@ -54,16 +53,16 @@ public class UserController implements IUserController {
 
     @GetMapping("/userinfo")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
-    public UserInfoDAO getUserInfo() {
+    public UserInfoDTO getUserInfo() {
         String activeUser = SecurityUtil.getActiveUser();
         return userService.getUserInfo(activeUser);
     }
 
     @PutMapping("/userinfo")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
-    public UserInfoDAO updateUserInfo(@RequestBody UserInfoRequest userInfoRequest) {
+    public UserInfoDTO updateUserInfo(@RequestBody UserInfoDTO userInfoRequest) {
         String activeUser = SecurityUtil.getActiveUser();
-        return userService.updateUserInfo(new UserInfoDAO(
+        return userService.updateUserInfo(new UserInfoDTO(
                 SecurityUtil.getActiveUser(),
                 userInfoRequest.getFullName(),
                 userInfoRequest.getCity(),

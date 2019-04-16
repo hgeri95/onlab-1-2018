@@ -1,4 +1,4 @@
-package bme.cateringunitmonitor.api.dao;
+package bme.cateringunitmonitor.api;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,7 +8,6 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Getter
 @Setter

@@ -5,6 +5,11 @@ services:
         image: mysql-server
         ports:
           - "3036:3036"
+        environment:
+          - MYSQL_DATABASE=app
+          - MYSQL_ROOT_PASSWORD=root123
+          - MYSQL_USER=user
+          - MYSQL_PASSWORD=test123
         networks:
           - custom-network
     user-service:
@@ -16,6 +21,8 @@ services:
             - custom-network
         depends_on:
           - mysql-server
+        links:
+          - mysql-server:mysql
     catering-service:
             container_name: catering-service
             image: catering-service-build
@@ -25,6 +32,8 @@ services:
                 - custom-network
             depends_on:
               - mysql-server
+            links:
+              - mysql-server:mysql
     gateway-service:
             container_name: gateway-service
             image: gateway-service-build

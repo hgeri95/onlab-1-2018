@@ -1,6 +1,5 @@
 package bme.cateringunitmonitor.api.dto;
 
-import bme.cateringunitmonitor.api.dao.CateringUnitDAO;
 import lombok.*;
 
 import java.io.Serializable;
@@ -12,5 +11,5 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 public class CateringUnitsResponse implements Serializable {
-    private List<CateringUnitDAO> cateringUnits;
+    private List<CateringUnitDTO> cateringUnits;
 }

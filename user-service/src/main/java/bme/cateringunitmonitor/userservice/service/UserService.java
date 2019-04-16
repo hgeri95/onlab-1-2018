@@ -1,12 +1,16 @@
 package bme.cateringunitmonitor.userservice.service;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dao.UserDAO;
-import bme.cateringunitmonitor.api.dao.UserInfoDAO;
+import bme.cateringunitmonitor.api.dto.UserDTO;
+import bme.cateringunitmonitor.api.dto.UserInfoDTO;
 import bme.cateringunitmonitor.api.exception.UserServiceException;
 import bme.cateringunitmonitor.api.remoting.service.IUserService;
+import bme.cateringunitmonitor.userservice.dao.UserDAO;
+import bme.cateringunitmonitor.userservice.dao.UserInfoDAO;
 import bme.cateringunitmonitor.userservice.repository.UserInfoRepository;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
+import bme.cateringunitmonitor.userservice.util.UserConverter;
+import bme.cateringunitmonitor.userservice.util.UserInfoConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,21 +39,27 @@ public class UserService implements IUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserConverter userConverter;
+
+    @Autowired
+    private UserInfoConverter userInfoConverter;
+
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @PostConstruct
     public void createDefaultAdminUser() {
-        create(new UserDAO("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN.toString())));
+        create(new UserDTO("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN)));
         logger.info("\n////////\n////////\nADMIN USER CREATED: admin 12345\n////////\n////////");
     }
 
-    public UserDAO create(UserDAO user) {
-        logger.debug("UserDAO to create: {}", user.getUsername());
+    public UserDTO create(UserDTO user) {
+        logger.debug("User to create: {}", user.getUsername());
         if (userRepository.findByUsername(user.getUsername()) != null) {
-            throw new UserServiceException("UserDAO already exists.");
+            throw new UserServiceException("User already exists.");
         }
 
-        Set<ConstraintViolation<UserDAO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
 
         if (!violations.isEmpty()) {
             throw new IllegalArgumentException(violations.toString());
@@ -58,28 +68,29 @@ public class UserService implements IUserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        logger.debug("UserDAO {} created", user.getUsername());
-        return userRepository.save(user);
+        UserDAO userDAO = userConverter.convertToEntity(user);
+        logger.debug("UserDAO {} created", userDAO.getUsername());
+        return userConverter.convertToDTO(userRepository.save(userDAO));
     }
 
-    public int delete(UserDAO user) {
-        logger.debug("UserDAO to delete: {}", user.getUsername());
+    public int delete(String username) {
+        logger.debug("User to delete: {}", username);
 
-        if (userRepository.findByUsername(user.getUsername()) != null) {
-            logger.debug("UserDAO {} deleted", user.getUsername());
-            return userRepository.deleteByUsername(user.getUsername());
+        if (userRepository.findByUsername(username) != null) {
+            logger.debug("UserDAO {} deleted", username);
+            return userRepository.deleteByUsername(username);
         } else {
-            throw new UserServiceException("UserDAO does not exist: " + user.getUsername());
+            throw new UserServiceException("User does not exist: " + username);
         }
     }
 
-    public UserDAO login(UserDAO user) {
+    public UserDTO login(UserDTO user) {
         logger.debug("Login user: {}", user.getUsername());
         UserDAO savedUser = userRepository.findByUsername(user.getUsername());
 
         if (savedUser != null) {
             if (passwordEncoder.matches(user.getPassword(), savedUser.getPassword())) {
-                return savedUser;
+                return userConverter.convertToDTO(savedUser);
             } else {
                 throw new BadCredentialsException("Incorrect password for user: " + user.getUsername());
             }
@@ -88,30 +99,33 @@ public class UserService implements IUserService {
         }
     }
 
-    public UserDAO findUser(String username) {
-        return userRepository.findByUsername(username);
+    public UserDTO findUser(String username) {
+        return userConverter.convertToDTO(userRepository.findByUsername(username));
     }
 
-    public UserDAO findUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public UserDTO findUserById(Long id) {
+        return userConverter.convertToDTO(userRepository.findById(id).orElse(null));
     }
 
-    public UserInfoDAO saveUserInfo(UserInfoDAO userInfo) {
-        return userInfoRepository.save(userInfo);
+    public UserInfoDTO saveUserInfo(UserInfoDTO userInfo) {
+        logger.debug("Save userinfo for user: {}", userInfo.getUsername());
+        UserInfoDAO userInfoDAO = userInfoRepository.save(userInfoConverter.convertToEntity(userInfo));
+        return userInfoConverter.convertToDTO(userInfoDAO);
     }
 
-    public UserInfoDAO getUserInfo(String username) {
-        return userInfoRepository.findByUsername(username);
+    public UserInfoDTO getUserInfo(String username) {
+        return userInfoConverter.convertToDTO(userInfoRepository.findByUsername(username));
     }
 
-    public UserInfoDAO updateUserInfo(UserInfoDAO userInfo) {
-        logger.debug("UserDAO info to update: {}", userInfo);
+    public UserInfoDTO updateUserInfo(UserInfoDTO userInfo) {
+        logger.debug("User info to update: {}", userInfo);
         if (userInfoRepository.existsByUsername(userInfo.getUsername())) {
             UserInfoDAO userInfoToUpdate = userInfoRepository.findByUsername(userInfo.getUsername());
-            UserInfoDAO updatedUserInfo = new UserInfoDAO(userInfoToUpdate.getId(), userInfo);
-            return userInfoRepository.save(updatedUserInfo);
+            UserInfoDAO userInfoRequest = userInfoConverter.convertToEntity(userInfo);
+            UserInfoDAO updatedUserInfo = new UserInfoDAO(userInfoToUpdate.getId(), userInfoRequest);
+            return userInfoConverter.convertToDTO(userInfoRepository.save(updatedUserInfo));
         } else {
-            return userInfoRepository.save(userInfo);
+            return userInfoConverter.convertToDTO(userInfoRepository.save(userInfoConverter.convertToEntity(userInfo)));
         }
     }
 }

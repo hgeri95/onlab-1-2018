@@ -1,24 +1,22 @@
 package bme.cateringunitmonitor.api.dto;
 
-import bme.cateringunitmonitor.api.dao.Address;
-import bme.cateringunitmonitor.api.dao.CategoryParameter;
-import bme.cateringunitmonitor.api.dao.OpeningPerDay;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import bme.cateringunitmonitor.api.Address;
+import bme.cateringunitmonitor.api.CategoryParameter;
+import bme.cateringunitmonitor.api.OpeningPerDay;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
-public class CateringUnitRequest implements Serializable {
+public class CateringUnitDTO {
+
+    private Long id;
 
     private String name;
 

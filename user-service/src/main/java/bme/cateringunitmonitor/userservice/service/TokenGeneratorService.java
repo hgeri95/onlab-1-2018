@@ -1,6 +1,8 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.api.dao.UserDAO;
+import bme.cateringunitmonitor.api.Role;
+import bme.cateringunitmonitor.api.dto.UserDTO;
+import bme.cateringunitmonitor.userservice.dao.UserDAO;
 import bme.cateringunitmonitor.api.dto.LoginResponse;
 import bme.cateringunitmonitor.security.SecurityConstants;
 import io.jsonwebtoken.Jwts;
@@ -27,8 +29,8 @@ public class TokenGeneratorService {
     @Value("${jwt.refreshTokenValidity.minutes:10}")
     private int refreshTokenValidity;
 
-    public LoginResponse createTokens(UserDAO user) {
-        List<String> roles = user.getRoles();
+    public LoginResponse createTokens(UserDTO user) {
+        List<Role> roles = user.getRoles();
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tokenExpireDate = now.plusMinutes(accessTokenValidity);

@@ -1,6 +1,9 @@
 package bme.cateringunitmonitor.userservice;
 
 import bme.cateringunitmonitor.userservice.service.UserService;
+import bme.cateringunitmonitor.userservice.util.UserConverter;
+import bme.cateringunitmonitor.userservice.util.UserInfoConverter;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -18,5 +21,20 @@ public class UserServiceTestConfig {
     @Bean
     public UserService userService() {
         return new UserService();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
+    @Bean
+    public UserInfoConverter userInfoConverter() {
+        return new UserInfoConverter();
+    }
+
+    @Bean
+    public UserConverter userConverter() {
+        return new UserConverter();
     }
 }

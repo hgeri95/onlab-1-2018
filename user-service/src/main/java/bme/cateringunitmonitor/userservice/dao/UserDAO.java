@@ -1,5 +1,6 @@
-package bme.cateringunitmonitor.api.dao;
+package bme.cateringunitmonitor.userservice.dao;
 
+import bme.cateringunitmonitor.api.Role;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +30,9 @@ public class UserDAO implements Serializable {
     @NotNull
     private String password;
 
-    @ElementCollection(targetClass = String.class)
-    private List<String> roles;
+    @ElementCollection(targetClass = Role.class)
+    @Enumerated(EnumType.STRING)
+    private List<Role> roles;
 
     public UserDAO() {
     }
@@ -41,7 +43,7 @@ public class UserDAO implements Serializable {
         this.roles = new ArrayList<>();
     }
 
-    public UserDAO(String username, String password, List<String> roles) {
+    public UserDAO(String username, String password, List<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;

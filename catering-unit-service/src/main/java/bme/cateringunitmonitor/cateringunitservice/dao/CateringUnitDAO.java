@@ -1,11 +1,11 @@
-package bme.cateringunitmonitor.api.dao;
+package bme.cateringunitmonitor.cateringunitservice.dao;
 
+import bme.cateringunitmonitor.api.Address;
+import bme.cateringunitmonitor.api.CategoryParameter;
+import bme.cateringunitmonitor.api.OpeningPerDay;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -13,12 +13,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 public class CateringUnitDAO implements Serializable {
 
@@ -44,23 +44,6 @@ public class CateringUnitDAO implements Serializable {
     @Column(length = 100000)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<CategoryParameter> categoryParameters = new ArrayList<>();
-
-    public CateringUnitDAO() {
-    }
-
-    @JsonCreator
-    public CateringUnitDAO(
-            @JsonProperty("name") String name,
-            @JsonProperty("description") String description,
-            @JsonProperty("openingHours") List<OpeningPerDay> openingHours,
-            @JsonProperty("address") Address address,
-            @JsonProperty("categoryParameters") List<CategoryParameter> categoryParameters) {
-        this.name = name;
-        this.description = description;
-        this.openingHours = openingHours;
-        this.address = address;
-        this.categoryParameters = categoryParameters;
-    }
 
     //TODO pictures
 }

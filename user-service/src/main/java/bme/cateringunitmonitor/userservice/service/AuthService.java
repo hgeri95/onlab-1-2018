@@ -1,9 +1,9 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.api.dao.UserDAO;
 import bme.cateringunitmonitor.api.dto.AuthRefreshRequest;
 import bme.cateringunitmonitor.api.dto.LoginRequest;
 import bme.cateringunitmonitor.api.dto.LoginResponse;
+import bme.cateringunitmonitor.api.dto.UserDTO;
 import bme.cateringunitmonitor.api.exception.AuthServiceException;
 import bme.cateringunitmonitor.api.remoting.service.IAuthService;
 import bme.cateringunitmonitor.api.wrapper.RefreshToken;
@@ -28,15 +28,15 @@ public class AuthService implements IAuthService {
     public LoginResponse authenticate(LoginRequest loginRequest) {
         logger.debug("Authenticating user: {}, {}", loginRequest.getUsername(), loginRequest.getPassword());
 
-        UserDAO user = userService.login(
-                new UserDAO(loginRequest.getUsername(),
+        UserDTO user = userService.login(
+                new UserDTO(loginRequest.getUsername(),
                         loginRequest.getPassword()));
         return tokenService.generateAndStoreTokens(user);
     }
 
     public void logout(String username) {
         logger.debug("Logging out user: {}", username);
-        UserDAO userToLogout = userService.findUser(username);
+        UserDTO userToLogout = userService.findUser(username);
         if (userToLogout == null) {
             throw new AuthServiceException("UserDAO does not exists");
         }
@@ -55,7 +55,7 @@ public class AuthService implements IAuthService {
             throw new AuthServiceException("Invalid token!");
         } else {
             if (refreshToken.equals(storedRefreshToken.getRefreshToken())) {
-                UserDAO user = userService.findUserById(refreshRequest.getUserId());
+                UserDTO user = userService.findUserById(refreshRequest.getUserId());
                 if (user != null) {
                     return tokenService.generateAndStoreTokens(user);
                 } else {

@@ -1,8 +1,7 @@
 package bme.cateringunitmonitor.apigateway.controller;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dao.CateringUnitDAO;
-import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.api.remoting.controller.ICateringUnitController;
@@ -46,9 +45,9 @@ public class CateringUnitController implements ICateringUnitController {
 
     @PostMapping("/create")
     @Secured(Role.Values.ROLE_OWNER)
-    public ResponseEntity create(@RequestBody CateringUnitRequest cateringUnitRequest) {
+    public ResponseEntity create(@RequestBody CateringUnitDTO cateringUnitRequest) {
         try {
-            CateringUnitDAO cateringUnit = cateringUnitService.create(cateringUnitRequest);
+            CateringUnitDTO cateringUnit = cateringUnitService.create(cateringUnitRequest);
             return ResponseEntity.ok().body(cateringUnit);
         } catch (CateringUnitServiceException ex) {
             logger.error("Error in catering unit creation: {}", ex);
@@ -58,9 +57,9 @@ public class CateringUnitController implements ICateringUnitController {
 
     @PutMapping("/update/{id}")
     @Secured(Role.Values.ROLE_OWNER)
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitRequest cateringUnitRequest) {
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitDTO cateringUnitRequest) {
         try {
-            CateringUnitDAO cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
+            CateringUnitDTO cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
             return ResponseEntity.ok().body(cateringUnit);
         } catch (CateringUnitServiceException ex) {
             logger.error("Error in catering unit update: {}", ex);

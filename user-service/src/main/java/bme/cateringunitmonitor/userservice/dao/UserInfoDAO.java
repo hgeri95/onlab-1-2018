@@ -1,5 +1,6 @@
-package bme.cateringunitmonitor.api.dao;
+package bme.cateringunitmonitor.userservice.dao;
 
+import bme.cateringunitmonitor.api.Gender;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,21 +23,23 @@ public class UserInfoDAO implements Serializable {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private final String username;
+    private String username;
 
     @Column(nullable = false)
-    private final String fullName;
+    private String fullName;
 
-    private final String city;
+    private String city;
 
     @Email
     @Column(nullable = false)
-    private final String email;
+    private String email;
 
-    private final LocalDate birthDate;
+    private LocalDate birthDate;
 
     @Column(nullable = false)
-    private final Gender gender;
+    private Gender gender;
+
+    public UserInfoDAO() {}
 
     public UserInfoDAO(String username, String fullName, String city, @Email String email, LocalDate birthDate, Gender gender) {
         this.username = username;

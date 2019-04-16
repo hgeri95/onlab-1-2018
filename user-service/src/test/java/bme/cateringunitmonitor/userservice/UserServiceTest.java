@@ -1,6 +1,8 @@
 package bme.cateringunitmonitor.userservice;
 
-import bme.cateringunitmonitor.api.dao.UserDAO;
+import bme.cateringunitmonitor.api.dto.UserDTO;
+import bme.cateringunitmonitor.userservice.configuration.UserServiceConfig;
+import bme.cateringunitmonitor.userservice.dao.UserDAO;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import bme.cateringunitmonitor.userservice.service.UserService;
 import org.assertj.core.util.Lists;
@@ -18,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@Import(UserServiceTestConfig.class)
+@Import({UserServiceTestConfig.class})
 public class UserServiceTest {
 
     @Autowired
@@ -47,15 +49,15 @@ public class UserServiceTest {
 
     @Test
     public void testUserServiceMethods() {
-        UserDAO user = new UserDAO("dummyUser", "123", Lists.emptyList());
+        UserDTO user = new UserDTO("dummyUser", "123", Lists.emptyList());
         userService.create(user);
 
         Assert.assertNotNull(userRepository.findByUsername(user.getUsername()));
 
         expectedException.expect(BadCredentialsException.class);
-        userService.login(new UserDAO(user.getUsername(), "badPassword", Lists.emptyList()));
+        userService.login(new UserDTO(user.getUsername(), "badPassword", Lists.emptyList()));
 
         Assert.assertEquals(user.getUsername(),
-                userService.login(new UserDAO(user.getUsername(), "123", Lists.emptyList())).getUsername());
+                userService.login(new UserDTO(user.getUsername(), "123", Lists.emptyList())).getUsername());
     }
 }

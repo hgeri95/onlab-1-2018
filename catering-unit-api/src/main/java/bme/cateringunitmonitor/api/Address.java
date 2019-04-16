@@ -1,4 +1,4 @@
-package bme.cateringunitmonitor.api.dao;
+package bme.cateringunitmonitor.api;
 
 import lombok.*;
 
