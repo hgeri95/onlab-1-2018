@@ -4,7 +4,6 @@ import bme.cateringunitmonitor.api.Role;
 import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
-import bme.cateringunitmonitor.api.remoting.controller.ICateringUnitController;
 import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cateringunit")
-public class CateringUnitController implements ICateringUnitController {
+public class CateringUnitController {
 
     private static final Logger logger = LoggerFactory.getLogger(CateringUnitController.class);
 

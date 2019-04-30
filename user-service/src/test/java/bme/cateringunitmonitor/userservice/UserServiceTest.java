@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashSet;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Import({UserServiceTestConfig.class})
@@ -37,7 +39,7 @@ public class UserServiceTest {
 
     @Test
     public void testUserRepositoryMethods() {
-        UserDAO user = new UserDAO("test", "123", Lists.emptyList());
+        UserDAO user = new UserDAO("test", "123", new HashSet<>());
         Assert.assertEquals(user, userRepository.save(user));
 
         Assert.assertNotNull(userRepository.findByUsername(user.getUsername()));

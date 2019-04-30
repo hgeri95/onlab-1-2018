@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/authenticate")
-public class AuthController implements IAuthController {
+public class AuthController {
 
     private static Logger logger = LoggerFactory.getLogger(AuthController.class);
 

@@ -3,11 +3,11 @@ package bme.cateringunitmonitor.apigateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = "bme.cateringunitmonitor")
-@EntityScan(basePackages = "bme.cateringunitmonitor")
 @Slf4j
+@EnableFeignClients
 public class Application {
 
     public  static void main(String[] args) {

@@ -1,16 +1,20 @@
 package bme.cateringunitmonitor.api.dto;
 
 import bme.cateringunitmonitor.api.Role;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Long id;
 

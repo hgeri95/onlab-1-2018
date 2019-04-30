@@ -9,8 +9,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,7 +32,7 @@ public class UserDAO implements Serializable {
 
     @ElementCollection(targetClass = Role.class)
     @Enumerated(EnumType.STRING)
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public UserDAO() {
     }
@@ -40,10 +40,10 @@ public class UserDAO implements Serializable {
     public UserDAO(String username, String password) {
         this.username = username;
         this.password = password;
-        this.roles = new ArrayList<>();
+        this.roles = new HashSet<>();
     }
 
-    public UserDAO(String username, String password, List<Role> roles) {
+    public UserDAO(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;

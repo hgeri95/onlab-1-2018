@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
     mysql-server:
         container_name: mysql-server
@@ -12,6 +12,10 @@ services:
           - MYSQL_PASSWORD=test123
         networks:
           - custom-network
+        healthcheck:
+          test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+          timeout: 20s
+          retries: 10
     user-service:
         container_name: user-service
         image: user-service-build
@@ -20,7 +24,8 @@ services:
         networks:
             - custom-network
         depends_on:
-          - mysql-server
+          mysql-server:
+            condition: service_healthy
         links:
           - mysql-server:mysql
     catering-service:
@@ -31,7 +36,8 @@ services:
             networks:
                 - custom-network
             depends_on:
-              - mysql-server
+              mysql-server:
+                condition: service_healthy
             links:
               - mysql-server:mysql
     gateway-service:
@@ -46,12 +52,12 @@ services:
             networks:
                 - custom-network
             links:
-              - user-service:user_service
-              - catering-service:catering_service
+              - user-service:user-service
+              - catering-service:catering-service
             environment:
-              - authServiceUrl=http://user_service:8081
-              - userServiceUrl=http://user_service:8081
-              - cateringServiceUrl=http://catering_service:8082
+              - authServiceUrl=http://user-service:8081
+              - userServiceUrl=http://user-service:8081
+              - cateringServiceUrl=http://catering-service:8082
 networks:
     custom-network:
         driver: bridge

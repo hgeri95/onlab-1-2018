@@ -74,7 +74,7 @@
                 </executions>
             </plugin>
             <!-- Upload image to GCloud -->
-            <plugin>
+            <!--<plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>1.0.2</version>
@@ -83,7 +83,7 @@
                         <image>eu.gcr.io/cateringunitmonitor/user-service-build</image>
                     </to>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>
