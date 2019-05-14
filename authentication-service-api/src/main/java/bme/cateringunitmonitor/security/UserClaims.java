@@ -1,9 +1,8 @@
 package bme.cateringunitmonitor.security;
 
-import bme.cateringunitmonitor.security.SecurityConstants;
+import bme.cateringunitmonitor.utils.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;

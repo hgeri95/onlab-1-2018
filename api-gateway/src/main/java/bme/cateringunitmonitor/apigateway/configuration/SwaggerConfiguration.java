@@ -30,7 +30,7 @@ public class SwaggerConfiguration {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder().securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("^((?!authenticate/).)*$"))
+                .forPaths(PathSelectors.regex("^((?!authenticate/login).)*$"))
                 .build();
     }
 

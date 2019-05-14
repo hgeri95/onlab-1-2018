@@ -23,6 +23,7 @@
         <module>user-service</module>
         <module>api-gateway</module>
         <module>authentication-service-api</module>
+        <module>utils</module>
     </modules>
 
     <dependencyManagement>
@@ -40,6 +41,11 @@
             <dependency>
                 <groupId>bme.cateringunitmonitor</groupId>
                 <artifactId>authentication-service-api</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>bme.cateringunitmonitor</groupId>
+                <artifactId>utils</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <!-- Database -->
@@ -84,11 +90,6 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
-                <version>2.1.1.RELEASE</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
                 <version>2.1.1.RELEASE</version>
             </dependency>
         </dependencies>

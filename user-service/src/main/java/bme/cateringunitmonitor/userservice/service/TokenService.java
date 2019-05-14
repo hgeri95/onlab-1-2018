@@ -25,6 +25,7 @@ public class TokenService {
         LoginResponse response = tokenGeneratorService.createTokens(user);
         tokenStore.storeRefreshToken(user.getId(),
                 response.getRefreshToken(), response.getRefreshTokenExpireDate());
+        logger.debug("Login response: {}", response);
         return response;
     }
 

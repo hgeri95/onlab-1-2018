@@ -1,4 +1,4 @@
-package bme.cateringunitmonitor.security;
+package bme.cateringunitmonitor.utils.security;
 
 public class SecurityConstants {
 

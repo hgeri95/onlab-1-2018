@@ -1,5 +1,7 @@
 package bme.cateringunitmonitor.apigateway.configuration;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -18,5 +20,10 @@ public class WebMvcConfiguration {
                 //registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
+    }
+
+    @Bean
+    public PropertyPlaceholderConfigurer placeholderConfigurer() {
+        return new PropertyPlaceholderConfigurer();
     }
 }

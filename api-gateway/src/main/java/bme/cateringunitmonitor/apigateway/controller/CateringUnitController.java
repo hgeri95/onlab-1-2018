@@ -3,66 +3,57 @@ package bme.cateringunitmonitor.apigateway.controller;
 import bme.cateringunitmonitor.api.Role;
 import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
-import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
-import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import bme.cateringunitmonitor.api.remoting.controller.ICateringUnitController;
+import bme.cateringunitmonitor.utils.feign.CustomErrorDecoder;
+import bme.cateringunitmonitor.utils.feign.FeignSecurityInterceptor;
+import feign.Contract;
+import feign.Feign;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cateringunit")
 public class CateringUnitController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CateringUnitController.class);
+    private final ICateringUnitController cateringUnitController;
 
     @Autowired
-    private ICateringUnitService cateringUnitService;
+    public CateringUnitController(@Value("${cateringServiceUrl}") String url, Decoder decoder, Encoder encoder, Contract contract,
+                                  CustomErrorDecoder errorDecoder, FeignSecurityInterceptor securityInterceptor) {
+        this.cateringUnitController = Feign.builder()
+                .encoder(encoder)
+                .decoder(decoder)
+                .contract(contract)
+                .errorDecoder(errorDecoder)
+                .requestInterceptor(securityInterceptor)
+                .target(ICateringUnitController.class, url);
+    }
 
-    @GetMapping("/getall")
+    @GetMapping("/cateringunit/getall")
     @Secured(Role.Values.ROLE_USER)
     public CateringUnitsResponse getAll() {
-        logger.debug("Get all catering unit.");
-        return new CateringUnitsResponse(cateringUnitService.getAll());
+        return cateringUnitController.getAll();
     }
 
-    //TODO Search nice to have
-
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/cateringunit/delete/{id}")
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity delete(@PathVariable("id") Long id) {
-        try {
-            cateringUnitService.delete(id);
-            return ResponseEntity.ok().build();
-        } catch (CateringUnitServiceException ex) {
-            logger.error("Error in catering unit delete: {}", ex);
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        return cateringUnitController.delete(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/cateringunit/create")
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity create(@RequestBody CateringUnitDTO cateringUnitRequest) {
-        try {
-            CateringUnitDTO cateringUnit = cateringUnitService.create(cateringUnitRequest);
-            return ResponseEntity.ok().body(cateringUnit);
-        } catch (CateringUnitServiceException ex) {
-            logger.error("Error in catering unit creation: {}", ex);
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        return cateringUnitController.create(cateringUnitRequest);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/cateringunit/update/{id}")
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitDTO cateringUnitRequest) {
-        try {
-            CateringUnitDTO cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
-            return ResponseEntity.ok().body(cateringUnit);
-        } catch (CateringUnitServiceException ex) {
-            logger.error("Error in catering unit update: {}", ex);
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        return cateringUnitController.update(id, cateringUnitRequest);
     }
 }

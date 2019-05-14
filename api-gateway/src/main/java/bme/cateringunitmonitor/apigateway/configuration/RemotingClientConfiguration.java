@@ -1,6 +1,6 @@
 package bme.cateringunitmonitor.apigateway.configuration;
 
-import bme.cateringunitmonitor.SecureRemoteInocationFactory;
+import bme.cateringunitmonitor.SecureRemoteInvocationFactory;
 import bme.cateringunitmonitor.api.remoting.service.IAuthService;
 import bme.cateringunitmonitor.api.remoting.service.ICateringUnitService;
 import bme.cateringunitmonitor.api.remoting.service.IUserService;
@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
 
+@Deprecated//No rmi required
 @Configuration
 public class RemotingClientConfiguration {
 
@@ -22,8 +23,8 @@ public class RemotingClientConfiguration {
     private String cateringServiceUrl;
 
     @Bean
-    public SecureRemoteInocationFactory secureRemoteInocationFactory() {
-        return new SecureRemoteInocationFactory();
+    public SecureRemoteInvocationFactory secureRemoteInocationFactory() {
+        return new SecureRemoteInvocationFactory();
     }
 
     @Bean

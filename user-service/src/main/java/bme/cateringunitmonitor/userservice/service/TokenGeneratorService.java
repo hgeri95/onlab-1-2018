@@ -1,10 +1,9 @@
 package bme.cateringunitmonitor.userservice.service;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dto.UserDTO;
-import bme.cateringunitmonitor.userservice.dao.UserDAO;
 import bme.cateringunitmonitor.api.dto.LoginResponse;
-import bme.cateringunitmonitor.security.SecurityConstants;
+import bme.cateringunitmonitor.api.dto.UserDTO;
+import bme.cateringunitmonitor.utils.security.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
