@@ -10,6 +10,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class CateringUnitsResponse implements Serializable {
     private List<CateringUnitDTO> cateringUnits;
 }

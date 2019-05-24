@@ -15,28 +15,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final IUserController userController;
-
     @Autowired
-    public UserController(@Value("${userServiceUrl}") String url, Decoder decoder, Encoder encoder, Contract contract,
-                          CustomErrorDecoder errorDecoder, FeignSecurityInterceptor securityInterceptor) {
-        this.userController = Feign.builder()
-                .encoder(encoder)
-                .decoder(decoder)
-                .contract(contract)
-                .errorDecoder(errorDecoder)
-                .requestInterceptor(securityInterceptor)
-                .target(IUserController.class, url);
-    }
+    private IUserController userController;
 
     @PostMapping("/sign-up")
-    public UserDTO signUp(@RequestBody UserDTO user) {
+    public UserDTO signUp(@Valid @RequestBody UserDTO user) {
         return userController.signUp(user);
     }
 
@@ -47,7 +37,7 @@ public class UserController {
 
     @PostMapping("/userinfo")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
-    public UserInfoDTO setUserInfo(@RequestBody UserInfoDTO userInfoRequest) {
+    public UserInfoDTO setUserInfo(@Valid @RequestBody UserInfoDTO userInfoRequest) {
         return userController.setUserInfo(userInfoRequest);
     }
 
@@ -59,7 +49,7 @@ public class UserController {
 
     @PutMapping("/userinfo")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
-    public UserInfoDTO updateUserInfo(@RequestBody UserInfoDTO userInfoRequest) {
+    public UserInfoDTO updateUserInfo(@Valid @RequestBody UserInfoDTO userInfoRequest) {
         return userController.updateUserInfo(userInfoRequest);
     }
 }

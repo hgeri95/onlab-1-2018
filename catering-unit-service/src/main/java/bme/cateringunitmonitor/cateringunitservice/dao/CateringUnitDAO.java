@@ -19,6 +19,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class CateringUnitDAO implements Serializable {
 
@@ -37,6 +38,8 @@ public class CateringUnitDAO implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<OpeningPerDay> openingHours = new ArrayList<>();
 
+    @Lob
+    @Column(length = 100000)
     private Address address;
 
     @ElementCollection(fetch = FetchType.EAGER)

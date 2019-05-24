@@ -2,6 +2,8 @@ package bme.cateringunitmonitor.api;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -9,8 +11,12 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class OpeningPerDay implements Serializable {
+    @NotNull
     private WeekDays weekDay;
+    @NotBlank
     private String open;
+    @NotBlank
     private String close;
 }

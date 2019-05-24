@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = "bme.cateringunitmonitor")
 @Slf4j
-@EnableFeignClients
+@EnableFeignClients(basePackages = "bme.cateringunitmonitor")
 public class Application {
 
     public static void main(String[] args) {

@@ -16,4 +16,6 @@ public interface ICateringUnitService {
     public CateringUnitDTO update(Long id, CateringUnitDTO cateringUnitRequest) throws CateringUnitServiceException;
 
     public void delete(Long id) throws CateringUnitServiceException;
+
+    public CateringUnitDTO get(Long id);
 }

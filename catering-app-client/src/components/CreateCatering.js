@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import {connect} from 'react-redux';
+import {Button, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import Dropdown from "react-dropdown";
 
 class CreateCatering extends Component {
     constructor(props) {
@@ -9,16 +10,24 @@ class CreateCatering extends Component {
 
         this.state = {
             cateringUnit: {
-              name: "Dream restaurant",
-              description: "The best restaurant",
-              openingHours: [],
-              address: {
-                  country: "Budapest",//Country
-                  street: "Nagy",
-                  number: "6",
-                  otherInformation: ""
-              },
-              categoryParameters: []
+                name: "Dream restaurant",
+                description: "The best restaurant",
+                openingHours: [
+                    {
+                        weekDay: "MONDAY",
+                        open: "12:00",
+                        close: "13:00"
+                    }
+                ],
+                address: {
+                    address: "Andrássy street 4.",
+                    coordinate: {
+                        latitude: 40.10,
+                        longitude: 50.11
+                    },
+                    otherInformation: "Entrance in back"
+                },
+                categoryParameters: []
             },
             errors: {}
         }
@@ -52,43 +61,82 @@ class CreateCatering extends Component {
 
     render() {
         const {cateringUnit} = this.state;
-
-        return(
+        const weekDays = [{value: 'MONDAY', label: 'MONDAY'}, {value: 'THUESRDAY', label: 'THUESRDAY'}, {value: 'WEDNESDAY', label: 'WEDNESDAY'}];
+        const categoryParameters = [{value: 'type', label: 'Type'}, {value: 'capacity', label: 'Capacity'}];
+        const {weekday} = this.state;
+        return (
             <div>
                 <Container>
-                    <h2>Create Catering Unit</h2>
+                    <h2>Catering Unit</h2>
                     <Form onSubmit={this.handleSubmit}>
                         <FormGroup>
                             <Label for="name">Name</Label>
-                            <Input type="text" name="name" id="name" value = {cateringUnit.name || ''}
-                                onChange={this.handleChange}/>
+                            <Input type="text" name="name" id="name" value={cateringUnit.name || ''}
+                                   onChange={this.handleChange}/>
                         </FormGroup>
                         <FormGroup>
                             <Label for="description">Description</Label>
-                            <Input type="text" name="description" id="description" value = {cateringUnit.description || ''}
+                            <Input type="text" name="description" id="description"
+                                   value={cateringUnit.description || ''}
                                    onChange={this.handleChange}/>
                         </FormGroup>
 
+                        <h2>Address</h2>
                         <FormGroup>
-                            <Label for="country">Country</Label>
-                            <Input type="text" name="country" id="country" value = {cateringUnit.address.country || ''}
+                            <Input type="text" name="address" id="address" value={cateringUnit.address.address || ''}
                                    onChange={this.handleAddressChange}/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="street">Street</Label>
-                            <Input type="text" name="street" id="street" value = {cateringUnit.address.street || ''}
+                            <Label for="otherInforamtion">Other address information</Label>
+                            <Input type="text" name="otherInformation" id="otherInforamtion"
+                                   value={cateringUnit.address.otherInformation || ''}
                                    onChange={this.handleAddressChange}/>
                         </FormGroup>
+
+                        <h2>Opening Hours</h2>
                         <FormGroup>
-                            <Label for="number">House Number</Label>
-                            <Input type="text" name="number" id="number" value = {cateringUnit.address.number || ''}
-                                   onChange={this.handleAddressChange}/>
+                            <Table>
+                                <thead>
+                                <tr>
+                                    <th>Day of week</th>
+                                    <th>Open</th>
+                                    <th>Close</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><Dropdown options={weekDays} onChange={this.handleSelect} value={weekday}
+                                                  placeholder="Weekday"/></td>
+                                    <td><Input type="text" value="12:00"/></td>
+                                    <td><Input type="text" value="14:00"/></td>
+                                </tr>
+                                </tbody>
+                            </Table>
+                            <Button color="secondary">Add new day</Button>
                         </FormGroup>
+
+                        <h2>Category Parameters</h2>
                         <FormGroup>
-                            <Label for="otherInformation">Other Address Informations</Label>
-                            <Input type="text" name="otherInformation" id="otherInformation" value = {cateringUnit.address.otherInformation || ''}
-                                   onChange={this.handleAddressChange}/>
+                            <Table>
+                                <thread>
+                                    <tr>
+                                        <th>Parameter </th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thread>
+                                <tbody>
+                                <tr>
+                                    <td><Dropdown options={categoryParameters} onChange={this.handleSelect}
+                                                  placeholder="Parameter"/></td>
+                                    <td>
+                                        <Input type="text" placeholder=""/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </Table>
+                            <Button color="secondary">Add new parameter</Button>
                         </FormGroup>
+
                         <FormGroup>
                             <Button color="primary" type="submit">Save</Button>
                         </FormGroup>

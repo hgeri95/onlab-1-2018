@@ -9,7 +9,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthRefreshRequest implements Serializable {
-    private final Long userId;
-    private final String refreshToken;
+    private Long userId;
+    private String refreshToken;
 }

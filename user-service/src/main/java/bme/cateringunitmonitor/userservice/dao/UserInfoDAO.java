@@ -1,10 +1,7 @@
 package bme.cateringunitmonitor.userservice.dao;
 
 import bme.cateringunitmonitor.api.Gender;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,6 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
@@ -39,7 +37,8 @@ public class UserInfoDAO implements Serializable {
     @Column(nullable = false)
     private Gender gender;
 
-    public UserInfoDAO() {}
+    public UserInfoDAO() {
+    }
 
     public UserInfoDAO(String username, String fullName, String city, @Email String email, LocalDate birthDate, Gender gender) {
         this.username = username;

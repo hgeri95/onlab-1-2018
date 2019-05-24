@@ -1,12 +1,12 @@
 package bme.cateringunitmonitor.userservice;
 
+import bme.cateringunitmonitor.api.Gender;
 import bme.cateringunitmonitor.api.dto.UserDTO;
-import bme.cateringunitmonitor.userservice.configuration.UserServiceConfig;
+import bme.cateringunitmonitor.api.dto.UserInfoDTO;
 import bme.cateringunitmonitor.userservice.dao.UserDAO;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import bme.cateringunitmonitor.userservice.service.UserService;
 import org.assertj.core.util.Lists;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,7 +18,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -40,13 +43,13 @@ public class UserServiceTest {
     @Test
     public void testUserRepositoryMethods() {
         UserDAO user = new UserDAO("test", "123", new HashSet<>());
-        Assert.assertEquals(user, userRepository.save(user));
+        assertEquals(user, userRepository.save(user));
 
-        Assert.assertNotNull(userRepository.findByUsername(user.getUsername()));
-        Assert.assertNull(userRepository.findByUsername("asd"));
+        assertNotNull(userRepository.findByUsername(user.getUsername()));
+        assertNull(userRepository.findByUsername("asd"));
 
-        Assert.assertEquals(1, userRepository.deleteByUsername(user.getUsername()));
-        Assert.assertNull(userRepository.findByUsername(user.getUsername()));
+        assertEquals(1, userRepository.deleteByUsername(user.getUsername()));
+        assertNull(userRepository.findByUsername(user.getUsername()));
     }
 
     @Test
@@ -54,12 +57,29 @@ public class UserServiceTest {
         UserDTO user = new UserDTO("dummyUser", "123", Lists.emptyList());
         userService.create(user);
 
-        Assert.assertNotNull(userRepository.findByUsername(user.getUsername()));
+        assertNotNull(userRepository.findByUsername(user.getUsername()));
 
         expectedException.expect(BadCredentialsException.class);
         userService.login(new UserDTO(user.getUsername(), "badPassword", Lists.emptyList()));
 
-        Assert.assertEquals(user.getUsername(),
+        assertEquals(user.getUsername(),
                 userService.login(new UserDTO(user.getUsername(), "123", Lists.emptyList())).getUsername());
+    }
+
+    @Test
+    public void testUserInfoCrud() {
+        String username = "testUser";
+        UserInfoDTO userInfo = new UserInfoDTO(username, "Test User", "San Diego",
+                "a@a.com", LocalDate.now(), Gender.MALE);
+        UserInfoDTO savedUserInfo = userService.saveUserInfo(userInfo);
+        assertNotNull(savedUserInfo);
+
+        String city = "Miami";
+        userInfo.setCity(city);
+        savedUserInfo = userService.updateUserInfo(userInfo);
+        assertEquals(city, savedUserInfo.getCity());
+
+        savedUserInfo = userService.getUserInfo(username);
+        assertNotNull(savedUserInfo);
     }
 }

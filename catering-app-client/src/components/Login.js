@@ -43,11 +43,11 @@ class Login extends Component {
         if(nextProps.authentication.authenticated) {
             this.props.history.push('/');
         }
-        if(nextProps.errors) {
+        /*if(nextProps.errors) {
             this.setState({
                 errors: nextProps.errors
             });
-        }
+        }*/
     }
 
     render() {
@@ -79,7 +79,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-    errors: PropTypes.object.isRequired,
+    /*errors: PropTypes.object.isRequired,*/
     authentication: PropTypes.object.isRequired
 }
 

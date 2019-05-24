@@ -1,19 +1,19 @@
-package bme.cateringunitmonitor.apigateway.configuration;
+package bme.cateringunitmonitor.utils.feign;
 
-import bme.cateringunitmonitor.utils.feign.CustomErrorDecoder;
-import bme.cateringunitmonitor.utils.feign.FeignSecurityInterceptor;
+import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class FeignExtendedConfiguration {
+public class FeignConfiguration {
+
     @Bean
     public CustomErrorDecoder errorDecoder() {
         return new CustomErrorDecoder();
     }
 
     @Bean
-    public FeignSecurityInterceptor requestInterceptor() {
+    public RequestInterceptor requestInterceptor() {
         return new FeignSecurityInterceptor();
     }
 }

@@ -9,6 +9,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class Coordinate implements Serializable {
     private double latitude;
     private double longitude;

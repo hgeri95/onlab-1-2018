@@ -34,8 +34,8 @@ public class UserController implements IUserController {
 
     @Override
     public UserInfoDTO setUserInfo(UserInfoDTO userInfoRequest) {
-        logger.debug("Set user info: {}", userInfoRequest);
         String activeUser = SecurityUtil.getActiveUser();
+        logger.debug("Set user info: {}, for user: {}", userInfoRequest, activeUser);
         UserInfoDTO userInfo = new UserInfoDTO(
                 activeUser,
                 userInfoRequest.getFullName(),
@@ -56,7 +56,6 @@ public class UserController implements IUserController {
 
     @Override
     public UserInfoDTO updateUserInfo(UserInfoDTO userInfoRequest) {
-        String activeUser = SecurityUtil.getActiveUser();
         return userService.updateUserInfo(new UserInfoDTO(
                 SecurityUtil.getActiveUser(),
                 userInfoRequest.getFullName(),

@@ -3,28 +3,36 @@ package bme.cateringunitmonitor.api.dto;
 import bme.cateringunitmonitor.api.Address;
 import bme.cateringunitmonitor.api.CategoryParameter;
 import bme.cateringunitmonitor.api.OpeningPerDay;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
-public class CateringUnitDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class CateringUnitDTO implements Serializable {
 
     private Long id;
 
+    @NotBlank
     private String name;
 
     private String description;
 
+    @Valid
     private List<OpeningPerDay> openingHours;
 
+    @NotNull
+    @Valid
     private Address address;
 
+    @Valid
     private List<CategoryParameter> categoryParameters;
 }

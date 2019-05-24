@@ -1,5 +1,6 @@
 import API from '../utils/api';
 import {userConstants} from '../constants/user.constants';
+import {authConstants} from "../constants/auth.contants";
 import setAuthToken from '../utils/SetAuthToken';
 
 export const loginAction = ({username, password}) => dispatch => {
@@ -7,12 +8,15 @@ export const loginAction = ({username, password}) => dispatch => {
         {"username": username, "password": password})
         .then(res => {
             const accessToken = res.data.accessToken;
-            localStorage.setItem('jwtToken', accessToken);
-            setAuthToken(true);
-
             const loggedInUser = res.data.user.username;
             const refreshToken = res.data.refreshToken;
             const roles = res.data.user.roles;
+            localStorage.setItem(authConstants.JWTTOKEN, accessToken);
+            localStorage.setItem(authConstants.REFRESHTOKEN, refreshToken);
+            localStorage.setItem(authConstants.USERNAME, loggedInUser);
+            localStorage.setItem(authConstants.ROLES, roles);
+
+            setAuthToken(true);
             dispatch({
                 type: userConstants.AUTHENTICATED,
                 payload: {username: loggedInUser, refreshToken: refreshToken, roles: roles}

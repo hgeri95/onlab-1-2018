@@ -1,19 +1,20 @@
 package bme.cateringunitmonitor.api;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class CategoryParameter implements Serializable {
 
+    @NotBlank
     private String key;
+    @NotBlank
     private String value;
 }

@@ -23,23 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequestMapping("/authenticate")
+@RequestMapping("/api/v1/authenticate")
 @Import(FeignClientsConfiguration.class)
 public class AuthController {
 
-    private final IAuthController authController;
-
     @Autowired
-    public AuthController(@Value("${authServiceUrl}") String url, Decoder decoder, Encoder encoder, Contract contract,
-                          CustomErrorDecoder errorDecoder, FeignSecurityInterceptor securityInterceptor) {
-        this.authController = Feign.builder()
-                .encoder(encoder)
-                .decoder(decoder)
-                .contract(contract)
-                .errorDecoder(errorDecoder)
-                .requestInterceptor(securityInterceptor)
-                .target(IAuthController.class, url);
-    }
+    private IAuthController authController;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {

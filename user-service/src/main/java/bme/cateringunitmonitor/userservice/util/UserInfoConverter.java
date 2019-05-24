@@ -3,6 +3,7 @@ package bme.cateringunitmonitor.userservice.util;
 import bme.cateringunitmonitor.api.dto.UserInfoDTO;
 import bme.cateringunitmonitor.userservice.dao.UserInfoDAO;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

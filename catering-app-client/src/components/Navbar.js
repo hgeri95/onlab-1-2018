@@ -13,7 +13,7 @@ class Navbar extends Component {
     };
 
     render() {
-        const {authenticated, roles} = this.props.authentication;
+        const {authenticated} = this.props.authentication;
         const authLinks = (
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
@@ -38,10 +38,10 @@ class Navbar extends Component {
 
         const menuLinks = (
             <ul className="navbar-nav mr-auto">
-                <li class="nav-item">
+                <li className="nav-item">
                     <Link className="nav-link" to="/list-all-catering">List all</Link>
                 </li>
-                <li class="nav-item">
+                <li className="nav-item">
                     <Link className="nav-link" to="/create-catering">Create</Link>
                 </li>
             </ul>

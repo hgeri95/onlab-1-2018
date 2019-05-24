@@ -1,9 +1,6 @@
 package bme.cateringunitmonitor.api.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,7 +8,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 public class LoginResponse implements Serializable {
 
     private String accessToken;

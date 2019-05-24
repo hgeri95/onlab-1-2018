@@ -1,14 +1,15 @@
 package bme.cateringunitmonitor.api.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginRequest implements Serializable{
 
     private String username;

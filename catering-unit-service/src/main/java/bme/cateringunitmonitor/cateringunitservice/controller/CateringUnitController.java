@@ -59,4 +59,15 @@ public class CateringUnitController implements ICateringUnitController {
             throw new CateringUnitHttpException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
+    @Override
+    public ResponseEntity<CateringUnitDTO> get(Long id) {
+        try {
+            CateringUnitDTO cateringUnit = cateringUnitService.get(id);
+            return ResponseEntity.ok(cateringUnit);
+        } catch (CateringUnitServiceException ex) {
+            logger.warn("Catering unit not found with id: {}", id);
+            throw new CateringUnitHttpException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
+    }
 }

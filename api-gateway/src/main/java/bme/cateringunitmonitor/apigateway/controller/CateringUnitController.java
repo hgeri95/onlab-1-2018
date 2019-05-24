@@ -16,44 +16,42 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
+@RequestMapping("/api/v1/cateringunit")
 public class CateringUnitController {
 
-    private final ICateringUnitController cateringUnitController;
-
     @Autowired
-    public CateringUnitController(@Value("${cateringServiceUrl}") String url, Decoder decoder, Encoder encoder, Contract contract,
-                                  CustomErrorDecoder errorDecoder, FeignSecurityInterceptor securityInterceptor) {
-        this.cateringUnitController = Feign.builder()
-                .encoder(encoder)
-                .decoder(decoder)
-                .contract(contract)
-                .errorDecoder(errorDecoder)
-                .requestInterceptor(securityInterceptor)
-                .target(ICateringUnitController.class, url);
-    }
+    private ICateringUnitController cateringUnitController;
 
-    @GetMapping("/cateringunit/getall")
+    @GetMapping("/getall")
     @Secured(Role.Values.ROLE_USER)
     public CateringUnitsResponse getAll() {
         return cateringUnitController.getAll();
     }
 
-    @DeleteMapping("/cateringunit/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity delete(@PathVariable("id") Long id) {
         return cateringUnitController.delete(id);
     }
 
-    @PostMapping("/cateringunit/create")
+    @PostMapping("/create")
     @Secured(Role.Values.ROLE_OWNER)
-    public ResponseEntity create(@RequestBody CateringUnitDTO cateringUnitRequest) {
+    public ResponseEntity create(@Valid @RequestBody CateringUnitDTO cateringUnitRequest) {
         return cateringUnitController.create(cateringUnitRequest);
     }
 
-    @PutMapping("/cateringunit/update/{id}")
+    @PutMapping("/update/{id}")
     @Secured(Role.Values.ROLE_OWNER)
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody CateringUnitDTO cateringUnitRequest) {
+    public ResponseEntity update(@Valid @PathVariable("id") Long id, @RequestBody CateringUnitDTO cateringUnitRequest) {
         return cateringUnitController.update(id, cateringUnitRequest);
+    }
+
+    @GetMapping("/get/{id}")
+    @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER})
+    public ResponseEntity get(@PathVariable("id") Long id) {
+        return cateringUnitController.get(id);
     }
 }
