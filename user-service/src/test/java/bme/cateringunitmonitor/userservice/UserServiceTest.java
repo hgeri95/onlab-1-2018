@@ -3,6 +3,9 @@ package bme.cateringunitmonitor.userservice;
 import bme.cateringunitmonitor.api.Gender;
 import bme.cateringunitmonitor.api.dto.UserDTO;
 import bme.cateringunitmonitor.api.dto.UserInfoDTO;
+import bme.cateringunitmonitor.api.dto.UserInfoRequest;
+import bme.cateringunitmonitor.api.dto.UserRequest;
+import bme.cateringunitmonitor.api.exception.UserServiceException;
 import bme.cateringunitmonitor.userservice.dao.UserDAO;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import bme.cateringunitmonitor.userservice.service.UserService;
@@ -53,8 +56,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUserServiceMethods() {
-        UserDTO user = new UserDTO("dummyUser", "123", Lists.emptyList());
+    public void testUserServiceMethods() throws UserServiceException {
+        UserRequest user = new UserRequest("dummyUser", "123", Lists.emptyList());
         userService.create(user);
 
         assertNotNull(userRepository.findByUsername(user.getUsername()));
@@ -67,9 +70,9 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUserInfoCrud() {
+    public void testUserInfoCrud() throws UserServiceException {
         String username = "testUser";
-        UserInfoDTO userInfo = new UserInfoDTO(username, "Test User", "San Diego",
+        UserInfoRequest userInfo = new UserInfoRequest(username, "Test User", "San Diego",
                 "a@a.com", LocalDate.now(), Gender.MALE);
         UserInfoDTO savedUserInfo = userService.saveUserInfo(userInfo);
         assertNotNull(savedUserInfo);

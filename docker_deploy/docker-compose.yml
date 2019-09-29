@@ -2,7 +2,7 @@ version: '2.1'
 services:
     mysql-server:
         container_name: mysql-server
-        image: mysql-server
+        image: mysql/mysql-server
         ports:
           - "3036:3036"
         environment:
@@ -40,24 +40,44 @@ services:
                 condition: service_healthy
             links:
               - mysql-server:mysql
-    gateway-service:
-            container_name: gateway-service
-            image: gateway-service-build
+    api-gateway-service:
+            container_name: api-gateway-service
+            image: api-gateway-service-build
             ports:
-                - "8080:8080"
+              - "80:80"
             depends_on:
               - user-service
               - catering-service
               - mysql-server
             networks:
-                - custom-network
+              - custom-network
             links:
               - user-service:user-service
+              - user-service:authentication-service
               - catering-service:catering-service
             environment:
               - authServiceUrl=http://user-service:8081
               - userServiceUrl=http://user-service:8081
               - cateringServiceUrl=http://catering-service:8082
+    swagger-service:
+      container_name: swagger-service
+      image: swagger-service-build
+      ports:
+        - "8083:8083"
+      depends_on:
+        - user-service
+        - catering-service
+        - mysql-server
+      networks:
+        - custom-network
+      links:
+        - user-service:user-service
+        - user-service:authentication-service
+        - catering-service:catering-service
+      environment:
+        - authServiceUrl=http://localhost:8081
+        - userServiceUrl=http://localhost:8081
+        - cateringServiceUrl=http://localhost:8082
 networks:
     custom-network:
         driver: bridge

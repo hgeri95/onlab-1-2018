@@ -3,8 +3,7 @@ package bme.cateringunitmonitor.api.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class UserServiceException extends RuntimeException {
+public class UserServiceException extends Exception {
 
     public UserServiceException(String message) {
         super(message);

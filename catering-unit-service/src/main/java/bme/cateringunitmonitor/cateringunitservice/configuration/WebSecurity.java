@@ -25,7 +25,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .anonymous().and()
                 .servletApi().and()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                //.antMatchers("/").permitAll()
+                .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/v2/api-docs**", "/swagger**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);

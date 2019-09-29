@@ -21,6 +21,7 @@ public class UserClaims implements Serializable {
      *
      * @param claims
      */
+    @SuppressWarnings("unchecked")
     public UserClaims(Claims claims) {
         this.id = Long.parseLong(claims.getSubject());
         this.username = (String) claims.get(SecurityConstants.USERNAME_KEY);

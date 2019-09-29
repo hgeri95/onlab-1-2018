@@ -1,6 +1,7 @@
 package bme.cateringunitmonitor.userservice.util;
 
 import bme.cateringunitmonitor.api.dto.UserInfoDTO;
+import bme.cateringunitmonitor.api.dto.UserInfoRequest;
 import bme.cateringunitmonitor.userservice.dao.UserInfoDAO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MatchingStrategy;
@@ -15,6 +16,10 @@ public class UserInfoConverter {
 
     public UserInfoDAO convertToEntity(UserInfoDTO userInfoDTO) {
         return mapper.map(userInfoDTO, UserInfoDAO.class);
+    }
+
+    public UserInfoDAO convertToEntity(UserInfoRequest userInfoRequest) {
+        return mapper.map(userInfoRequest, UserInfoDAO.class);
     }
 
     public UserInfoDTO convertToDTO(UserInfoDAO userInfoDAO) {

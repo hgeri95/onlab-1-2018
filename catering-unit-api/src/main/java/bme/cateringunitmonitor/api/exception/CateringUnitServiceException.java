@@ -1,6 +1,6 @@
 package bme.cateringunitmonitor.api.exception;
 
-public class CateringUnitServiceException extends RuntimeException {
+public class CateringUnitServiceException extends Exception {
 
     public CateringUnitServiceException(String message) {
         super(message);

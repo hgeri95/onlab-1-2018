@@ -7,5 +7,4 @@ public interface UserRepository extends JpaRepository<UserDAO, Long> {
 
     UserDAO findByUsername(String username);
     int deleteByUsername(String username);
-    UserDAO save(UserDAO user);
 }

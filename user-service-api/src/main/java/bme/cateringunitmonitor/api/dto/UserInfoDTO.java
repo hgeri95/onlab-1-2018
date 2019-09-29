@@ -32,7 +32,7 @@ public class UserInfoDTO implements Serializable {
     @NotBlank
     private String email;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate birthDate;
 

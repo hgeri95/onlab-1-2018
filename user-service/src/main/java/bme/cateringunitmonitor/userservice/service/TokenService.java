@@ -1,8 +1,7 @@
 package bme.cateringunitmonitor.userservice.service;
 
-import bme.cateringunitmonitor.api.dto.UserDTO;
-import bme.cateringunitmonitor.userservice.dao.UserDAO;
 import bme.cateringunitmonitor.api.dto.LoginResponse;
+import bme.cateringunitmonitor.api.dto.UserDTO;
 import bme.cateringunitmonitor.api.wrapper.RefreshToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,7 @@ public class TokenService {
         logger.debug("Generate token for user: {}", user.toString());
         LoginResponse response = tokenGeneratorService.createTokens(user);
         tokenStore.storeRefreshToken(user.getId(),
-                response.getRefreshToken(), response.getRefreshTokenExpireDate());
+                response.getRefreshToken(), response.getRefreshTokenExpireDate().toLocalDateTime());
         logger.debug("Login response: {}", response);
         return response;
     }

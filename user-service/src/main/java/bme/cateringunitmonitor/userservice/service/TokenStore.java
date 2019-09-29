@@ -6,14 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class TokenStore {
 
     private static Logger logger = LoggerFactory.getLogger(TokenStore.class);
-    private Map<Long, RefreshToken> tokens = new HashMap<>();
+    private Map<Long, RefreshToken> tokens = new ConcurrentHashMap<>();
 
     public void storeRefreshToken(Long id, String refreshToken, LocalDateTime expireDate) {
         logger.debug("Refresh token to store for user: {}", id);

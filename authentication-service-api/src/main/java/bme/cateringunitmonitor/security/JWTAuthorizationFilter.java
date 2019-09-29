@@ -17,6 +17,7 @@ import java.io.IOException;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
+    private static final String UNDEFINED = "undefined";
     private static Logger logger = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
@@ -29,7 +30,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String header = request.getHeader(SecurityConstants.HEADER_STRING);
         logger.debug("Authorization header in request: {}", header);
 
-        if (header != null && header.startsWith(SecurityConstants.TOKEN_PREFIX) && !header.contains("undefined")) {
+        if (header != null && header.startsWith(SecurityConstants.TOKEN_PREFIX) && !header.contains(UNDEFINED)) {
             final String token = header.substring(SecurityConstants.TOKEN_PREFIX.length());
             logger.debug("Token in header: {}", token);
             UserAuthentication authentication = getAuthentication(token, response);
@@ -55,17 +56,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         .getBody();
 
                 return new UserAuthentication(claims);
-            } catch (MalformedJwtException ex) {
-                logger.error("Invalid JWT token");
-                handleError(response, ex.getMessage());
-            } catch (ExpiredJwtException ex) {
-                logger.error("Expired JWT token");
-                handleError(response, ex.getMessage());
-            } catch (UnsupportedJwtException ex) {
-                logger.error("Unsupported JWT token");
-                handleError(response, ex.getMessage());
-            } catch (IllegalArgumentException ex) {
-                logger.error("JWT claims string is empty.");
+            } catch (MalformedJwtException |
+                    IllegalArgumentException |
+                    UnsupportedJwtException |
+                    ExpiredJwtException ex) {
+                logger.error("Invalid JWT token! Exception: {}", ex);
                 handleError(response, ex.getMessage());
             }
             return null;

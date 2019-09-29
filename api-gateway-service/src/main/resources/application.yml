@@ -1,0 +1,35 @@
+server:
+  port: 80
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user_service_route
+          uri: ${userServiceUrl}
+          predicates:
+            - Path=/api/v1/users/**
+        - id: authentication_service_route
+          uri: ${authServiceUrl}
+          predicates:
+            - Path=/api/v1/authenticate/**
+        - id: cateringunit_service_route
+          uri: ${cateringServiceUrl}
+          predicates:
+            - Path=/api/v1/cateringunit/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET, POST, PUT, DELETE
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

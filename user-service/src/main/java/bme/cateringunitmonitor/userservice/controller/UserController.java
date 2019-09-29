@@ -3,14 +3,19 @@ package bme.cateringunitmonitor.userservice.controller;
 import bme.cateringunitmonitor.api.Role;
 import bme.cateringunitmonitor.api.dto.UserDTO;
 import bme.cateringunitmonitor.api.dto.UserInfoDTO;
+import bme.cateringunitmonitor.api.dto.UserInfoRequest;
+import bme.cateringunitmonitor.api.dto.UserRequest;
+import bme.cateringunitmonitor.api.exception.BadRequestException;
+import bme.cateringunitmonitor.api.exception.UserServiceException;
 import bme.cateringunitmonitor.api.remoting.controller.IUserController;
-import bme.cateringunitmonitor.api.remoting.service.IUserService;
 import bme.cateringunitmonitor.security.SecurityUtil;
+import bme.cateringunitmonitor.userservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,12 +24,29 @@ public class UserController implements IUserController {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Override
-    public UserDTO signUp(UserDTO user) {
+    public UserDTO signUp(@Valid UserRequest user) throws BadRequestException {
         logger.debug("Sign up new user: {}", user);
-        return userService.create(user);
+        try {
+            return userService.create(user);
+        } catch (IllegalArgumentException | UserServiceException ex) {
+            logger.warn("Failed to register new user: {}", ex);
+            throw new BadRequestException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public int deleteUser() {
+        String activeUser = SecurityUtil.getActiveUser();
+        logger.debug("Delete user: {}", activeUser);
+        try {
+            return userService.delete(activeUser);
+        } catch (UserServiceException ex) {
+            logger.warn("Failed to delete user: {}", activeUser);
+            throw new BadRequestException(ex.getMessage());
+        }
     }
 
     @Override
@@ -33,36 +55,38 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public UserInfoDTO setUserInfo(UserInfoDTO userInfoRequest) {
+    public UserInfoDTO setUserInfo(@Valid UserInfoRequest userInfoRequest) {
         String activeUser = SecurityUtil.getActiveUser();
         logger.debug("Set user info: {}, for user: {}", userInfoRequest, activeUser);
-        UserInfoDTO userInfo = new UserInfoDTO(
-                activeUser,
-                userInfoRequest.getFullName(),
-                userInfoRequest.getCity(),
-                userInfoRequest.getEmail(),
-                userInfoRequest.getBirthDate(),
-                userInfoRequest.getGender()
-        );
-
-        return userService.saveUserInfo(userInfo);
+        userInfoRequest.setUsername(activeUser);
+        return userService.saveUserInfo(userInfoRequest);
     }
 
     @Override
-    public UserInfoDTO getUserInfo() {
+    public UserInfoDTO getUserInfo() throws BadRequestException {
         String activeUser = SecurityUtil.getActiveUser();
-        return userService.getUserInfo(activeUser);
+        try {
+            return userService.getUserInfo(activeUser);
+        } catch (UserServiceException ex) {
+            logger.warn("Userinfo not found: {}", ex);
+            throw new BadRequestException(ex.getMessage());
+        }
     }
 
     @Override
-    public UserInfoDTO updateUserInfo(UserInfoDTO userInfoRequest) {
-        return userService.updateUserInfo(new UserInfoDTO(
-                SecurityUtil.getActiveUser(),
-                userInfoRequest.getFullName(),
-                userInfoRequest.getCity(),
-                userInfoRequest.getEmail(),
-                userInfoRequest.getBirthDate(),
-                userInfoRequest.getGender()
-        ));
+    public UserInfoDTO updateUserInfo(@Valid UserInfoRequest userInfoRequest) {
+        String username = SecurityUtil.getActiveUser();
+        userInfoRequest.setUsername(username);
+        return userService.updateUserInfo(userInfoRequest);
+    }
+
+    @Override
+    public UserInfoDTO getUserInfoByUsername(String username) {
+        try {
+            return userService.getUserInfo(username);
+        } catch (UserServiceException ex) {
+            logger.warn("User info not found: {}", ex);
+            throw new BadRequestException(ex.getMessage());
+        }
     }
 }

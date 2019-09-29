@@ -6,18 +6,23 @@ import bme.cateringunitmonitor.api.dto.LoginResponse;
 import bme.cateringunitmonitor.utils.feign.FeignConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 @FeignClient(name = "AuthController", url = "${authServiceUrl}", configuration = FeignConfiguration.class)
 public interface IAuthController {
 
-    @PostMapping(value = "/authenticate/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest);
+    String BASE_PATH = "api/v1/authenticate";
 
-    @PostMapping("/authenticate/logout")
+    @PostMapping(BASE_PATH + "/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest);
+
+    @PostMapping(BASE_PATH + "/logout")
     public ResponseEntity logout();
 
-    @PostMapping("/authenticate/refresh")
-    public ResponseEntity<LoginResponse> refresh(@RequestBody AuthRefreshRequest authRefreshRequest);
+    @PostMapping(BASE_PATH + "/refresh")
+    public ResponseEntity<LoginResponse> refresh(@RequestBody @Valid AuthRefreshRequest authRefreshRequest);
 }

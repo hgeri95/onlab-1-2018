@@ -3,7 +3,7 @@ package bme.cateringunitmonitor.api.dto;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -15,9 +15,9 @@ public class LoginResponse implements Serializable {
 
     private String accessToken;
 
-    private LocalDateTime tokenExpireDate;
+    private OffsetDateTime tokenExpireDate;
 
     private String refreshToken;
 
-    private LocalDateTime refreshTokenExpireDate;
+    private OffsetDateTime refreshTokenExpireDate;
 }

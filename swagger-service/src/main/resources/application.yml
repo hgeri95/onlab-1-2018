@@ -1,0 +1,25 @@
+server:
+  port: 8083
+
+swagger:
+  path: v2/api-docs
+
+documentation:
+  swagger:
+      services:
+        -
+          name: UserService
+          url: ${userServiceUrl}/${swagger.path}
+          version: 2.0
+        -
+          name: AuthenticationService
+          url: ${authServiceUrl}/${swagger.path}
+          version: 2.0
+        -
+          name: CateringUnitService
+          url: ${cateringServiceUrl}/${swagger.path}
+          version: 2.0
+
+logging:
+  level:
+    io.springfox: DEBUG

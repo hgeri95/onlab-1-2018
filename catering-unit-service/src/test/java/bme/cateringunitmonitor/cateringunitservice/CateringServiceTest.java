@@ -2,6 +2,8 @@ package bme.cateringunitmonitor.cateringunitservice;
 
 import bme.cateringunitmonitor.api.*;
 import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
+import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.cateringunitservice.service.CateringUnitService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,20 +25,19 @@ public class CateringServiceTest {
     private CateringUnitService cateringUnitService;
 
     @Test
-    public void testCateringUnitCrud() {
-        CateringUnitDTO cateringUnit = new CateringUnitDTO(
-                null, "McDonalds", "Best", asList(new OpeningPerDay(WeekDays.FRIDAY, "12:00", "13:00")),
-                new Address("ABC Street 6.", new Coordinate(1,1), "no"),
+    public void testCateringUnitCrud() throws CateringUnitServiceException {
+        CateringUnitRequest cateringUnit = new CateringUnitRequest(
+                "McDonalds", "Best", asList(new OpeningPerDay(WeekDays.FRIDAY, "12:00", "13:00")),
+                new Address("ABC Street 6.", new Coordinate(1, 1), "no"),
                 asList(new CategoryParameter("type", "dfdg"))
         );
         CateringUnitDTO result = cateringUnitService.create(cateringUnit);
         assertNotNull(result);
-
-        assertEquals(1,cateringUnitService.getAll().size());
+        assertEquals(1, cateringUnitService.getAll().size());
 
         String description = "updated dic";
-        result.setDescription(description);
-        CateringUnitDTO updatedCateringUnit = cateringUnitService.update(result.getId(), result);
+        cateringUnit.setDescription(description);
+        CateringUnitDTO updatedCateringUnit = cateringUnitService.update(result.getId(), cateringUnit);
         assertEquals(description, updatedCateringUnit.getDescription());
 
         cateringUnitService.delete(updatedCateringUnit.getId());
