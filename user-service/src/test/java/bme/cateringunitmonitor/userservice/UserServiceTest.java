@@ -22,7 +22,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -84,5 +86,26 @@ public class UserServiceTest {
 
         savedUserInfo = userService.getUserInfo(username);
         assertNotNull(savedUserInfo);
+    }
+
+    @Test
+    public void testGetBulkUsers() throws UserServiceException {
+        String user1 = "user1";
+        String user2 = "user2";
+        String user3 = "user3";
+        UserInfoRequest userInfoRequest1 = new UserInfoRequest(
+                user1, "f", "c", "a@a.com", LocalDate.now(), Gender.MALE);
+        UserInfoRequest userInfoRequest2 = new UserInfoRequest(
+                user2, "f", "c", "a@a.com", LocalDate.now(), Gender.MALE);
+        UserInfoRequest userInfoRequest3 = new UserInfoRequest(
+                user3, "f", "c", "a@a.com", LocalDate.now(), Gender.MALE);
+        userService.saveUserInfo(userInfoRequest1);
+        userService.saveUserInfo(userInfoRequest2);
+        userService.saveUserInfo(userInfoRequest3);
+
+        List<String> usernamesToFind = Arrays.asList(user1, user2, "user4");
+        List<UserInfoDTO> userInfos = userService.getUserInfos(usernamesToFind);
+
+        assertEquals(2, userInfos.size());
     }
 }

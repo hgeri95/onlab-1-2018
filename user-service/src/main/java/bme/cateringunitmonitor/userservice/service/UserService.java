@@ -25,8 +25,10 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -55,6 +57,10 @@ public class UserService {
     public void createDefaultAdminUser() throws UserServiceException {
         create(new UserRequest("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN)));
         logger.info("\n////////\n////////\nADMIN USER CREATED: admin 12345\n////////\n////////");
+
+        //Create technical user
+        create(new UserRequest("technical", "12345", Collections.singletonList(Role.ROLE_TECHNICAL)));
+        logger.info("\n////////\n////////\nTECHNICAL USER CREATED: technical 12345\n////////\n////////");
     }
 
     public UserDTO create(UserRequest userRequest) throws UserServiceException, IllegalArgumentException {
@@ -113,10 +119,14 @@ public class UserService {
         return userConverter.convertToDTO(userRepository.findById(id).orElse(null));
     }
 
-    public UserInfoDTO saveUserInfo(UserInfoRequest userInfo) {
+    public UserInfoDTO saveUserInfo(UserInfoRequest userInfo) throws UserServiceException {
         logger.debug("Save user info for user: {}", userInfo.getUsername());
-        UserInfoDAO userInfoDAO = userInfoRepository.save(userInfoConverter.convertToEntity(userInfo));
-        return userInfoConverter.convertToDTO(userInfoDAO);
+        if (!userInfoRepository.findUserInfoByUsername(userInfo.getUsername()).isPresent()) {
+            UserInfoDAO userInfoDAO = userInfoRepository.save(userInfoConverter.convertToEntity(userInfo));
+            return userInfoConverter.convertToDTO(userInfoDAO);
+        } else {
+            throw new UserServiceException("User info is exists!");
+        }
     }
 
     public UserInfoDTO getUserInfo(String username) throws UserServiceException {
@@ -141,7 +151,16 @@ public class UserService {
             return userInfoConverter.convertToDTO(userInfoRepository.save(updatedUserInfo));
         } else {
             logger.debug("Create new user info for user: {}", userInfoRequest.getUsername());
-            return saveUserInfo(userInfoRequest);
+            return userInfoConverter.convertToDTO(
+                    userInfoRepository.save(
+                            userInfoConverter.convertToEntity(userInfoRequest)));
         }
+    }
+
+    public List<UserInfoDTO> getUserInfos(List<String> usernames) {
+        logger.debug("Get user infos for users: {}", usernames);
+        List<UserInfoDAO> userInfos = userInfoRepository.findByUsernameIn(usernames);
+        logger.debug("User infos found: {}", userInfos.size());
+        return userInfos.stream().map(i -> userInfoConverter.convertToDTO(i)).collect(Collectors.toList());
     }
 }

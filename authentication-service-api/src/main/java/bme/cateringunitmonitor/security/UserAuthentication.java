@@ -1,5 +1,6 @@
 package bme.cateringunitmonitor.security;
 
+import bme.cateringunitmonitor.api.Role;
 import io.jsonwebtoken.Claims;
 import lombok.ToString;
 import org.springframework.security.core.Authentication;
@@ -13,11 +14,15 @@ import java.util.List;
 @ToString
 public class UserAuthentication implements Authentication {
 
+    private String token;
     private UserClaims userClaims;
     private boolean authenticated = true;
+    private boolean isInnerCall;
 
-    public UserAuthentication(Claims claims) {
+    public UserAuthentication(Claims claims, String token, boolean isInnerCall) {
         this.userClaims = new UserClaims(claims);
+        this.token = token;
+        this.isInnerCall = isInnerCall;
     }
 
     @Override
@@ -26,6 +31,11 @@ public class UserAuthentication implements Authentication {
 
         userClaims.getRoles().forEach(role ->
                 grantedAuthorities.add(new SimpleGrantedAuthority(role)));
+
+        //Add technical role if it is an inner call. (Used by Feign calls)
+        /*if (isInnerCall) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(Role.Values.ROLE_TECHNICAL));
+        }*/
 
         return grantedAuthorities;
     }
@@ -62,5 +72,9 @@ public class UserAuthentication implements Authentication {
 
     public UserClaims getUserClaims() {
         return userClaims;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

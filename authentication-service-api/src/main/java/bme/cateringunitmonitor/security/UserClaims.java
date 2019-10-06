@@ -3,12 +3,14 @@ package bme.cateringunitmonitor.security;
 import bme.cateringunitmonitor.utils.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Getter
+@ToString
 public class UserClaims implements Serializable {
 
     private final Long id;

@@ -1,11 +1,15 @@
-package bme.cateringunitmonitor.utils.feign;
+package bme.cateringunitmonitor.feign;
 
 import feign.RequestInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Slf4j
 public class FeignConfiguration {
+
+    public FeignConfiguration() {
+        log.info("Load Feign configuration...");
+    }
 
     @Bean
     public CustomErrorDecoder errorDecoder() {

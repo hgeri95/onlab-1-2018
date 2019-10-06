@@ -17,6 +17,10 @@ spring:
           uri: ${cateringServiceUrl}
           predicates:
             - Path=/api/v1/cateringunit/**
+        - id: notification_service_route
+          uri: ${notificationServiceUrl}
+          predicates:
+            - Path=/api/v1/notification/**
       globalcors:
         cors-configurations:
           '[/**]':

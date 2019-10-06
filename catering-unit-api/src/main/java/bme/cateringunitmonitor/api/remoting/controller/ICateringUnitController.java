@@ -4,14 +4,13 @@ import bme.cateringunitmonitor.api.Role;
 import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
-import bme.cateringunitmonitor.utils.feign.FeignConfiguration;
+import bme.cateringunitmonitor.feign.FeignConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Base64;
 
 @FeignClient(name = "CateringController", url = "${cateringServiceUrl}", configuration = FeignConfiguration.class)
 public interface ICateringUnitController {

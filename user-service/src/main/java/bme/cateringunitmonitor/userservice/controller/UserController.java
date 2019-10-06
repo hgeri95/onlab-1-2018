@@ -1,10 +1,7 @@
 package bme.cateringunitmonitor.userservice.controller;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dto.UserDTO;
-import bme.cateringunitmonitor.api.dto.UserInfoDTO;
-import bme.cateringunitmonitor.api.dto.UserInfoRequest;
-import bme.cateringunitmonitor.api.dto.UserRequest;
+import bme.cateringunitmonitor.api.dto.*;
 import bme.cateringunitmonitor.api.exception.BadRequestException;
 import bme.cateringunitmonitor.api.exception.UserServiceException;
 import bme.cateringunitmonitor.api.remoting.controller.IUserController;
@@ -59,7 +56,12 @@ public class UserController implements IUserController {
         String activeUser = SecurityUtil.getActiveUser();
         logger.debug("Set user info: {}, for user: {}", userInfoRequest, activeUser);
         userInfoRequest.setUsername(activeUser);
-        return userService.saveUserInfo(userInfoRequest);
+        try {
+            return userService.saveUserInfo(userInfoRequest);
+        } catch (UserServiceException ex) {
+            logger.warn("User info is already exists for user: {}, exception: {}", userInfoRequest.getUsername(), ex);
+            throw new BadRequestException(ex.getMessage());
+        }
     }
 
     @Override
@@ -88,5 +90,10 @@ public class UserController implements IUserController {
             logger.warn("User info not found: {}", ex);
             throw new BadRequestException(ex.getMessage());
         }
+    }
+
+    @Override
+    public List<UserInfoDTO> getUserInfosByUsernames(@Valid UserInfoBulkRequest userInfoBulkRequest) {
+        return userService.getUserInfos(userInfoBulkRequest.getUsernames());
     }
 }

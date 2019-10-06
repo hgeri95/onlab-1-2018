@@ -1,18 +1,15 @@
 package bme.cateringunitmonitor.api.remoting.controller;
 
 import bme.cateringunitmonitor.api.Role;
-import bme.cateringunitmonitor.api.dto.UserDTO;
-import bme.cateringunitmonitor.api.dto.UserInfoDTO;
-import bme.cateringunitmonitor.api.dto.UserInfoRequest;
-import bme.cateringunitmonitor.api.dto.UserRequest;
+import bme.cateringunitmonitor.api.dto.*;
 import bme.cateringunitmonitor.api.exception.BadRequestException;
-import bme.cateringunitmonitor.utils.feign.FeignConfiguration;
+import bme.cateringunitmonitor.feign.FeignConfiguration;
+import bme.cateringunitmonitor.utils.security.SecurityConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @FeignClient(name = "UserController", url = "${userServiceUrl}", configuration = FeignConfiguration.class)
@@ -42,6 +39,10 @@ public interface IUserController {
     public UserInfoDTO updateUserInfo(@RequestBody @Valid UserInfoRequest userInfoRequest);
 
     @GetMapping(BASE_PATH + "/userinfo/{username}")
-    @Secured({Role.Values.ROLE_ADMIN})
+    @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_TECHNICAL, Role.Values.ROLE_OWNER, Role.Values.ROLE_USER})
     public UserInfoDTO getUserInfoByUsername(@PathVariable("username") String username);
+
+    @GetMapping(BASE_PATH + "/userinfo/bulk")
+    @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_TECHNICAL, Role.Values.ROLE_OWNER, Role.Values.ROLE_USER})
+    public List<UserInfoDTO> getUserInfosByUsernames(@RequestBody @Valid UserInfoBulkRequest userInfoBulkRequest);
 }

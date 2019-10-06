@@ -33,7 +33,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         if (header != null && header.startsWith(SecurityConstants.TOKEN_PREFIX) && !header.contains(UNDEFINED)) {
             final String token = header.substring(SecurityConstants.TOKEN_PREFIX.length());
             logger.debug("Token in header: {}", token);
-            UserAuthentication authentication = getAuthentication(token, response);
+
+            String innerCallHeader = request.getHeader(SecurityConstants.INNER_CALL_HEADER_STRING);
+            boolean isInnerCall = innerCallHeader != null && innerCallHeader.equals(SecurityConstants.INNER_CALL_TOKEN);
+            if (isInnerCall) {
+                logger.info("Inner call with token: {}", token);
+            }
+            UserAuthentication authentication = getAuthentication(token, response, isInnerCall);
 
             if (authentication != null) {
                 logger.debug("Set security context: {}", authentication.toString());
@@ -47,7 +53,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
     }
 
-    private UserAuthentication getAuthentication(String token, HttpServletResponse response) throws IOException {
+    private UserAuthentication getAuthentication(String token, HttpServletResponse response, boolean isInnerCall) throws IOException {
         if (token != null) {
             try {
                 final Claims claims = Jwts.parser()
@@ -55,7 +61,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         .parseClaimsJws(token)
                         .getBody();
 
-                return new UserAuthentication(claims);
+                return new UserAuthentication(claims, token, isInnerCall);
             } catch (MalformedJwtException |
                     IllegalArgumentException |
                     UnsupportedJwtException |

@@ -19,6 +19,10 @@ documentation:
           name: CateringUnitService
           url: ${cateringServiceUrl}/${swagger.path}
           version: 2.0
+        -
+          name: NotificationService
+          url: ${notificationServiceUrl}/${swagger.path}
+          version: 2.0
 
 logging:
   level:

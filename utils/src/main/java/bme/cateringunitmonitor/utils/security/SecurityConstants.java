@@ -8,4 +8,6 @@ public class SecurityConstants {
     public static final String HEADER_STRING = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String SECRET = "SecretKeyToGenJWTs";
+    public static final String INNER_CALL_HEADER_STRING = "Innercall";
+    public static final String INNER_CALL_TOKEN = "rndinctokn";
 }

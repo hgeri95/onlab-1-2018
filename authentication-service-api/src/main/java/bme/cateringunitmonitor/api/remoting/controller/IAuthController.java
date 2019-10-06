@@ -3,10 +3,9 @@ package bme.cateringunitmonitor.api.remoting.controller;
 import bme.cateringunitmonitor.api.dto.AuthRefreshRequest;
 import bme.cateringunitmonitor.api.dto.LoginRequest;
 import bme.cateringunitmonitor.api.dto.LoginResponse;
-import bme.cateringunitmonitor.utils.feign.FeignConfiguration;
+import bme.cateringunitmonitor.feign.FeignConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

@@ -1,4 +1,4 @@
-package bme.cateringunitmonitor.utils.feign;
+package bme.cateringunitmonitor.feign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
@@ -19,6 +19,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String s, Response response) {
         try {
+            log.debug("Feign decode error: {}", s);
             String responseBody = Util.toString(response.body().asReader());
             String message = objectMapper.readTree(responseBody).get(MESSAGE_KEY).asText();
             return new ResponseStatusException(HttpStatus.valueOf(response.status()), message);
