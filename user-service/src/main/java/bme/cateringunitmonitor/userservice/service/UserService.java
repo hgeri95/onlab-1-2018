@@ -115,6 +115,10 @@ public class UserService {
         return userConverter.convertToDTO(userRepository.findByUsername(username));
     }
 
+    public boolean isUserExists(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
     public UserDTO findUserById(Long id) {
         return userConverter.convertToDTO(userRepository.findById(id).orElse(null));
     }

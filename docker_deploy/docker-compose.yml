@@ -50,6 +50,7 @@ services:
               - catering-service
               - mysql-server
               - notification-service
+              - rating-service
             networks:
               - custom-network
             links:
@@ -57,11 +58,13 @@ services:
               - user-service:authentication-service
               - catering-service:catering-service
               - notification-service:notification-service
+              - rating-service:rating-service
             environment:
               - authServiceUrl=http://user-service:8081
               - userServiceUrl=http://user-service:8081
               - cateringServiceUrl=http://catering-service:8082
               - notificationServiceUrl=http://notification-service:8084
+              - ratingServiceUrl=http://rating-service:8085
     swagger-service:
       container_name: swagger-service
       image: swagger-service-build
@@ -77,11 +80,13 @@ services:
         - user-service:user-service
         - user-service:authentication-service
         - catering-service:catering-service
+        - rating-service:rating-service
       environment:
         - authServiceUrl=http://localhost:8081
         - userServiceUrl=http://localhost:8081
         - cateringServiceUrl=http://localhost:8082
         - notificationServiceUrl=http://localhost:8084
+        - ratingServiceUrl=http://localhost:8085
     notification-service:
       container_name: notification-service
       image: notification-service-build
@@ -109,6 +114,24 @@ services:
         - custom-network
       volumes:
         - /c/tmp:/var/mail
+    rating-service:
+      container_name: rating-service
+      image: rating-service-build
+      ports:
+        - "8085:8085"
+      depends_on:
+        mysql-server:
+          condition: service_healthy
+      networks:
+        - custom-network
+      links:
+        - user-service:user-service
+        - catering-service:catering-service
+        - mysql-server:mysql
+      environment:
+        - userServiceUrl=http://user-service:8081
+        - authServiceUrl=http://user-service:8081
+        - cateringServiceUrl=http://catering-service:8082
 
 networks:
     custom-network:

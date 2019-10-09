@@ -39,4 +39,7 @@ public interface ICateringUnitController {
     @GetMapping(BASE_PATH + "/get/{id}")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER})
     public ResponseEntity<CateringUnitDTO> get(@PathVariable("id") Long id);
+
+    @GetMapping(BASE_PATH + "/exists/{cateringUnitName}")
+    public Boolean checkCateringUnitExists(@PathVariable("cateringUnitName") String cateringUnitName);
 }

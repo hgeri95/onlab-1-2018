@@ -77,4 +77,8 @@ public class CateringUnitService {
             throw new CateringUnitServiceException(ex.getMessage());
         }
     }
+
+    public boolean isCateringUnitExists(String cateringUnitName) {
+        return cateringUnitRepository.existsByName(cateringUnitName);
+    }
 }

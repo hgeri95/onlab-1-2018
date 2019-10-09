@@ -21,6 +21,10 @@ spring:
           uri: ${notificationServiceUrl}
           predicates:
             - Path=/api/v1/notification/**
+        - id: rating_service_route
+          uri: ${ratingServiceUrl}
+          predicates:
+            - Path=/api/v1/rating/**
       globalcors:
         cors-configurations:
           '[/**]':

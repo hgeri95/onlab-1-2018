@@ -23,6 +23,10 @@ documentation:
           name: NotificationService
           url: ${notificationServiceUrl}/${swagger.path}
           version: 2.0
+        -
+          name: RatingService
+          url: ${ratingServiceUrl}/${swagger.path}
+          version: 2.0
 
 logging:
   level:

@@ -65,4 +65,9 @@ public class CateringUnitController implements ICateringUnitController {
             throw new CateringUnitHttpException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
+
+    @Override
+    public Boolean checkCateringUnitExists(String cateringUnitName) {
+        return cateringUnitService.isCateringUnitExists(cateringUnitName);
+    }
 }

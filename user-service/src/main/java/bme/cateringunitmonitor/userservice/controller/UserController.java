@@ -96,4 +96,9 @@ public class UserController implements IUserController {
     public List<UserInfoDTO> getUserInfosByUsernames(@Valid UserInfoBulkRequest userInfoBulkRequest) {
         return userService.getUserInfos(userInfoBulkRequest.getUsernames());
     }
+
+    @Override
+    public Boolean checkUserExists(String username) {
+        return userService.isUserExists(username);
+    }
 }
