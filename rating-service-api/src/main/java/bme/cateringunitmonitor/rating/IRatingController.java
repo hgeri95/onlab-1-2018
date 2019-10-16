@@ -34,4 +34,6 @@ public interface IRatingController {
     public RatingResponse getRatingForUserAndCateringUnit(
             @RequestParam("userName") @NotBlank String username,
             @RequestParam("cateringUnitName") @NotBlank String cateringUnitName);
+
+    //TODO Proposal for user
 }

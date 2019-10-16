@@ -1,9 +1,11 @@
 package bme.cateringunitmonitor.rating.dao;
 
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -25,4 +27,7 @@ public class RatingDAO implements Serializable {
     private String username;
 
     private int rate;
+
+    @UpdateTimestamp
+    private LocalDateTime updateDateTime;
 }

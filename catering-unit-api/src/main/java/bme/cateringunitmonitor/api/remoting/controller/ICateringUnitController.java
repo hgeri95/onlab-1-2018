@@ -11,6 +11,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @FeignClient(name = "CateringController", url = "${cateringServiceUrl}", configuration = FeignConfiguration.class)
 public interface ICateringUnitController {
@@ -20,8 +21,6 @@ public interface ICateringUnitController {
     @GetMapping(BASE_PATH + "/getall")
     @Secured(Role.Values.ROLE_USER)
     public CateringUnitsResponse getAll();
-
-    //TODO Search nice to have
 
     @DeleteMapping(BASE_PATH + "/delete/{id}")
     @Secured(Role.Values.ROLE_OWNER)
@@ -42,4 +41,7 @@ public interface ICateringUnitController {
 
     @GetMapping(BASE_PATH + "/exists/{cateringUnitName}")
     public Boolean checkCateringUnitExists(@PathVariable("cateringUnitName") String cateringUnitName);
+
+    @GetMapping(BASE_PATH + "/search")
+    public List<CateringUnitDTO> search(@RequestParam(name = "term", required=true) String searchTerm);
 }

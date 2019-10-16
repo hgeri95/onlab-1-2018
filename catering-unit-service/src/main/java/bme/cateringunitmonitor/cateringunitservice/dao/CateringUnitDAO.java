@@ -1,13 +1,12 @@
 package bme.cateringunitmonitor.cateringunitservice.dao;
 
-import bme.cateringunitmonitor.api.Address;
-import bme.cateringunitmonitor.api.CategoryParameter;
 import bme.cateringunitmonitor.api.OpeningPerDay;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Indexed
 public class CateringUnitDAO implements Serializable {
 
     @Id
@@ -28,8 +28,10 @@ public class CateringUnitDAO implements Serializable {
     private Long id;
 
     @Column(nullable = false)
+    @Field
     private String name;
 
+    @Field
     private String description;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -40,12 +42,14 @@ public class CateringUnitDAO implements Serializable {
 
     @Lob
     @Column(length = 100000)
+    @IndexedEmbedded
     private Address address;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Lob
     @Column(length = 100000)
     @Fetch(value = FetchMode.SUBSELECT)
+    @IndexedEmbedded
     private List<CategoryParameter> categoryParameters = new ArrayList<>();
 
     //TODO pictures

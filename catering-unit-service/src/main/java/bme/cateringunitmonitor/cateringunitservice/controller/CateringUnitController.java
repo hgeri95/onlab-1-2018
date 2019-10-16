@@ -7,6 +7,7 @@ import bme.cateringunitmonitor.api.exception.CateringUnitHttpException;
 import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.api.remoting.controller.ICateringUnitController;
 import bme.cateringunitmonitor.cateringunitservice.service.CateringUnitService;
+import bme.cateringunitmonitor.cateringunitservice.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class CateringUnitController implements ICateringUnitController {
@@ -23,6 +25,9 @@ public class CateringUnitController implements ICateringUnitController {
 
     @Autowired
     private CateringUnitService cateringUnitService;
+
+    @Autowired
+    private SearchService searchService;
 
     @Override
     public CateringUnitsResponse getAll() {
@@ -36,7 +41,7 @@ public class CateringUnitController implements ICateringUnitController {
             cateringUnitService.delete(id);
             return ResponseEntity.ok().build();
         } catch (CateringUnitServiceException ex) {
-            logger.error("Error in catering unit delete: {}", ex);
+            logger.warn("Error in catering unit delete: {}", ex);
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
@@ -46,14 +51,20 @@ public class CateringUnitController implements ICateringUnitController {
         try {
             return ResponseEntity.ok(cateringUnitService.create(cateringUnitRequest));
         } catch (CateringUnitServiceException ex) {
-            logger.error("Error in catering unit creation: {}", ex);
+            logger.warn("Error in catering unit creation: {}", ex);
             throw new CateringUnitHttpException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
 
     @Override
     public ResponseEntity<CateringUnitDTO> update(Long id, @Valid CateringUnitRequest cateringUnitRequest) {
-        return ResponseEntity.ok(cateringUnitService.update(id, cateringUnitRequest));
+        try {
+            CateringUnitDTO cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
+            return ResponseEntity.ok(cateringUnit);
+        } catch (CateringUnitServiceException ex) {
+            logger.warn("Error in catering unit update: {}", ex);
+            throw new CateringUnitHttpException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @Override
@@ -69,5 +80,10 @@ public class CateringUnitController implements ICateringUnitController {
     @Override
     public Boolean checkCateringUnitExists(String cateringUnitName) {
         return cateringUnitService.isCateringUnitExists(cateringUnitName);
+    }
+
+    @Override
+    public List<CateringUnitDTO> search(String searchTerm) {
+        return searchService.search(searchTerm);
     }
 }

@@ -43,10 +43,13 @@ public class CateringUnitService {
         return cateringUnitConverter.convertToDTO(cateringUnitRepository.save(cateringUnit));
     }
 
-    public CateringUnitDTO update(Long id, CateringUnitRequest cateringUnitRequest) {
+    public CateringUnitDTO update(Long id, CateringUnitRequest cateringUnitRequest) throws CateringUnitServiceException {
         log.debug("Catering unit to update: {}, with id: {}", cateringUnitRequest, id);
         Optional<CateringUnitDAO> cateringUnitFromDb = cateringUnitRepository.findById(id);
         if (cateringUnitFromDb.isPresent()) {
+            if (!cateringUnitFromDb.get().getName().equals(cateringUnitRequest.getName())) {
+                throw new CateringUnitServiceException("Catering unit not changeable!");
+            }
             CateringUnitDAO updatedCateringUnit = cateringUnitConverter.convertToEntity(cateringUnitRequest);
             updatedCateringUnit.setId(cateringUnitFromDb.get().getId());
             CateringUnitDAO savedCateringUnit = cateringUnitRepository.save(updatedCateringUnit);
