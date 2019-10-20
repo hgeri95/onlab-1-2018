@@ -6,7 +6,7 @@ import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.cateringunitservice.dao.CateringUnitDAO;
 import bme.cateringunitmonitor.cateringunitservice.repository.CateringUnitRepository;
 import bme.cateringunitmonitor.cateringunitservice.util.CateringUnitConverter;
-import lombok.extern.flogger.Flogger;
+import bme.cateringunitmonitor.utils.amqp.GenericEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,8 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static bme.cateringunitmonitor.utils.amqp.EventTypes.DELETE_CATERING_EVENT;
 
 @Service
 @Transactional
@@ -27,6 +29,9 @@ public class CateringUnitService {
 
     @Autowired
     private CateringUnitConverter cateringUnitConverter;
+
+    @Autowired(required = false)//Optional because of testing only
+    private Optional<EventSender> eventSender;
 
     public List<CateringUnitDTO> getAll() {
         return cateringUnitRepository.findAll().stream()
@@ -63,8 +68,15 @@ public class CateringUnitService {
     }
 
     public void delete(Long id) throws CateringUnitServiceException {
+        Optional<CateringUnitDAO> cateringUnitToDelete = cateringUnitRepository.findById(id);
         try {
-            cateringUnitRepository.deleteById(id);
+            if (cateringUnitToDelete.isPresent()) {
+                final String cateringUnitName = cateringUnitToDelete.get().getName();
+                cateringUnitRepository.deleteById(id);
+                sendDeleteCateringEvent(cateringUnitName);
+            } else {
+                throw new CateringUnitServiceException("Catering unit not exists with id: " + id);
+            }
         } catch (IllegalArgumentException ex) {
             log.error("Failed to delete Catering unit with id: {}, exception: {}", id, ex);
             throw new CateringUnitServiceException(ex.getMessage());
@@ -83,5 +95,15 @@ public class CateringUnitService {
 
     public boolean isCateringUnitExists(String cateringUnitName) {
         return cateringUnitRepository.existsByName(cateringUnitName);
+    }
+
+    private void sendDeleteCateringEvent(String cateringUnitName) {
+        if (eventSender.isPresent()) {
+            GenericEvent cateringUnitDeleteEvent = new GenericEvent(DELETE_CATERING_EVENT,
+                    "cateringUnitName", cateringUnitName);
+            eventSender.get().send(cateringUnitDeleteEvent.getMessage());
+        } else {
+            log.error("Event sender is missing!");
+        }
     }
 }

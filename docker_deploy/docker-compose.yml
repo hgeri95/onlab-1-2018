@@ -24,10 +24,13 @@ services:
         networks:
             - custom-network
         depends_on:
+          rabbitmq:
+            condition: service_started
           mysql-server:
             condition: service_healthy
         links:
           - mysql-server:mysql
+          - rabbitmq:rabbitmq
     catering-service:
             container_name: catering-service
             image: catering-service-build
@@ -36,10 +39,13 @@ services:
             networks:
                 - custom-network
             depends_on:
+              rabbitmq:
+                condition: service_started
               mysql-server:
                 condition: service_healthy
             links:
               - mysql-server:mysql
+              - rabbitmq:rabbitmq
     api-gateway-service:
             container_name: api-gateway-service
             image: api-gateway-service-build
@@ -120,6 +126,12 @@ services:
       ports:
         - "8085:8085"
       depends_on:
+        user-service:
+          condition: service_started
+        catering-service:
+          condition: service_started
+        rabbitmq:
+          condition: service_started
         mysql-server:
           condition: service_healthy
       networks:
@@ -128,10 +140,19 @@ services:
         - user-service:user-service
         - catering-service:catering-service
         - mysql-server:mysql
+        - rabbitmq:rabbitmq
       environment:
         - userServiceUrl=http://user-service:8081
         - authServiceUrl=http://user-service:8081
         - cateringServiceUrl=http://catering-service:8082
+    rabbitmq:
+      container_name: rabbitmq
+      image: rabbitmq:management
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+      networks:
+        - custom-network
 
 networks:
     custom-network:

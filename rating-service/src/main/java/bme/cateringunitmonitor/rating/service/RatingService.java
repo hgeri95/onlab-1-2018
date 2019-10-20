@@ -92,6 +92,18 @@ public class RatingService {
         }
     }
 
+    public void deleteRatingsByCateringUnitName(String cateringUnitName) {
+        log.debug("Delete ratings by catering unit name: {}", cateringUnitName);
+        int deletedRatings = ratingRepository.deleteAllByCateringUnitName(cateringUnitName);
+        log.debug("{} ratings deleted", deletedRatings);
+    }
+
+    public void deleteRatingsByUsername(String username) {
+        log.debug("Delete ratings by username: {}", username);
+        int deletedRatings = ratingRepository.deleteAllByUsername(username);
+        log.debug("{} ratings deleted", deletedRatings);
+    }
+
     private boolean checkCateringUnitExists(String cateringUnitName) throws RatingServiceException {
         boolean cateringUnitExists = cateringUnitController.checkCateringUnitExists(cateringUnitName);
         if (!cateringUnitExists) {

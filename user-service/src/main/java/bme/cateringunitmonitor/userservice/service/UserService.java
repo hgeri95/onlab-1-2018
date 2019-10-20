@@ -12,6 +12,8 @@ import bme.cateringunitmonitor.userservice.repository.UserInfoRepository;
 import bme.cateringunitmonitor.userservice.repository.UserRepository;
 import bme.cateringunitmonitor.userservice.util.UserConverter;
 import bme.cateringunitmonitor.userservice.util.UserInfoConverter;
+import bme.cateringunitmonitor.utils.amqp.EventTypes;
+import bme.cateringunitmonitor.utils.amqp.GenericEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,9 @@ public class UserService {
 
     @Autowired
     private UserInfoConverter userInfoConverter;
+
+    @Autowired(required = false)//Optional because of testing only
+    private Optional<EventSender> eventSender;
 
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -90,6 +95,7 @@ public class UserService {
         if (userRepository.findByUsername(username) != null) {
             logger.debug("UserDAO {} deleted", username);
             userInfoRepository.deleteByUsername(username);
+            sendDeleteUserEvent(username);
             return userRepository.deleteByUsername(username);
         } else {
             throw new UserServiceException("User does not exist: " + username);
@@ -166,5 +172,14 @@ public class UserService {
         List<UserInfoDAO> userInfos = userInfoRepository.findByUsernameIn(usernames);
         logger.debug("User infos found: {}", userInfos.size());
         return userInfos.stream().map(i -> userInfoConverter.convertToDTO(i)).collect(Collectors.toList());
+    }
+
+    private void sendDeleteUserEvent(String username) {
+        GenericEvent deleteUserEvent = new GenericEvent(EventTypes.DELETE_USER_EVENT, "username", username);
+        if (eventSender.isPresent()) {
+            eventSender.get().send(deleteUserEvent.getMessage());
+        } else {
+            logger.error("Event sender is missing!");
+        }
     }
 }
