@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Programs\kompose\kompose.exe convert
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mysql-server
+  name: mysql-server
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Programs\kompose\kompose.exe convert
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mysql-server
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: app
+        - name: MYSQL_PASSWORD
+          value: test123
+        - name: MYSQL_ROOT_PASSWORD
+          value: root123
+        - name: MYSQL_USER
+          value: user
+        image: mysql/mysql-server
+        name: mysql-server
+        ports:
+        - containerPort: 3036
+        resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: notification-service
+  name: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+      - env:
+        - name: authServiceUrl
+          value: http://user-service:8081
+        - name: smtpPort
+          value: "25"
+        - name: smtpUrl
+          value: fakesmtp
+        - name: userServiceUrl
+          value: http://user-service:8081
+        image: notification-service-build
+        name: notification-service
+        ports:
+        - containerPort: 8084

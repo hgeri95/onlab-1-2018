@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway-service
   labels:
-    app: gateway-service
+    app: rating-service
+  name: rating-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gateway-service
+      app: rating-service
   template:
     metadata:
       labels:
-        app: gateway-service
+        app: rating-service
     spec:
       containers:
       - env:
@@ -22,12 +22,7 @@ spec:
           value: http://catering-service:8082
         - name: userServiceUrl
           value: http://user-service:8081
-        - name: notificationServiceUrl
-          value: http://notification-service:8084
-        - name: ratingServiceUrl
-          value: http://rating-service:8085
-        image: eu.gcr.io/cateringunitmonitorproject/api-gateway-service-build
-        name: gateway-service
+        image: eu.gcr.io/cateringunitmonitorproject/rating-service-build
+        name: rating-service
         ports:
-        - name: http
-          containerPort: 80
+        - containerPort: 8085

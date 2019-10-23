@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fakesmtp
+  name: fakesmtp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fakesmtp
+  template:
+    metadata:
+      labels:
+        app: fakesmtp
+    spec:
+      containers:
+      - image: munkyboy/fakesmtp
+        name: fakesmtp
+        ports:
+        - name: http
+          containerPort: 25
+        volumeMounts:
+        - mountPath: /var/mail
+          name: fakesmtp-claim0
+      volumes:
+      - name: fakesmtp-claim0
+        persistentVolumeClaim:
+          claimName: fakesmtp-claim0

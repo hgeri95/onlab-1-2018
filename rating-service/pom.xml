@@ -85,8 +85,17 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--Upload to GCloud-->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>1.6.1</version>
+                <configuration>
+                    <to>
+                        <image>eu.gcr.io/cateringunitmonitorproject/rating-service-build</image>
+                    </to>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>

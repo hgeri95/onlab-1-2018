@@ -86,16 +86,16 @@
                 </executions>
             </plugin>
             <!-- Upload image to GCloud -->
-            <!--<plugin>
+            <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>1.0.2</version>
+                <version>1.6.1</version>
                 <configuration>
                     <to>
-                        <image>eu.gcr.io/cateringunitmonitor/user-service-build</image>
+                        <image>eu.gcr.io/cateringunitmonitorproject/user-service-build</image>
                     </to>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
 </project>

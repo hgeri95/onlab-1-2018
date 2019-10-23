@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 services:
     mysql-server:
         container_name: mysql-server
@@ -12,10 +12,6 @@ services:
           - MYSQL_PASSWORD=test123
         networks:
           - custom-network
-        healthcheck:
-          test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-          timeout: 20s
-          retries: 10
     user-service:
         container_name: user-service
         image: user-service-build
@@ -24,10 +20,8 @@ services:
         networks:
             - custom-network
         depends_on:
-          rabbitmq:
-            condition: service_started
-          mysql-server:
-            condition: service_healthy
+          - rabbitmq
+          - mysql-server
         links:
           - mysql-server:mysql
           - rabbitmq:rabbitmq
@@ -39,10 +33,8 @@ services:
             networks:
                 - custom-network
             depends_on:
-              rabbitmq:
-                condition: service_started
-              mysql-server:
-                condition: service_healthy
+              - rabbitmq
+              - mysql-server
             links:
               - mysql-server:mysql
               - rabbitmq:rabbitmq
@@ -126,14 +118,10 @@ services:
       ports:
         - "8085:8085"
       depends_on:
-        user-service:
-          condition: service_started
-        catering-service:
-          condition: service_started
-        rabbitmq:
-          condition: service_started
-        mysql-server:
-          condition: service_healthy
+        - user-service
+        - catering-service
+        - rabbitmq
+        - mysql-server
       networks:
         - custom-network
       links:

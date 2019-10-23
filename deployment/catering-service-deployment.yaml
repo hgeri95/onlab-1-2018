@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: catering-service
@@ -15,7 +15,7 @@ spec:
         app: catering-service
     spec:
       containers:
-      - image: eu.gcr.io/cateringunitmonitor/catering-service-build
+      - image: eu.gcr.io/cateringunitmonitorproject/catering-service-build
         name: catering-service
         ports:
         - name: http

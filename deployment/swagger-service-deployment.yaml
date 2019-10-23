@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: swagger-service
+  name: swagger-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swagger-service
+  template:
+    metadata:
+      labels:
+        app: swagger-service
+    spec:
+      containers:
+      - env:
+        - name: authServiceUrl
+          value: http://localhost:8081
+        - name: cateringServiceUrl
+          value: http://localhost:8082
+        - name: notificationServiceUrl
+          value: http://localhost:8084
+        - name: ratingServiceUrl
+          value: http://localhost:8085
+        - name: userServiceUrl
+          value: http://localhost:8081
+        image: eu.gcr.io/cateringunitmonitorproject/swagger-service-build
+        name: swagger-service
+        ports:
+        - containerPort: 8083
