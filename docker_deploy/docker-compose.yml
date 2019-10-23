@@ -42,7 +42,7 @@ services:
             container_name: api-gateway-service
             image: api-gateway-service-build
             ports:
-              - "80:80"
+              - "8080:8080"
             depends_on:
               - user-service
               - catering-service
