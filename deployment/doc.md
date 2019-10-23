@@ -71,3 +71,9 @@ Tag the image before push it to gcloud repo.
 > docker tag catering-ui eu.gcr.io/cateringunitmonitor/catering-ui
 > docker push eu.gcr.io/cateringunitmonitor/catering-ui
 ```
+
+# Commands
+Resize cluster size
+```aidl
+gcloud container clusters resize catering... --num-nodes=5
+```

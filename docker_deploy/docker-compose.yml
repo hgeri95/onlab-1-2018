@@ -7,7 +7,7 @@ services:
           - "3036:3036"
         environment:
           - MYSQL_DATABASE=app
-          - MYSQL_ROOT_PASSWORD=root123
+          - MYSQL_ROOT_PASSWORD=test123
           - MYSQL_USER=user
           - MYSQL_PASSWORD=test123
         networks:
