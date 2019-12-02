@@ -1,7 +1,9 @@
-import {userConstants} from '../constants/user.constants';
+import {userConstants} from "../constants/actionTypes";
+
 
 const initialState = {
-    userInfo: ""
+    userInfo: "",
+    userDeleted: false
 }
 
 export default function (state = initialState, action) {
@@ -16,6 +18,11 @@ export default function (state = initialState, action) {
                 ...state,
                 userInfo: action.payload
             };
+        case userConstants.DELETE_USER:
+            return {
+                ...state,
+                userDeleted: true
+            }
         default:
             return state;
     }

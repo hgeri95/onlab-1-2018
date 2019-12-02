@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -33,13 +34,13 @@ public class CateringServiceTest {
                 new Address("ABC Street 6.", new Coordinate(1, 1), "no"),
                 asList(new CategoryParameter("type", "dfdg"))
         );
-        CateringUnitDTO result = cateringUnitService.create(cateringUnit);
+        CateringUnitDTO result = cateringUnitService.create(cateringUnit, "testUser");
         assertNotNull(result);
         assertEquals(1, cateringUnitService.getAll().size());
 
         String description = "updated dic";
         cateringUnit.setDescription(description);
-        CateringUnitDTO updatedCateringUnit = cateringUnitService.update(result.getId(), cateringUnit);
+        CateringUnitDTO updatedCateringUnit = cateringUnitService.update(result.getId(), cateringUnit, "testUser");
         assertEquals(description, updatedCateringUnit.getDescription());
 
         cateringUnitService.delete(updatedCateringUnit.getId());

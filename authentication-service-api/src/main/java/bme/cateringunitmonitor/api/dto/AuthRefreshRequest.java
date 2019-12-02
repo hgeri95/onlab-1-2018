@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class AuthRefreshRequest implements Serializable {
     @NotNull
-    private Long userId;
+    private String userName;
     @NotBlank
     private String refreshToken;
 }

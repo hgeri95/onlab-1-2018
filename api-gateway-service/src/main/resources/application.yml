@@ -9,28 +9,39 @@ spring:
           uri: ${userServiceUrl}
           predicates:
             - Path=/api/v1/users/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - id: authentication_service_route
           uri: ${authServiceUrl}
           predicates:
             - Path=/api/v1/authenticate/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - id: cateringunit_service_route
           uri: ${cateringServiceUrl}
           predicates:
             - Path=/api/v1/cateringunit/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - id: notification_service_route
           uri: ${notificationServiceUrl}
           predicates:
             - Path=/api/v1/notification/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - id: rating_service_route
           uri: ${ratingServiceUrl}
           predicates:
             - Path=/api/v1/rating/**
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET, POST, PUT, DELETE
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        - id: statistic_service_route
+          uri: ${statisticServiceUrl}
+          predicates:
+            - Path=/api/v1/statistic/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
 
 logging:
   level:

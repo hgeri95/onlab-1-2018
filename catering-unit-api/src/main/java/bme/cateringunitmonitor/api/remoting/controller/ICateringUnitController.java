@@ -3,6 +3,7 @@ package bme.cateringunitmonitor.api.remoting.controller;
 import bme.cateringunitmonitor.api.Role;
 import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dto.CateringUnitWithDistanceDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.feign.FeignConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -19,8 +20,12 @@ public interface ICateringUnitController {
     String BASE_PATH = "api/v1/cateringunit";
 
     @GetMapping(BASE_PATH + "/getall")
-    @Secured(Role.Values.ROLE_USER)
+    @Secured({Role.Values.ROLE_USER})
     public CateringUnitsResponse getAll();
+
+    @GetMapping(BASE_PATH + "/getowned")
+    @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_ADMIN})
+    public CateringUnitsResponse getOwned();
 
     @DeleteMapping(BASE_PATH + "/delete/{id}")
     @Secured(Role.Values.ROLE_OWNER)
@@ -44,4 +49,12 @@ public interface ICateringUnitController {
 
     @GetMapping(BASE_PATH + "/search")
     public List<CateringUnitDTO> search(@RequestParam(name = "term", required=true) String searchTerm);
+
+    @GetMapping(BASE_PATH + "/nearest")
+    @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_USER})
+    public List<CateringUnitWithDistanceDTO> getNearestCaterings(
+            @RequestParam(name="distance", required = true) double distance,
+            @RequestParam(name="latitude", required = true) double latitude,
+            @RequestParam(name="longitude", required = true) double longitude
+    );
 }

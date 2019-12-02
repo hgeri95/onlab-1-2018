@@ -5,3 +5,6 @@
 
 #Docker build
 Skip docker build with **-Ddockerfile.skip**
+
+#Gcloud build
+Skip jib pllugin with **-Djib.skip**do

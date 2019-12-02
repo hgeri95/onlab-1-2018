@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class TokenGeneratorService {
 
-    @Value("${jwt.accessTokenValidity.minutes:10}")
+    @Value("${jwt.accessTokenValidity.minutes:5}")
     private int accessTokenValidity;
 
     @Value("${jwt.refreshTokenLength:16}")
@@ -44,7 +44,7 @@ public class TokenGeneratorService {
         String refreshToken = generateRandomSecureString(refreshTokenLength);
         OffsetDateTime refreshTokenExpireDate = now.plusMinutes(refreshTokenValidity);
 
-        return new LoginResponse(token, tokenExpireDate, refreshToken, refreshTokenExpireDate);
+        return new LoginResponse(token, tokenExpireDate, refreshToken, refreshTokenExpireDate, user.getUsername(), roles.get(0));
     }
 
     private String generateRandomSecureString(int length) {

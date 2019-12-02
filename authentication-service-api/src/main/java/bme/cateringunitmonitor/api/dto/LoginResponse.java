@@ -1,5 +1,6 @@
 package bme.cateringunitmonitor.api.dto;
 
+import bme.cateringunitmonitor.api.Role;
 import lombok.*;
 
 import java.io.Serializable;
@@ -19,5 +20,9 @@ public class LoginResponse implements Serializable {
 
     private String refreshToken;
 
-    private OffsetDateTime refreshTokenExpireDate;
+    private OffsetDateTime refreshTokenExpireDate;//TODO localdatetime
+
+    private String username;
+
+    private Role role;
 }

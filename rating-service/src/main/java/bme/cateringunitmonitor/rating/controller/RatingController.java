@@ -5,6 +5,7 @@ import bme.cateringunitmonitor.rating.dto.RatingRequest;
 import bme.cateringunitmonitor.rating.dto.RatingResponse;
 import bme.cateringunitmonitor.rating.exception.RatingServiceException;
 import bme.cateringunitmonitor.rating.service.RatingService;
+import bme.cateringunitmonitor.security.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,8 @@ public class RatingController implements IRatingController {
     @Override
     public RatingResponse changeRate(@Valid RatingRequest ratingRequest) {
         try {
-            return ratingService.updateRate(ratingRequest);
+            String username = SecurityUtil.getActiveUser();
+            return ratingService.updateRate(username, ratingRequest);
         } catch (RatingServiceException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
@@ -51,7 +53,8 @@ public class RatingController implements IRatingController {
     }
 
     @Override
-    public RatingResponse getRatingForUserAndCateringUnit(@NotBlank String username, @NotBlank String cateringUnitName) {
+    public RatingResponse getRatingForUserAndCateringUnit(@NotBlank String cateringUnitName) {
+        String username = SecurityUtil.getActiveUser();
         try {
             Optional<RatingResponse> ratingResponse =
                     ratingService.getRatingForUserAndCateringUnit(username, cateringUnitName);
@@ -63,5 +66,11 @@ public class RatingController implements IRatingController {
         } catch (RatingServiceException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
+    }
+
+    @Override
+    public List<String> getRecommendedCaterings() {
+        String username = SecurityUtil.getActiveUser();
+        return ratingService.getRecommendedCateringsForUser(username);
     }
 }

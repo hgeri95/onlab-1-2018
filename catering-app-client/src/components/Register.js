@@ -1,23 +1,23 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
-import {registerUserAction} from '../actions/authentication';
-import classnames from 'classnames';
+import {registerUserAction} from '../action_creators/authentication';
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
+import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
+import {renderError} from "./ErrorAlert";
 
 class Register extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             name: '',
             password: '',
             password_confirm: '',
             role: '',
-            errors: {}
-        }
+            errorMessage: ''
+        };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,16 +25,16 @@ class Register extends Component {
     }
 
     validateForm() {
-        return this.state.password === this.state.password_confirm;
+        return this.state.password === this.state.password_confirm && this.state.password.length > 4 && this.state.role.length > 0;
     }
 
     handleInputChange = event => {
         this.setState({[event.target.name]: event.target.value})
-    }
+    };
 
     handleSelect = event => {
         this.setState({role: event.value})
-    }
+    };
 
     handleSubmit = event => {
         event.preventDefault();
@@ -42,8 +42,9 @@ class Register extends Component {
             name: this.state.name,
             password: this.state.password,
             role: this.state.role
-        }
+        };
         this.props.registerUserAction(user, this.props.history);
+        this.setState({name: '', password: '', password_confirm: '', role: '', errorMessage: ''});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -51,62 +52,46 @@ class Register extends Component {
             this.props.history.push('/')
         }
         if (nextProps.errors) {
-            this.setState({
-                errors: nextProps.errors
-            });
-        }
-    }
-
-    componentDidMount() {
-        if (this.props.authentication.authenticated) {
-            this.props.history.push('/');
+            console.log(nextProps.errors);
+            this.setState({errorMessage: nextProps.errors.errors.message});
         }
     }
 
     render() {
-        const {errors} = this.state;
-        const roles = [{value: 'ROLE_ADMIN', label: 'ADMIN'}, {
-            value: 'ROLE_OWNER',
-            label: 'OWNER'
-        }, {value: 'ROLE_USER', label: 'USER'}];
+        const roles = [{value: 'ROLE_OWNER', label: 'OWNER'}, {value: 'ROLE_USER', label: 'USER'}];
         const {role} = this.state;
         return (
-            <div className="container">
+            <Container>
                 <h2>Registration</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <input type="text" placeholder="Username"
-                               className={classnames('form-control form-control-lg', {'is-valid': errors.name})}
-                               name="name" value={this.state.name} onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <input type="password" placeholder="Password"
-                               className={classnames('form-control form-control-lg', {'is-valid': errors.password})}
-                               name="password" onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <input type="password" placeholder="Password confirmation"
-                               className={classnames('form-control form-control-lg')}
-                               name="password_confirm" onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <Dropdown options={roles} onChange={this.handleSelect} value={role} placeholder="Roles"/>
-                    </div>
-                    <div className="form-group">
-                        <button type="submit" className="btn btn-primary"
-                                disabled={!this.validateForm()}>
-                            Register
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <Form onSubmit={this.handleSubmit}>
+                    <FormGroup>
+                        <Label for="name">Username</Label>
+                        <Input type="text" placeholder="Username" id="name" name="name" value={this.state.name}
+                               onChange={this.handleInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="password">Password</Label>
+                        <Input type="password" placeholder="Password" id="password" name="password"
+                               value={this.state.password}
+                               onChange={this.handleInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="password_confirm">Password again</Label>
+                        <Input type="password" placeholder="Password confirmation" id="password_confirm"
+                               name="password_confirm" value={this.state.password_confirm}
+                               onChange={this.handleInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="role">Role</Label>
+                        <Dropdown options={roles} onChange={this.handleSelect} value={role}
+                                  placeholder="Role"></Dropdown>
+                    </FormGroup>
+                    {renderError(this.state.errorMessage)}
+                    <Button disabled={!this.validateForm()} type="submit">Register</Button>
+                </Form>
+            </Container>
         );
     }
-}
-
-Register.propTypes = {
-    registerUserAction: PropTypes.func.isRequired,
-    authentication: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({

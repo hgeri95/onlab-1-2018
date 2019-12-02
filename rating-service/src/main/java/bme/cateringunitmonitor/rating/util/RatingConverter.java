@@ -13,10 +13,6 @@ public class RatingConverter {
     @Autowired
     private ModelMapper modelMapper;
 
-    public RatingDAO convertToEntity(RatingRequest ratingRequest) {
-        return modelMapper.map(ratingRequest, RatingDAO.class);
-    }
-
     public RatingResponse convertToDTO(RatingDAO ratingDAO) {
         return modelMapper.map(ratingDAO, RatingResponse.class);
     }

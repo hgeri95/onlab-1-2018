@@ -57,12 +57,14 @@ services:
               - catering-service:catering-service
               - notification-service:notification-service
               - rating-service:rating-service
+              - statistic-service:statistic-service
             environment:
               - authServiceUrl=http://user-service:8081
               - userServiceUrl=http://user-service:8081
               - cateringServiceUrl=http://catering-service:8082
               - notificationServiceUrl=http://notification-service:8084
               - ratingServiceUrl=http://rating-service:8085
+              - statisticServiceUrl=http://statistic-service:8086
     swagger-service:
       container_name: swagger-service
       image: swagger-service-build
@@ -79,12 +81,14 @@ services:
         - user-service:authentication-service
         - catering-service:catering-service
         - rating-service:rating-service
+        - statistic-service:statistic-service
       environment:
         - authServiceUrl=http://localhost:8081
         - userServiceUrl=http://localhost:8081
         - cateringServiceUrl=http://localhost:8082
         - notificationServiceUrl=http://localhost:8084
         - ratingServiceUrl=http://localhost:8085
+        - statisticServiceUrl=http://localhost:8086
     notification-service:
       container_name: notification-service
       image: notification-service-build
@@ -93,11 +97,14 @@ services:
       depends_on:
         - mysql-server
         - user-service
+        - rabbitmq
       networks:
         - custom-network
       links:
         - user-service:user_service
         - fakesmtp:fakesmtp
+        - mysql-server:mysql
+        - rabbitmq:rabbitmq
       environment:
         - authServiceUrl=http://user-service:8081
         - userServiceUrl=http://user-service:8081
@@ -111,7 +118,7 @@ services:
       networks:
         - custom-network
       volumes:
-        - /c/tmp:/var/mail
+        - "/c/tmp:/var/mail"
     rating-service:
       container_name: rating-service
       image: rating-service-build
@@ -133,6 +140,17 @@ services:
         - userServiceUrl=http://user-service:8081
         - authServiceUrl=http://user-service:8081
         - cateringServiceUrl=http://catering-service:8082
+    statistic-service:
+      container_name: statistic-service
+      image: statistic-service-build
+      ports:
+        - "8086:8086"
+      depends_on:
+        - mysql-server
+      networks:
+        - custom-network
+      links:
+        - mysql-server:mysql
     rabbitmq:
       container_name: rabbitmq
       image: rabbitmq:management
@@ -145,3 +163,4 @@ services:
 networks:
     custom-network:
         driver: bridge
+

@@ -3,6 +3,7 @@ package bme.cateringunitmonitor.notification.service;
 import bme.cateringunitmonitor.api.Gender;
 import bme.cateringunitmonitor.api.dto.UserInfoDTO;
 import bme.cateringunitmonitor.api.remoting.controller.IUserController;
+import bme.cateringunitmonitor.notification.SubscriptionRepository;
 import bme.cateringunitmonitor.notification.dto.NotificationBulkRequest;
 import bme.cateringunitmonitor.notification.dto.NotificationDirectRequest;
 import bme.cateringunitmonitor.notification.dto.NotificationRequest;
@@ -23,6 +24,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static bme.cateringunitmonitor.utils.Profiles.TEST_PROFILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles(TEST_PROFILE)
 @RunWith(SpringRunner.class)
 public class NotificationServiceTest {
 
@@ -52,6 +54,11 @@ public class NotificationServiceTest {
                     );
 
             return userController;
+        }
+
+        @Bean
+        SubscriptionRepository subscriptionRepository() {
+            return mock(SubscriptionRepository.class);
         }
 
         @Bean

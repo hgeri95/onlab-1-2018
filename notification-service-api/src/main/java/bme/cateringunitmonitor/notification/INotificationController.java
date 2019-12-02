@@ -2,14 +2,11 @@ package bme.cateringunitmonitor.notification;
 
 import bme.cateringunitmonitor.api.Role;
 import bme.cateringunitmonitor.feign.FeignConfiguration;
-import bme.cateringunitmonitor.notification.dto.NotificationBulkRequest;
-import bme.cateringunitmonitor.notification.dto.NotificationDirectRequest;
-import bme.cateringunitmonitor.notification.dto.NotificationRequest;
-import bme.cateringunitmonitor.notification.dto.NotificationResponse;
+import bme.cateringunitmonitor.notification.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.concurrent.CompletableFuture;
@@ -32,4 +29,21 @@ public interface INotificationController {
     @PostMapping(BASE_PATH + "/email/direct")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_TECHNICAL})
     public CompletableFuture<String> sendDirectMail(@RequestBody @Valid NotificationDirectRequest notificationRequest);
+
+    @PostMapping(BASE_PATH + "/email/subscribed/{cateringUnitName}")
+    @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_ADMIN, Role.Values.ROLE_TECHNICAL})
+    public CompletableFuture<NotificationResponse> sendSubscribed(@PathVariable("cateringUnitName") String cateringUnitName,
+    @RequestBody @Valid NotificationSubscribedRequest notificationRequest);
+
+    @PutMapping(BASE_PATH + "/subscribe/{cateringUnitName}")
+    @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_USER})
+    public ResponseEntity<SubscriptionResponse> subscribe(@PathVariable("cateringUnitName") String cateringUnitName);
+
+    @PutMapping(BASE_PATH + "/unsubscribe/{cateringUnitName}")
+    @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_USER})
+    public ResponseEntity<SubscriptionResponse> unsubscribe(@PathVariable("cateringUnitName") String cateringUnitName);
+
+    @GetMapping(BASE_PATH + "/isSubscribed/{cateringUnitName}")
+    @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_USER})
+    public ResponseEntity<SubscriptionResponse> isSubscribed(@PathVariable("cateringUnitName") String cateringUnitName);
 }

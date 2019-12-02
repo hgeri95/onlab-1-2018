@@ -27,6 +27,10 @@ documentation:
           name: RatingService
           url: ${ratingServiceUrl}/${swagger.path}
           version: 2.0
+        -
+          name: StatisticService
+          url: ${statisticServiceUrl}/${swagger.path}
+          version: 2.0
 
 logging:
   level:

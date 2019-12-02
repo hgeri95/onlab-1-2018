@@ -46,7 +46,7 @@ public class AuthController implements IAuthController {
 
     @Override
     public ResponseEntity<LoginResponse> refresh(@Valid AuthRefreshRequest authRefreshRequest) {
-        logger.debug("Refresh token for user with id: {}", authRefreshRequest.getUserId());
+        logger.debug("Refresh token for user: {}", authRefreshRequest.getUserName());
         try {
             return ResponseEntity.ok(authService.refresh(authRefreshRequest));
         } catch (AuthServiceException ex) {

@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,23 +33,23 @@ public class RatingService {
     @Autowired
     private RatingRepository ratingRepository;
 
-    public RatingResponse updateRate(RatingRequest ratingRequest) throws RatingServiceException {
+    public RatingResponse updateRate(String username, RatingRequest ratingRequest) throws RatingServiceException {
         checkCateringUnitExists(ratingRequest.getCateringUnitName());
-        checkUserExists(ratingRequest.getUsername());
+        checkUserExists(username);
         if (!isRatingValueValid(ratingRequest.getRate())) {
             throw new RatingServiceException("Rating value is not in 1 - 5 range!");
         }
 
         Optional<RatingDAO> existingRating = ratingRepository.findByUsernameAndCateringUnitName(
-                ratingRequest.getUsername(), ratingRequest.getCateringUnitName());
+                username, ratingRequest.getCateringUnitName());
 
         if (existingRating.isPresent()) {
-            RatingDAO updatedRating = ratingConverter.convertToEntity(ratingRequest);
+            RatingDAO updatedRating = new RatingDAO(ratingRequest.getCateringUnitName(), username, ratingRequest.getRate(), ratingRequest.getComment());
             updatedRating.setId(existingRating.get().getId());
             log.info("Rating updated to: {}", updatedRating);
             return ratingConverter.convertToDTO(ratingRepository.save(updatedRating));
         } else {
-            RatingDAO ratingToSave = ratingConverter.convertToEntity(ratingRequest);
+            RatingDAO ratingToSave = new RatingDAO(ratingRequest.getCateringUnitName(), username, ratingRequest.getRate(), ratingRequest.getComment());
             log.info("New rating to save: {}", ratingToSave);
             return ratingConverter.convertToDTO(ratingRepository.save(ratingToSave));
         }
@@ -102,6 +101,32 @@ public class RatingService {
         log.debug("Delete ratings by username: {}", username);
         int deletedRatings = ratingRepository.deleteAllByUsername(username);
         log.debug("{} ratings deleted", deletedRatings);
+    }
+
+    public List<String> getRecommendedCateringsForUser(String username) {
+        log.info("Get recommended caterings for user: {}", username);
+        List<RatingDAO> likedByUser = ratingRepository.findAllByUsername(username);
+        List<String> likedCaterings = likedByUser.stream()
+                .map(RatingDAO::getCateringUnitName).collect(Collectors.toList());
+
+        List<RatingDAO> ratingsForSameCateringsByOthers = ratingRepository.findByCateringUnitNameIn(likedCaterings)
+                .stream().filter(r -> !r.getUsername().equals(username))
+                .sorted(Comparator.comparingInt(RatingDAO::getRate).reversed())
+                .collect(Collectors.toList());
+        log.debug("Ratings for same caterings: {}", ratingsForSameCateringsByOthers);
+
+        Set<String> recommendedCaterings = new HashSet<>(); //TODO do no use db query in loop!!!
+        for (RatingDAO rating : ratingsForSameCateringsByOthers) {
+            List<String> likedCateringsFromSimilarUser = ratingRepository
+                    .findAllByUsername(rating.getUsername()).stream()
+                    .map(RatingDAO::getCateringUnitName).collect(Collectors.toList());
+            likedCateringsFromSimilarUser.removeAll(likedCaterings);
+            recommendedCaterings.addAll(likedCateringsFromSimilarUser);
+            if (recommendedCaterings.size() > 10) {
+                return new ArrayList<>(recommendedCaterings);
+            }
+        }
+        return new ArrayList<>(recommendedCaterings);
     }
 
     private boolean checkCateringUnitExists(String cateringUnitName) throws RatingServiceException {

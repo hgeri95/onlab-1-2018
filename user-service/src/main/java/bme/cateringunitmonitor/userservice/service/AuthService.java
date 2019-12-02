@@ -37,23 +37,22 @@ public class AuthService {
         if (userToLogout == null) {
             throw new AuthServiceException("User does not exists!");
         }
-        tokenService.invalidateToken(userToLogout.getId());
+        tokenService.invalidateToken(userToLogout.getUsername());
     }
 
     public LoginResponse refresh(AuthRefreshRequest refreshRequest) throws AuthServiceException {
-        logger.debug("Refresh token for user with id: {}", refreshRequest.getUserId());
+        logger.debug("Refresh token for user: {}", refreshRequest.getUserName());
 
-        RefreshToken storedRefreshToken = tokenService.getRefreshToken(refreshRequest.getUserId());
+        RefreshToken storedRefreshToken = tokenService.getRefreshToken(refreshRequest.getUserName());
         String refreshToken = refreshRequest.getRefreshToken();
         LocalDateTime now = LocalDateTime.now();
 
-        if (storedRefreshToken == null ||
-                storedRefreshToken.getRefreshTokenExpireDate().isBefore(now)) {
-            logger.debug("No valid refresh token for user with id: {}", refreshRequest.getUserId());
+        if (storedRefreshToken == null || storedRefreshToken.getRefreshTokenExpireDate().isBefore(now)) {
+            logger.debug("No valid refresh token for user: {}", refreshRequest.getUserName());
             throw new AuthServiceException("Invalid token!");
         } else {
             if (refreshToken.equals(storedRefreshToken.getRefreshToken())) {
-                UserDTO user = userService.findUserById(refreshRequest.getUserId());
+                UserDTO user = userService.findUser(refreshRequest.getUserName());
                 if (user != null) {
                     return tokenService.generateAndStoreTokens(user);
                 } else {

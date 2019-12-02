@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: statistic-service
+  name: statistic-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: statistic-service
+  template:
+    metadata:
+      labels:
+        app: statistic-service
+    spec:
+      containers:
+          image: eu.gcr.io/cateringunitmonitorproject/statistic-service-build
+          name: statistic-service
+          ports:
+            - containerPort: 8086

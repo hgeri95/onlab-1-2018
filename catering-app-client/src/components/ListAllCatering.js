@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getAllCateringsAction } from "../actions/catering";
+import { getAllCateringsAction } from "../action_creators/catering";
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
@@ -26,15 +26,14 @@ class ListAllCatering extends Component {
 
     render() {
         const {cateringUnits} = this.state;
-
         const cateringList = cateringUnits.map(catering => {
             return <tr>
-                <td style={{whiteSpace: 'nowrap'}}>{catering.name}</td>
+                <td style={{whiteSpace: 'nowrap'}}><b>{catering.name}</b></td>
                 <td>{catering.description}</td>
-                <td>{catering.address.country}</td>
+                <td>{catering.address.address}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/"}>Details</Button>
+                        <Button size="sm" color="primary" tag={Link} to={"/catering-details/" + catering.id}>Details</Button>
                     </ButtonGroup>
                 </td>
             </tr>

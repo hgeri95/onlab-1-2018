@@ -85,9 +85,10 @@ public class SearchServiceTest {
                 new Address("Bartok Street 6.", new Coordinate(1, 1), "no"),
                 asList(new CategoryParameter("type", "bnm"))
         );
-        cateringUnitService.create(cateringUnit);
-        cateringUnitService.create(cateringUnit2);
-        cateringUnitService.create(cateringUnit3);
-        cateringUnitService.create(cateringUnit4);
+        final String ownerName = "testUser";
+        cateringUnitService.create(cateringUnit, ownerName);
+        cateringUnitService.create(cateringUnit2, ownerName);
+        cateringUnitService.create(cateringUnit3, ownerName);
+        cateringUnitService.create(cateringUnit4, ownerName);
     }
 }

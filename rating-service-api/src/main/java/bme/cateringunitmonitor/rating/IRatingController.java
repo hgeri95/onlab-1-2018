@@ -31,9 +31,9 @@ public interface IRatingController {
 
     @GetMapping(BASE_PATH + "/specific")
     @Secured(Role.Values.ROLE_USER)
-    public RatingResponse getRatingForUserAndCateringUnit(
-            @RequestParam("userName") @NotBlank String username,
-            @RequestParam("cateringUnitName") @NotBlank String cateringUnitName);
+    public RatingResponse getRatingForUserAndCateringUnit(@RequestParam("cateringUnitName") @NotBlank String cateringUnitName);
 
-    //TODO Proposal for user
+    @GetMapping(BASE_PATH + "/recommended")
+    @Secured({Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
+    public List<String> getRecommendedCaterings();
 }

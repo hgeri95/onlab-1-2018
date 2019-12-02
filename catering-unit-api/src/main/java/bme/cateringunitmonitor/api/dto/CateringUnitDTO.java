@@ -26,6 +26,8 @@ public class CateringUnitDTO implements Serializable {
 
     private String description;
 
+    private String owner;
+
     @Valid
     private List<OpeningPerDay> openingHours;
 

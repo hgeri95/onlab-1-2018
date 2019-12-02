@@ -13,4 +13,5 @@ public interface RatingRepository extends JpaRepository<RatingDAO, Long> {
     List<RatingDAO> findAllByUsername(String username);
     int deleteAllByCateringUnitName(String cateringUnitName);
     int deleteAllByUsername(String username);
+    List<RatingDAO> findByCateringUnitNameIn(List<String> cateringUnitNames);
 }

@@ -3,10 +3,10 @@ package bme.cateringunitmonitor.notification.service;
 import bme.cateringunitmonitor.api.dto.UserInfoBulkRequest;
 import bme.cateringunitmonitor.api.dto.UserInfoDTO;
 import bme.cateringunitmonitor.api.remoting.controller.IUserController;
-import bme.cateringunitmonitor.notification.dto.NotificationBulkRequest;
-import bme.cateringunitmonitor.notification.dto.NotificationDirectRequest;
-import bme.cateringunitmonitor.notification.dto.NotificationRequest;
-import bme.cateringunitmonitor.notification.dto.NotificationResponse;
+import bme.cateringunitmonitor.notification.SubscriptionRepository;
+import bme.cateringunitmonitor.notification.dao.SubscriptionDAO;
+import bme.cateringunitmonitor.notification.dto.*;
+import bme.cateringunitmonitor.notification.exception.NotificationServiceException;
 import bme.cateringunitmonitor.security.UserAuthentication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,9 @@ public class NotificationService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Async
     public CompletableFuture<NotificationResponse> sendMailForUser(NotificationRequest notificationRequest) {
@@ -82,6 +86,62 @@ public class NotificationService {
 
         return CompletableFuture.completedFuture("Message sent to " + notificationRequest.getEmail() + ".");
     }
+
+    public SubscriptionResponse subscribe(String username, String cateringUnitName) throws NotificationServiceException {
+        log.info("Create new subscription for user: {}, for catering: {}", username, cateringUnitName);
+        Optional<SubscriptionDAO> existingSubscription = subscriptionRepository
+                .findByCateringUnitNameAndUsername(cateringUnitName, username);
+        if (existingSubscription.isPresent()) {
+            log.debug("Subscription already exists: {}", existingSubscription.get());
+            throw new NotificationServiceException("Subscription already exists!");
+        } else {
+            SubscriptionDAO subscription = new SubscriptionDAO(cateringUnitName, username);
+            log.debug("Create new subscription: {}", subscription);
+            SubscriptionDAO savedSubscription = subscriptionRepository.save(subscription);
+            return new SubscriptionResponse(savedSubscription.getUsername(), savedSubscription.getCateringUnitName());
+        }
+    }
+
+    public SubscriptionResponse unsubscribe(String username, String cateringUnitName) throws NotificationServiceException {
+        log.info("Delete subscription for user: {}, for catering: {}" ,username, cateringUnitName);
+        Optional<SubscriptionDAO> existingSubscription = subscriptionRepository
+                .findByCateringUnitNameAndUsername(cateringUnitName, username);
+        if (existingSubscription.isPresent()) {
+            subscriptionRepository.delete(existingSubscription.get());
+            log.debug("Subscription deleted");
+            return new SubscriptionResponse(username, cateringUnitName);
+        } else {
+            log.debug("No subscription to delete");
+            throw new NotificationServiceException("Subscription not exists!");
+        }
+    }
+
+    public SubscriptionResponse isSubscribed(String username, String cateringUnitName) throws NotificationServiceException {
+        log.info("Is subscription exists for user: {}, for catering: {} ?" ,username, cateringUnitName);
+        Optional<SubscriptionDAO> existingSubscription = subscriptionRepository
+                .findByCateringUnitNameAndUsername(cateringUnitName, username);
+        if (existingSubscription.isPresent()) {
+            log.debug("Subscription exists");
+            return new SubscriptionResponse(existingSubscription.get().getUsername(), existingSubscription.get().getCateringUnitName());
+        } else {
+            throw new NotificationServiceException("Subscription not exists!");
+        }
+    }
+
+    @Async
+    public CompletableFuture<NotificationResponse> sendSubscribed(String cateringUnitName, NotificationSubscribedRequest notificationRequest) throws NotificationServiceException {
+        log.info("Send notification for subscribed users for catering: {}", cateringUnitName);
+        List<SubscriptionDAO> subscriptions = subscriptionRepository.findAllByCateringUnitName(cateringUnitName);
+        if (!subscriptions.isEmpty()) {
+            List<String> usernames = subscriptions.stream().map(SubscriptionDAO::getUsername).collect(Collectors.toList());
+            NotificationBulkRequest notificationBulkRequest = new NotificationBulkRequest(usernames, notificationRequest.getSubject(), notificationRequest.getMessage());
+            return sendMailForUsers(notificationBulkRequest);
+        } else {
+            throw new NotificationServiceException("No subscribed users!");
+        }
+    }
+
+
 
     private SimpleMailMessage buildMessage(String emailAddress, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();

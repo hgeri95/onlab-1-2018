@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import {getUserInfoAction, postUserInfoAction } from "../actions/user";
-import classnames from "classnames";
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {deleteUser, getUserInfoAction, putUserInfoAction} from "../action_creators/user";
 import Dropdown from 'react-dropdown';
 import Moment from 'moment';
+import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
+import {renderError} from "./ErrorAlert";
 
 class UserDetails extends Component {
     constructor(props) {
@@ -12,15 +12,13 @@ class UserDetails extends Component {
 
         this.state = {
             userInfo: {
-                address: "",
-                birthDate: {},
+                city: "",
+                birthDate: "",
                 email: "",
-                firstName: "",
-                gender: "",
-                lastName: ""
+                fullName: "",
+                gender: ""
             },
-            username: "",
-            errors: {}
+            errorMessage: ''
         };
     }
 
@@ -32,9 +30,21 @@ class UserDetails extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        const modifiedUserInfo = this.state.userInfo;
-        this.props.postUserInfoAction(modifiedUserInfo, this.props.history);
+        let modifiedUserInfo = this.state.userInfo;
+        this.props.putUserInfoAction(modifiedUserInfo, this.props.history);
+        this.setState({
+            userInfo: {city: "", birthDate: {}, email: "", fullName: "", gender: ""},
+            errorMessage: ''
+        });
     };
+
+    handleDelete = () => {
+        this.props.deleteUser(this.props.history);
+        this.setState({
+            userInfo: {city: "", birthDate: {}, email: "", fullName: "", gender: ""},
+            errorMessage: ''
+        });
+    }
 
     handleSelect = event => {
         let localUserInfo = Object.assign({}, this.state.userInfo);
@@ -47,7 +57,7 @@ class UserDetails extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.user.userInfo) {
+        if (nextProps.user.userInfo) {
             let copyUserInfo = nextProps.user.userInfo;
             this.setState({username: copyUserInfo.username});
             delete copyUserInfo.username;
@@ -55,75 +65,67 @@ class UserDetails extends Component {
                 userInfo: copyUserInfo
             });
         }
-        if(nextProps.errors) {
-            //alert(JSON.stringify(nextProps.errors, null, 2));
+        if (nextProps.errors) {
+            console.log(nextProps.errors);
+            this.setState({errorMessage: nextProps.errors.errors.message});
+        }
+        if (nextProps.authentication.authenticated === false) {
+            this.props.history.push("/login");
         }
     }
 
     render() {
-        Moment.locale('en');//TODO browser locale
-        const { errors } = this.state;
-        const { userInfo } = this.state;
-        const genders = ['MALE','FEMALE'];
+        let userLang = navigator.language || navigator.userLanguage;
+        Moment.locale(userLang);
+        const {userInfo} = this.state;
+        const genders = ['MALE', 'FEMALE'];
         const formattedDate = Moment(userInfo.birthDate).format('YYYY-MM-DD');
         return (
-            //<div><pre>{JSON.stringify({userInfo}, null, 2) }</pre></div>
-            <div className="container">
-                <h2>Userinfo for: <b>{this.state.username}</b></h2>
-                <form onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <text>Address</text>
-                        <input type="text"
-                               className={classnames('form-control form-control-lg')}
-                               name="address" value={userInfo.address} onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <text>Birthday</text>
-                        <input type="date"
-                               className={classnames('form-control form-control-lg')}
-                               name="birthDate" value={formattedDate} onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <text>Email</text>
-                        <input type="email"
-                               className={classnames('form-control form-control-lg')}
-                               name="email" value={userInfo.email} onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <text>First name</text>
-                        <input type="text"
-                               className={classnames('form-control form-control-lg')}
-                               name="firstName" value={userInfo.firstName} onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <text>Last name</text>
-                        <input type="text"
-                               className={classnames('form-control form-control-lg')}
-                               name="lastName" value={userInfo.lastName} onChange={this.handleInputChange}/>
-                    </div>
-                    <div className="form-group">
-                        <text>Gender</text>
-                        <Dropdown options={genders} onChange={this.handleSelect} value={userInfo.gender}/>
-                    </div>
-                    <div className="form-group">
-                        <button type="submit" className="btn btn-primary">
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <Container>
+                <h2>User details for: <b>{this.props.authentication.username}</b></h2>
+                <Form onSubmit={this.handleSubmit}>
+                    <FormGroup>
+                        <Label for="fullName">Full name</Label>
+                        <Input type="text" id="fullName" name="fullName" placeholder="Your full name"
+                               value={userInfo.fullName} onChange={this.handleInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="birthDate">Birth date</Label>
+                        <Input type="date" id="birthDate" name="birthDate" value={formattedDate}
+                               onChange={this.handleInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="city">City</Label>
+                        <Input type="text" placeholder="City where you live" id="city" name="city"
+                               value={userInfo.city} onChange={this.handleInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="email">Email</Label>
+                        <Input type="email" id="email" name="email" placeholder="example@domain.com"
+                               value={userInfo.email} onChange={this.handleInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="gender">Gender</Label>
+                        <Dropdown options={genders} onChange={this.handleSelect} value={userInfo.gender}
+                                  placeholder="Gender"/>
+                    </FormGroup>
+                    {renderError(this.state.errorMessage)}
+                    <FormGroup>
+                        <Button type="submit" color="primary">Save</Button>
+                    </FormGroup>
+                    <FormGroup>
+                        <Button color="danger" onClick={this.handleDelete}>Delete user</Button>
+                    </FormGroup>
+                </Form>
+            </Container>
         );
     }
 }
 
-UserDetails.propTypes= {
-    errors: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired
-}
-
 const mapStateToProps = (state) => ({
     errors: state.errors,
-    user: state.user
+    user: state.user,
+    authentication: state.authentication
 });
 
-export default connect(mapStateToProps, { getUserInfoAction, postUserInfoAction })(UserDetails)
+export default connect(mapStateToProps, {getUserInfoAction, putUserInfoAction, deleteUser})(UserDetails)

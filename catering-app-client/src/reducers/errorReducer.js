@@ -1,11 +1,18 @@
-import { userConstants } from '../constants/user.constants';
+import {userConstants} from "../constants/actionTypes";
 
-const initialState = {};
+const initialState = {
+    errors: {}
+};
 
-export default function(state = initialState, action) {
-    switch(action.type) {
+export default function (state = initialState, action) {
+    switch (action.type) {
         case userConstants.GET_ERRORS:
-            return action.payload;
+            return {
+                ...state,
+                errors: action.payload
+            };
+        case userConstants.NO_ERRORS:
+            return initialState;
         default:
             return state;
     }

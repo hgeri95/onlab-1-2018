@@ -69,18 +69,18 @@ public class RatingServiceTest {
         String username = "testuser1";
         String cateringUnitName = "catering1";
 
-        RatingRequest ratingRequest = new RatingRequest(username, cateringUnitName, 1);
-        ratingService.updateRate(ratingRequest);
+        RatingRequest ratingRequest = new RatingRequest(cateringUnitName, 1, "comment");
+        ratingService.updateRate(username, ratingRequest);
 
         Optional<RatingResponse> ratingResponse = ratingService
                 .getRatingForUserAndCateringUnit(username, cateringUnitName);
 
-        assertEquals(ratingRequest.getUsername(), ratingResponse.get().getUsername());
+        assertEquals(username, ratingResponse.get().getUsername());
         assertEquals(ratingRequest.getCateringUnitName(), ratingResponse.get().getCateringUnitName());
         assertEquals(ratingRequest.getRate(), ratingResponse.get().getRate());
 
-        RatingRequest updateRequest = new RatingRequest(username, cateringUnitName, 5);
-        ratingService.updateRate(updateRequest);
+        RatingRequest updateRequest = new RatingRequest(cateringUnitName, 5, "comment");
+        ratingService.updateRate(username, updateRequest);
 
         ratingResponse = ratingService.getRatingForUserAndCateringUnit(username, cateringUnitName);
         assertEquals(updateRequest.getRate(), ratingResponse.get().getRate());

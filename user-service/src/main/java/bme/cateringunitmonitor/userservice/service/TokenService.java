@@ -22,17 +22,17 @@ public class TokenService {
     public LoginResponse generateAndStoreTokens(UserDTO user) {
         logger.debug("Generate token for user: {}", user.toString());
         LoginResponse response = tokenGeneratorService.createTokens(user);
-        tokenStore.storeRefreshToken(user.getId(),
+        tokenStore.storeRefreshToken(user.getUsername(),
                 response.getRefreshToken(), response.getRefreshTokenExpireDate().toLocalDateTime());
         logger.debug("Login response: {}", response);
         return response;
     }
 
-    public void invalidateToken(Long userId) {
-        tokenStore.deleteRefreshToken(userId);
+    public void invalidateToken(String userName) {
+        tokenStore.deleteRefreshToken(userName);
     }
 
-    public RefreshToken getRefreshToken(Long userId) {
-        return tokenStore.getRefreshToken(userId);
+    public RefreshToken getRefreshToken(String userName) {
+        return tokenStore.getRefreshToken(userName);
     }
 }

@@ -34,6 +34,8 @@ public class CateringUnitDAO implements Serializable {
     @Field
     private String description;
 
+    private String owner;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Lob
     @Column(length = 100000)
@@ -51,6 +53,4 @@ public class CateringUnitDAO implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @IndexedEmbedded
     private List<CategoryParameter> categoryParameters = new ArrayList<>();
-
-    //TODO pictures
 }

@@ -7,6 +7,7 @@ modules=(
     rating-service
     swagger-service
     user-service
+    statistic-service
 )
 
 for i in "${modules[@]}"; do

@@ -30,4 +30,13 @@ public class RatingDAO implements Serializable {
 
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
+
+    private String comment;
+
+    public RatingDAO(String cateringUnitName, String username, int rate, String comment) {
+        this.cateringUnitName = cateringUnitName;
+        this.username = username;
+        this.rate = rate;
+        this.comment = comment;
+    }
 }

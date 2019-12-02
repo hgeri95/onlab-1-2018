@@ -2,12 +2,14 @@ package bme.cateringunitmonitor.cateringunitservice.controller;
 
 import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dto.CateringUnitWithDistanceDTO;
 import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.api.exception.CateringUnitHttpException;
 import bme.cateringunitmonitor.api.exception.CateringUnitServiceException;
 import bme.cateringunitmonitor.api.remoting.controller.ICateringUnitController;
 import bme.cateringunitmonitor.cateringunitservice.service.CateringUnitService;
 import bme.cateringunitmonitor.cateringunitservice.service.SearchService;
+import bme.cateringunitmonitor.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,13 @@ public class CateringUnitController implements ICateringUnitController {
     }
 
     @Override
+    public CateringUnitsResponse getOwned() {
+        String username = SecurityUtil.getActiveUser();
+        logger.debug("Get owned catering units for user: {}", username);
+        return cateringUnitService.getAllCateringUnitForOwner(username);
+    }
+
+    @Override
     public ResponseEntity delete(Long id) {
         try {
             cateringUnitService.delete(id);
@@ -49,7 +58,8 @@ public class CateringUnitController implements ICateringUnitController {
     @Override
     public ResponseEntity<CateringUnitDTO> create(@Valid CateringUnitRequest cateringUnitRequest) {
         try {
-            return ResponseEntity.ok(cateringUnitService.create(cateringUnitRequest));
+            String ownerName = SecurityUtil.getActiveUser();
+            return ResponseEntity.ok(cateringUnitService.create(cateringUnitRequest, ownerName));
         } catch (CateringUnitServiceException ex) {
             logger.warn("Error in catering unit creation: {}", ex);
             throw new CateringUnitHttpException(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -59,7 +69,8 @@ public class CateringUnitController implements ICateringUnitController {
     @Override
     public ResponseEntity<CateringUnitDTO> update(Long id, @Valid CateringUnitRequest cateringUnitRequest) {
         try {
-            CateringUnitDTO cateringUnit = cateringUnitService.update(id, cateringUnitRequest);
+            String ownerName = SecurityUtil.getActiveUser();
+            CateringUnitDTO cateringUnit = cateringUnitService.update(id, cateringUnitRequest, ownerName);
             return ResponseEntity.ok(cateringUnit);
         } catch (CateringUnitServiceException ex) {
             logger.warn("Error in catering unit update: {}", ex);
@@ -85,5 +96,10 @@ public class CateringUnitController implements ICateringUnitController {
     @Override
     public List<CateringUnitDTO> search(String searchTerm) {
         return searchService.search(searchTerm);
+    }
+
+    @Override
+    public List<CateringUnitWithDistanceDTO> getNearestCaterings(double distance, double latitude, double longitude) {
+        return cateringUnitService.nearestCaterings(latitude, longitude, distance);
     }
 }
