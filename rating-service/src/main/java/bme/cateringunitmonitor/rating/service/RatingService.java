@@ -106,7 +106,9 @@ public class RatingService {
     public List<String> getRecommendedCateringsForUser(String username) {
         log.info("Get recommended caterings for user: {}", username);
         List<RatingDAO> likedByUser = ratingRepository.findAllByUsername(username);
-        List<String> likedCaterings = likedByUser.stream()
+        List<String> userRatings = likedByUser.stream().map(RatingDAO::getCateringUnitName)
+                .collect(Collectors.toList());
+        List<String> likedCaterings = likedByUser.stream().filter(rating -> rating.getRate() > 2)
                 .map(RatingDAO::getCateringUnitName).collect(Collectors.toList());
 
         List<RatingDAO> ratingsForSameCateringsByOthers = ratingRepository.findByCateringUnitNameIn(likedCaterings)
@@ -118,9 +120,9 @@ public class RatingService {
         Set<String> recommendedCaterings = new HashSet<>(); //TODO do no use db query in loop!!!
         for (RatingDAO rating : ratingsForSameCateringsByOthers) {
             List<String> likedCateringsFromSimilarUser = ratingRepository
-                    .findAllByUsername(rating.getUsername()).stream()
+                    .findAllByUsername(rating.getUsername()).stream().filter(r -> r.getRate() > 2)
                     .map(RatingDAO::getCateringUnitName).collect(Collectors.toList());
-            likedCateringsFromSimilarUser.removeAll(likedCaterings);
+            likedCateringsFromSimilarUser.removeAll(userRatings);
             recommendedCaterings.addAll(likedCateringsFromSimilarUser);
             if (recommendedCaterings.size() > 10) {
                 return new ArrayList<>(recommendedCaterings);

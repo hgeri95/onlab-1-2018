@@ -43,7 +43,7 @@ public class RatingController implements IRatingController {
         }
     }
 
-    @Override
+   // @Override
     public List<RatingResponse> getAllRatingForUser(String username) {
         try {
             return ratingService.getAllRatingForUser(username);

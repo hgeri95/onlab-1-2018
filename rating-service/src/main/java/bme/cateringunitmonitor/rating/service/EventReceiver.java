@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static bme.cateringunitmonitor.utils.amqp.QueueNames.CATERING_QUEUE_NAME;
-import static bme.cateringunitmonitor.utils.amqp.QueueNames.USER_QUEUE_NAME;
+import static bme.cateringunitmonitor.utils.amqp.QueueNames.*;
 
 @Service
-@RabbitListener(queues = {CATERING_QUEUE_NAME, USER_QUEUE_NAME})
+@RabbitListener(queues = {USER_TO_RATING_QUEUE, CATERING_TO_RATING_QUEUE})
 @Slf4j
 @Transactional
 public class EventReceiver {
@@ -22,7 +21,7 @@ public class EventReceiver {
     private RatingService ratingService;
 
     @RabbitHandler
-    public void receive(String event) {
+    public void receiveDeleteUser(String event) {
         log.info("Event message received: {}", event);
         GenericEvent genericEvent = new GenericEvent();
         genericEvent.deserializeMessage(event);

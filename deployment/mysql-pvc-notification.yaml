@@ -1,12 +1,12 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: mysql-pvc
+  name: mysql-pvc-notification
   annotations:
     volume.beta.kubernetes.io/storage-class: standard
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 2Gi
+      storage: 10Gi

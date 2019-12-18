@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static bme.cateringunitmonitor.utils.amqp.QueueNames.CATERING_QUEUE_NAME;
-import static bme.cateringunitmonitor.utils.amqp.QueueNames.USER_QUEUE_NAME;
+import static bme.cateringunitmonitor.utils.amqp.QueueNames.*;
 
 @Service
-@RabbitListener(queues = {CATERING_QUEUE_NAME, USER_QUEUE_NAME})
+@RabbitListener(queues = {USER_TO_NOTIFICATION_QUEUE, CATERING_TO_NOTIFICATION_QUEUE})
 @Slf4j
 @Transactional
 public class EventReceiver {
@@ -23,18 +22,20 @@ public class EventReceiver {
     private SubscriptionRepository subscriptionRepository;
 
     @RabbitHandler
-    public void receive(String event) {
+    public void receiveDeleteUser(String event) {
         log.info("Event message received: {}", event);
         GenericEvent genericEvent = new GenericEvent();
         genericEvent.deserializeMessage(event);
 
         if (genericEvent.getEventName().equals(EventTypes.DELETE_CATERING_EVENT)) {
             String cateringUnitName = genericEvent.getEventParameter();
-            subscriptionRepository.deleteAllByCateringUnitName(cateringUnitName);
+            int deletedSubscriptionCount = subscriptionRepository.deleteAllByCateringUnitName(cateringUnitName);
+            log.info("Deleted subscriptions: {} by catering name: {}", deletedSubscriptionCount, cateringUnitName);
         }
         if (genericEvent.getEventName().equals(EventTypes.DELETE_USER_EVENT)) {
             String username = genericEvent.getEventParameter();
-            subscriptionRepository.deleteAllByUsername(username);
+            int deletedSubscriptionCount = subscriptionRepository.deleteAllByUsername(username);
+            log.info("Deleted subscriptions: {} by username: {}", deletedSubscriptionCount, username);
         }
     }
 }

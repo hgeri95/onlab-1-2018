@@ -10,7 +10,9 @@ import bme.cateringunitmonitor.userservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,6 +45,17 @@ public class UserController implements IUserController {
         } catch (UserServiceException ex) {
             logger.warn("Failed to delete user: {}", activeUser);
             throw new BadRequestException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public int deleteUserByAdmin(String username) {
+        logger.info("User to delete: {} by admin", username);
+        try {
+            return userService.delete(username);
+        } catch (UserServiceException ex) {
+            logger.warn("Failed to delete user: {} by admin", username);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
 

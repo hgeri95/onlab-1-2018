@@ -7,8 +7,8 @@ metadata:
   name: fakesmtp-claim0
 spec:
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
-      storage: 100Mi
+      storage: 500Mi
 status: {}

@@ -27,7 +27,7 @@ export const imageIdsAction = (ids) => ({type: imageConstants.IMAGE_IDS, payload
 
 //Action creators
 export const getAllCateringsAction = () => dispatch => {
-    API.get('/cateringunit/getowned')
+    API.get('/cateringunit/owned')
         .then(res => {
             console.log(res);
             dispatch(getAllAction(res.data));
@@ -40,7 +40,7 @@ export const getAllCateringsAction = () => dispatch => {
 };
 
 export const createCateringUnit = (cateringUnit) => dispatch => {
-    API.post('/cateringunit/create', cateringUnit)
+    API.post('/cateringunit', cateringUnit)
         .then(res => {
             console.log(res);
             dispatch(createdCateringUnitAction(res.data));
@@ -53,7 +53,7 @@ export const createCateringUnit = (cateringUnit) => dispatch => {
 };
 
 export const updateCateringUnit = (cateringUnit, id) => dispatch => {
-    API.put('/cateringunit/update/' + id, cateringUnit)
+    API.put('/cateringunit/' + id, cateringUnit)
         .then(res => {
             console.log(res);
             dispatch(updatedCateringUnitAction(res.data));
@@ -66,7 +66,7 @@ export const updateCateringUnit = (cateringUnit, id) => dispatch => {
 };
 
 export const getCateringUnit = (id) => dispatch => {
-    API.get('/cateringunit/get/' + id)
+    API.get('/cateringunit/' + id)
         .then(res => {
             console.log(res);
             dispatch(getCateringAction(res.data));
@@ -79,7 +79,7 @@ export const getCateringUnit = (id) => dispatch => {
 };
 
 export const deleteCateringUnit = (id, history) => dispatch => {
-    API.delete('/cateringunit/delete/' + id)
+    API.delete('/cateringunit/' + id)
         .then(res => {
             console.log(res);
             history.push('/list-all-catering');

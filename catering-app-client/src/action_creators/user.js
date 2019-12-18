@@ -44,7 +44,7 @@ export const putUserInfoAction = (userInfo, history) => dispatch => {
 };
 
 export const deleteUser = (history) => dispatch => {
-    API.delete('users/delete')
+    API.delete('users')
         .then(res => {
             console.log(res);
             history.push('/login');

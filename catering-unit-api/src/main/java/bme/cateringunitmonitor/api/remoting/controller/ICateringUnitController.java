@@ -19,28 +19,28 @@ public interface ICateringUnitController {
 
     String BASE_PATH = "api/v1/cateringunit";
 
-    @GetMapping(BASE_PATH + "/getall")
-    @Secured({Role.Values.ROLE_USER})
+    @GetMapping(BASE_PATH + "/all")
+    @Secured({Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
     public CateringUnitsResponse getAll();
 
-    @GetMapping(BASE_PATH + "/getowned")
+    @GetMapping(BASE_PATH + "/owned")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_ADMIN})
     public CateringUnitsResponse getOwned();
 
-    @DeleteMapping(BASE_PATH + "/delete/{id}")
-    @Secured(Role.Values.ROLE_OWNER)
+    @DeleteMapping(BASE_PATH + "/{id}")
+    @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_ADMIN})
     public ResponseEntity delete(@PathVariable("id") Long id);
 
-    @PostMapping(BASE_PATH + "/create")
+    @PostMapping(BASE_PATH)
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity<CateringUnitDTO> create(@RequestBody @Valid CateringUnitRequest cateringUnitRequest);
 
-    @PutMapping(BASE_PATH + "/update/{id}")
+    @PutMapping(BASE_PATH + "/{id}")
     @Secured(Role.Values.ROLE_OWNER)
     public ResponseEntity<CateringUnitDTO > update(@PathVariable("id") Long id,
                                                    @RequestBody @Valid CateringUnitRequest cateringUnitRequest);
 
-    @GetMapping(BASE_PATH + "/get/{id}")
+    @GetMapping(BASE_PATH + "/{id}")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER})
     public ResponseEntity<CateringUnitDTO> get(@PathVariable("id") Long id);
 

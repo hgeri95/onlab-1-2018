@@ -40,10 +40,10 @@ instance.interceptors.response.use((response) => {
                 refreshToken: refreshToken
             })
             .then(res => {
-                    localStorage.setItem(authConstants.JWTTOKEN, res.data.accessToken);
-                    localStorage.setItem(authConstants.REFRESHTOKEN, res.data.refreshToken);
-                    error.response.config.headers['Authorization'] = 'Bearer ' + res.data.accessToken;
-                    return axios(error.response.config);
+                localStorage.setItem(authConstants.JWTTOKEN, res.data.accessToken);
+                localStorage.setItem(authConstants.REFRESHTOKEN, res.data.refreshToken);
+                error.response.config.headers['Authorization'] = 'Bearer ' + res.data.accessToken;
+                return axios(error.response.config);
             }).catch(error => {
                 unsetLocalStorage();
                 return Promise.reject(error);

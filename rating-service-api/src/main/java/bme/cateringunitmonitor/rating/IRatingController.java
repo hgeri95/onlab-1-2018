@@ -21,13 +21,13 @@ public interface IRatingController {
     @Secured(Role.Values.ROLE_USER)
     public RatingResponse changeRate(@RequestBody @Valid RatingRequest ratingRequest);
 
-    @GetMapping(BASE_PATH + "/catering/{cateringUnitName}")
+    @GetMapping(BASE_PATH + "/{cateringUnitName}")
     @Secured({Role.Values.ROLE_USER, Role.Values.ROLE_OWNER, Role.Values.ROLE_TECHNICAL})
     public List<RatingResponse> getAllRatingForCateringUnit(@PathVariable @NotBlank String cateringUnitName);
 
-    @GetMapping(BASE_PATH + "/user/{userName}")
+    /*@GetMapping(BASE_PATH + "/user/{userName}")
     @Secured(Role.Values.ROLE_USER)
-    public List<RatingResponse> getAllRatingForUser(@PathVariable("userName") @NotBlank String username);
+    public List<RatingResponse> getAllRatingForUser(@PathVariable("userName") @NotBlank String username);*/
 
     @GetMapping(BASE_PATH + "/specific")
     @Secured(Role.Values.ROLE_USER)

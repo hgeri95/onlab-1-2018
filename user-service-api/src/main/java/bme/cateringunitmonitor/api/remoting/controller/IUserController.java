@@ -20,8 +20,12 @@ public interface IUserController {
     @PostMapping(BASE_PATH + "/sign-up")
     public UserDTO signUp(@RequestBody @Valid UserRequest userRequest) throws BadRequestException;
 
-    @DeleteMapping(BASE_PATH + "/delete")
+    @DeleteMapping(BASE_PATH)
     public int deleteUser();
+
+    @DeleteMapping(BASE_PATH + "/{username}")
+    @Secured({Role.Values.ROLE_ADMIN})
+    public int deleteUserByAdmin(@PathVariable("username") String username);
 
     @GetMapping(BASE_PATH + "/get-available-roles")
     public List<String> getAvailableRoles();

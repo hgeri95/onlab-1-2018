@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mysql
+  name: mysql-notification
   labels:
-    app: mysql
+    app: mysql-notification
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: mysql-notification
   template:
     metadata:
       labels:
-        app: mysql
+        app: mysql-notification
     spec:
       containers:
-      - name: mysql
+      - name: mysql-notification
         image: mysql:5.6
         env:
         - name: MYSQL_ROOT_PASSWORD
@@ -23,7 +23,7 @@ spec:
         - name: MYSQL_DATABASE
           value: app
         ports:
-        - containerPort: 3306
+        - containerPort: 3307
           name: mysql
         volumeMounts:
         # name must match the volume name below
@@ -33,4 +33,4 @@ spec:
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pvc
+          claimName: mysql-pvc-notification

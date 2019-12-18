@@ -15,19 +15,17 @@ import org.springframework.stereotype.Service;
 public class EventSender {
 
     private final RabbitTemplate template;
-    private final Queue queue;
 
     @Autowired
-    public EventSender(RabbitTemplate template, Queue queue) {
+    public EventSender(RabbitTemplate rabbitTemplate) {
         log.info("EventSender service created.");
-        this.template = template;
-        this.queue = queue;
+        this.template = rabbitTemplate;
         //Send initial event to create queue
-        GenericEvent event = new GenericEvent("InitQueue", "queueName", queue.getName());
-        this.template.convertAndSend(queue.getName(), event.getMessage());
+        GenericEvent event = new GenericEvent("InitQueue", "queueName", "catering");
+        this.template.convertAndSend("fanout.exchange.catering", event.getMessage());
     }
 
     public void send(String message) {
-        this.template.convertAndSend(queue.getName(), message);
+        this.template.convertAndSend("fanout.exchange.catering","", message);
     }
 }

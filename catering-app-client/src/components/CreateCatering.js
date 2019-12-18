@@ -12,7 +12,6 @@ import {
 } from "../action_creators/catering";
 import {renderError} from "./ErrorAlert";
 import {baseUrl} from "../utils/api";
-import {func} from "prop-types";
 
 class CreateCatering extends Component {
     constructor(props) {
@@ -326,7 +325,7 @@ function ImageView(props) {
             {imageIds.map((imageId, idx) => (
                 <tr>
                     <td>
-                        <img src={props.createUrlFromImgId(imageId)}/>
+                        <img src={props.createUrlFromImgId(imageId)} width={500} mode='fit'/>
                     </td>
                     <td>
                         <Button color="danger" onClick={() => props.deleteImage(imageId)}>Delete</Button>
