@@ -1,9 +1,10 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql-notification
   labels:
     app: mysql-notification
+    visualize: "true"
 spec:
   replicas: 1
   selector:
@@ -24,13 +25,13 @@ spec:
           value: app
         ports:
         - containerPort: 3306
-          name: mysql
+          name: mysql-notif
         volumeMounts:
         # name must match the volume name below
-        - name: mysql-persistent-storage
+        - name: mysql-persistent-storage-notif
           # mount path within the container
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysql-persistent-storage-notif
         persistentVolumeClaim:
           claimName: mysql-pvc-notification

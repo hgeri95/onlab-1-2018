@@ -6,7 +6,8 @@ metadata:
     app: mysql-rating
 spec:
   ports:
-  - port: 3306
-  - targetPort: 3308
+    - protocol: TCP
+      port: 3308
+      targetPort: 3306
   selector:
     app: mysql-rating
