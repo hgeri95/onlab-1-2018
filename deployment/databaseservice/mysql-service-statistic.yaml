@@ -7,5 +7,6 @@ metadata:
 spec:
   ports:
   - port: 3309
+  - targetPort: 3309
   selector:
     app: mysql-statistic
