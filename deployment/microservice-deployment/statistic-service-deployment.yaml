@@ -15,7 +15,7 @@ spec:
         app: statistic-service
     spec:
       containers:
-          image: eu.gcr.io/cateringunitmonitorproject/statistic-service-build
+        - image: eu.gcr.io/cateringunitmonitorproject/statistic-service-build
           name: statistic-service
           ports:
             - containerPort: 8086
