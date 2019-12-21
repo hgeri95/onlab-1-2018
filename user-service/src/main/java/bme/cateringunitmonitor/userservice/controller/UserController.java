@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -106,8 +107,9 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public List<UserInfoDTO> getUserInfosByUsernames(@Valid UserInfoBulkRequest userInfoBulkRequest) {
-        return userService.getUserInfos(userInfoBulkRequest.getUsernames());
+    public List<UserInfoDTO> getUserInfosByUsernames(String[] userNames) {
+        List<String> userNameCollection = Arrays.asList(userNames);
+        return userService.getUserInfos(userNameCollection);
     }
 
     @Override

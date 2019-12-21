@@ -5,22 +5,24 @@ import {StatusBar} from "react-native-web";
 import API from "../utils/Api";
 
 export default function RecommendationScreen({navigation}) {
+    const [error, setError] = useState("");
     const [caterings, setCaterings] = useState([]);
 
     const loadRecommendations = () => {
-        API.get('/cateringunit/getall')
+        API.get('/rating/recommended')
             .then(res => {
                 console.log(res.data);
                 setCaterings(res.data.cateringUnits);
             }).catch(err => {
             console.log(err);
             setError(err.response.data.message);
-        });//TODO Change to reccommendation call
+        });
     };
 
     useEffect(() => {
         loadRecommendations();
     }, []);
+
 
     return (
         <Content>

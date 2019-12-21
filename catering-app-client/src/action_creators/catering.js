@@ -127,4 +127,14 @@ export const deleteImage = (imageId) => dispatch => {
         .catch(err => {
             console.log(err);
         })
-}
+};
+
+export const sendNotification = (cateringName, notification) => dispatch => {
+    API.put('/notification/email/subscribed/' + cateringName, notification)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+};

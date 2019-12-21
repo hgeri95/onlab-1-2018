@@ -20,5 +20,9 @@
             <groupId>bme.cateringunitmonitor</groupId>
             <artifactId>authentication-service-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>bme.cateringunitmonitor</groupId>
+            <artifactId>catering-unit-api</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -60,12 +60,19 @@ public class UserService {
 
     @PostConstruct
     public void createDefaultAdminUser() throws UserServiceException {
-        create(new UserRequest("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN)));
-        logger.info("\n////////\n////////\nADMIN USER CREATED: admin 12345\n////////\n////////");
-
-        //Create technical user
-        create(new UserRequest("technical", "12345", Collections.singletonList(Role.ROLE_TECHNICAL)));
-        logger.info("\n////////\n////////\nTECHNICAL USER CREATED: technical 12345\n////////\n////////");
+        if (userRepository.findByUsername("admin") != null) {
+            logger.info("\n////////\n////////\nADMIN USER ALREADY EXISTS\n////////\n////////");
+        } else {
+            create(new UserRequest("admin", "12345", Collections.singletonList(Role.ROLE_ADMIN)));
+            logger.info("\n////////\n////////\nADMIN USER CREATED: admin 12345\n////////\n////////");
+        }
+        if (userRepository.findByUsername("technical") != null) {
+            logger.info("\n////////\n////////\nTECHNICAL USER ALREADY EXISTS\n////////\n////////");
+        } else {
+            //Create technical user
+            create(new UserRequest("technical", "12345", Collections.singletonList(Role.ROLE_TECHNICAL)));
+            logger.info("\n////////\n////////\nTECHNICAL USER CREATED: technical 12345\n////////\n////////");
+        }
     }
 
     public UserDTO create(UserRequest userRequest) throws UserServiceException, IllegalArgumentException {

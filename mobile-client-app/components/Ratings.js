@@ -12,7 +12,7 @@ export const Ratings = ({cateringUnitName}) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        API.get('/rating/catering/' + cateringUnitName)
+        API.get('/rating/' + cateringUnitName)
             .then(res => {
                 console.log(res.data);
                 setRatings(res.data);

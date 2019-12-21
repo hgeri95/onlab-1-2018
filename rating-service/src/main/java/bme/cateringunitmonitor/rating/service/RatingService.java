@@ -1,5 +1,8 @@
 package bme.cateringunitmonitor.rating.service;
 
+import bme.cateringunitmonitor.api.dto.CateringUnitDTO;
+import bme.cateringunitmonitor.api.dto.CateringUnitRequest;
+import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.api.remoting.controller.ICateringUnitController;
 import bme.cateringunitmonitor.api.remoting.controller.IUserController;
 import bme.cateringunitmonitor.rating.dao.RatingDAO;
@@ -103,7 +106,15 @@ public class RatingService {
         log.debug("{} ratings deleted", deletedRatings);
     }
 
-    public List<String> getRecommendedCateringsForUser(String username) {
+    public CateringUnitsResponse getRecommended(String username) {
+        List<String> recommendedCateringNames = getRecommendedCateringsForUser(username);
+        CateringUnitsResponse caterings = cateringUnitController.getAll();
+        List<CateringUnitDTO> recommendedCaterings = caterings.getCateringUnits().stream()
+                .filter(c -> recommendedCateringNames.contains(c.getName())).collect(Collectors.toList());
+        return new CateringUnitsResponse(recommendedCaterings);
+    }
+
+    private List<String> getRecommendedCateringsForUser(String username) {
         log.info("Get recommended caterings for user: {}", username);
         List<RatingDAO> likedByUser = ratingRepository.findAllByUsername(username);
         List<String> userRatings = likedByUser.stream().map(RatingDAO::getCateringUnitName)

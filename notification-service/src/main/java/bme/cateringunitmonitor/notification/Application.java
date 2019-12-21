@@ -21,6 +21,6 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
         log.info("Notification Service started!");
-        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);//Hold SecurityContext in async calls!
+        //SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);//Hold SecurityContext in async calls!
     }
 }

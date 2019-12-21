@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import RecommendationScreen from "../screens/RecommendationScreen";
 import NearestScreen from "../screens/NearestScreen";
+import {UserScreen} from "../screens/UserScreen";
 
 const config = Platform.select({
     web: {headerMode: 'screen'},
@@ -70,46 +71,31 @@ NearestStack.navigationOptions = {
 
 NearestStack.path = '';
 
-/*
-const LoginStack = createStackNavigator(
+
+const UserStack = createStackNavigator(
     {
-        Login: LoginScreen,
+        User: UserScreen
     },
     config
 );
 
-LoginStack.navigationOptions = {
-    tabBarLabel: 'Login',
+UserStack.navigationOptions = {
+    tabBarLabel: 'Logout',
     tabBarIcon: ({focused}) => (
         <TabBarIcon
             focused={focused}
-            name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+            name={'md-person'}
         />
-    ),
+    )
 };
 
-LoginStack.path = '';
+UserStack.path = '';
 
-const SettingsStack = createStackNavigator(
-    {
-        Settings: SettingsScreen,
-    },
-    config
-);
-
-SettingsStack.navigationOptions = {
-    tabBarLabel: 'Settings',
-    tabBarIcon: ({focused}) => (
-        <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}/>
-    ),
-};
-
-SettingsStack.path = '';
-*/
 const tabNavigator = createBottomTabNavigator({
     HomeStack,
     RecommendationStack,
     NearestStack,
+    UserStack
 });
 
 tabNavigator.path = '';

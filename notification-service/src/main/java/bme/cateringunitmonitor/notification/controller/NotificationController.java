@@ -23,22 +23,22 @@ public class NotificationController implements INotificationController {
     private NotificationService notificationService;
 
     @Override
-    public CompletableFuture<NotificationResponse> sendMail(@Valid NotificationRequest notificationRequest) {
+    public NotificationResponse sendMail(@Valid NotificationRequest notificationRequest) {
         return notificationService.sendMailForUser(notificationRequest);
     }
 
     @Override
-    public CompletableFuture<NotificationResponse> sendBulkMails(@Valid NotificationBulkRequest notificationRequest) {
+    public NotificationResponse sendBulkMails(@Valid NotificationBulkRequest notificationRequest) {
         return notificationService.sendMailForUsers(notificationRequest);
     }
 
     @Override
-    public CompletableFuture<String> sendDirectMail(@Valid NotificationDirectRequest notificationRequest) {
+    public String sendDirectMail(@Valid NotificationDirectRequest notificationRequest) {
         return notificationService.sendDirectMail(notificationRequest);
     }
 
     @Override
-    public CompletableFuture<NotificationResponse> sendSubscribed(String cateringUnitName, @Valid NotificationSubscribedRequest notificationRequest) {
+    public NotificationResponse sendSubscribed(String cateringUnitName, @Valid NotificationSubscribedRequest notificationRequest) {
         try {
             return notificationService.sendSubscribed(cateringUnitName, notificationRequest);
         } catch (NotificationServiceException ex) {

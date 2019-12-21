@@ -11,7 +11,7 @@ export default function HomeScreen({navigation}) {
     const [error, setError] = useState("");
 
     const loadCaterings = () => {
-        API.get('/cateringunit/getall')
+        API.get('/cateringunit/all')
             .then(res => {
                 console.log(res.data);
                 setCaterings(res.data.cateringUnits);

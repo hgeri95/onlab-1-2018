@@ -1,5 +1,6 @@
 package bme.cateringunitmonitor.rating.controller;
 
+import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.rating.IRatingController;
 import bme.cateringunitmonitor.rating.dto.RatingRequest;
 import bme.cateringunitmonitor.rating.dto.RatingResponse;
@@ -69,8 +70,8 @@ public class RatingController implements IRatingController {
     }
 
     @Override
-    public List<String> getRecommendedCaterings() {
+    public CateringUnitsResponse getRecommendedCaterings() {
         String username = SecurityUtil.getActiveUser();
-        return ratingService.getRecommendedCateringsForUser(username);
+        return ratingService.getRecommended(username);
     }
 }

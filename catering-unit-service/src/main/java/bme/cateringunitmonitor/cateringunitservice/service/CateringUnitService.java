@@ -41,6 +41,7 @@ public class CateringUnitService {
     public List<CateringUnitDTO> getAll() {
         return cateringUnitRepository.findAll().stream()
                 .map(c -> cateringUnitConverter.convertToDTO(c))
+                .sorted(Comparator.comparing(CateringUnitDTO::getName))
                 .collect(Collectors.toList());
     }
 
@@ -63,6 +64,7 @@ public class CateringUnitService {
             }
             CateringUnitDAO updatedCateringUnit = cateringUnitConverter.convertToEntity(cateringUnitRequest);
             updatedCateringUnit.setId(cateringUnitFromDb.get().getId());
+            updatedCateringUnit.setOwner(ownerName);
             CateringUnitDAO savedCateringUnit = cateringUnitRepository.save(updatedCateringUnit);
             log.debug("Catering unit updated with id: {}", id);
             return cateringUnitConverter.convertToDTO(savedCateringUnit);
@@ -120,14 +122,14 @@ public class CateringUnitService {
         List<CateringUnitDAO> cateringsInTolerance = cateringUnitRepository.findAll()
                 .stream().filter(c -> cateringCoordinateIsInTolerance(c, latitude, longitude)).collect(Collectors.toList());
 
-        List<CateringUnitWithDistanceDTO> nearestCaterings =
-                cateringsInTolerance.stream()
-                        .map(c -> new CateringUnitWithDistanceDTO(
-                                c.getId(), c.getName(),
-                                new Address(c.getAddress().getAddress(), c.getAddress().getCoordinate(), c.getAddress().getOtherInformation()),
-                                c.getAddress().getCoordinate().distanceTo(userLocation)))
-                        .filter(c -> c.getDistance() <= distanceInKm)
-                        .sorted(Comparator.comparingDouble(CateringUnitWithDistanceDTO::getDistance)).collect(Collectors.toList());
+        List<CateringUnitWithDistanceDTO> caterings = cateringsInTolerance.stream()
+                .map(c -> new CateringUnitWithDistanceDTO(
+                        c.getId(), c.getName(),
+                        new Address(c.getAddress().getAddress(), c.getAddress().getCoordinate(), c.getAddress().getOtherInformation()),
+                        c.getAddress().getCoordinate().distanceTo(userLocation))).collect(Collectors.toList());
+        log.debug("Caterings: {}", caterings);
+        List<CateringUnitWithDistanceDTO> nearestCaterings = caterings.stream().filter(c -> c.getDistance() <= distanceInKm)
+                .sorted(Comparator.comparingDouble(CateringUnitWithDistanceDTO::getDistance)).collect(Collectors.toList());
 
         log.debug("Nearest caterings result: {}", nearestCaterings);
         return nearestCaterings;
@@ -135,9 +137,9 @@ public class CateringUnitService {
 
     private boolean cateringCoordinateIsInTolerance(CateringUnitDAO catering, double latitude, double longitude) {
         double cateringLatitude = catering.getAddress().getCoordinate().getLatitude();
-        boolean isLatitudeOk = Math.abs(cateringLatitude - latitude) < 5;
+        boolean isLatitudeOk = Math.abs(cateringLatitude - latitude) < 5.0;
         double cateringLongitude = catering.getAddress().getCoordinate().getLongitude();
-        boolean isLongitudeOk = Math.abs(cateringLongitude- longitude) < 5;
+        boolean isLongitudeOk = Math.abs(cateringLongitude- longitude) < 5.0;
 
         return isLatitudeOk && isLongitudeOk;
     }

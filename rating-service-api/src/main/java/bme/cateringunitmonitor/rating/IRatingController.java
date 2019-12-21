@@ -1,6 +1,7 @@
 package bme.cateringunitmonitor.rating;
 
 import bme.cateringunitmonitor.api.Role;
+import bme.cateringunitmonitor.api.dto.CateringUnitsResponse;
 import bme.cateringunitmonitor.feign.FeignConfiguration;
 import bme.cateringunitmonitor.rating.dto.RatingRequest;
 import bme.cateringunitmonitor.rating.dto.RatingResponse;
@@ -35,5 +36,5 @@ public interface IRatingController {
 
     @GetMapping(BASE_PATH + "/recommended")
     @Secured({Role.Values.ROLE_USER, Role.Values.ROLE_ADMIN})
-    public List<String> getRecommendedCaterings();
+    public CateringUnitsResponse getRecommendedCaterings();
 }

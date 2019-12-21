@@ -1,6 +1,5 @@
 package bme.cateringunitmonitor.notification.service;
 
-import bme.cateringunitmonitor.api.dto.UserInfoBulkRequest;
 import bme.cateringunitmonitor.api.dto.UserInfoDTO;
 import bme.cateringunitmonitor.api.remoting.controller.IUserController;
 import bme.cateringunitmonitor.notification.SubscriptionRepository;
@@ -36,8 +35,7 @@ public class NotificationService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
-    @Async
-    public CompletableFuture<NotificationResponse> sendMailForUser(NotificationRequest notificationRequest) {
+    public NotificationResponse sendMailForUser(NotificationRequest notificationRequest) {
         log.debug("Send email notification for user: {}", notificationRequest.getUsername());
 
         UserAuthentication userAuthentication = (UserAuthentication) SecurityContextHolder.getContext().getAuthentication();
@@ -49,16 +47,15 @@ public class NotificationService {
         log.debug("Message to send: {}", message.toString());
         mailSender.send(message);
 
-        return CompletableFuture.completedFuture(
-                new NotificationResponse(Collections.singletonList(notificationRequest.getUsername())));
+        return new NotificationResponse(Collections.singletonList(notificationRequest.getUsername()));
     }
 
-    @Async
-    public CompletableFuture<NotificationResponse> sendMailForUsers(NotificationBulkRequest notificationRequest) {
+    public NotificationResponse sendMailForUsers(NotificationBulkRequest notificationRequest) {
         log.debug("Send email notification for users: {}", notificationRequest.getUsernames());
 
+        String[] userNames = notificationRequest.getUsernames().stream().toArray(String[] :: new);
         List<UserInfoDTO> userinfos = userController
-                .getUserInfosByUsernames(new UserInfoBulkRequest(new ArrayList<>(notificationRequest.getUsernames())));
+                .getUserInfosByUsernames(userNames);
 
         List<String> usernamesToSend = new ArrayList<>(notificationRequest.getUsernames());
         for (UserInfoDTO userInfo : userinfos) {
@@ -72,11 +69,10 @@ public class NotificationService {
         log.warn("The following users has no userinfo: {}", usernamesToSend);
         List<String> usernamesSend = userinfos.stream().map(i -> i.getUsername()).collect(Collectors.toList());
 
-        return CompletableFuture.completedFuture(new NotificationResponse(usernamesSend));
+        return new NotificationResponse(usernamesSend);
     }
 
-    @Async
-    public CompletableFuture<String> sendDirectMail(NotificationDirectRequest notificationRequest) {
+    public String sendDirectMail(NotificationDirectRequest notificationRequest) {
         log.debug("Send email for address: {}", notificationRequest.getEmail());
 
         SimpleMailMessage message = buildMessage(notificationRequest.getEmail(),
@@ -84,7 +80,7 @@ public class NotificationService {
         log.debug("Message to send: {}", message.toString());
         mailSender.send(message);
 
-        return CompletableFuture.completedFuture("Message sent to " + notificationRequest.getEmail() + ".");
+        return "Message sent to " + notificationRequest.getEmail() + ".";
     }
 
     public SubscriptionResponse subscribe(String username, String cateringUnitName) throws NotificationServiceException {
@@ -128,8 +124,7 @@ public class NotificationService {
         }
     }
 
-    @Async
-    public CompletableFuture<NotificationResponse> sendSubscribed(String cateringUnitName, NotificationSubscribedRequest notificationRequest) throws NotificationServiceException {
+    public NotificationResponse sendSubscribed(String cateringUnitName, NotificationSubscribedRequest notificationRequest) throws NotificationServiceException {
         log.info("Send notification for subscribed users for catering: {}", cateringUnitName);
         List<SubscriptionDAO> subscriptions = subscriptionRepository.findAllByCateringUnitName(cateringUnitName);
         if (!subscriptions.isEmpty()) {
@@ -140,8 +135,6 @@ public class NotificationService {
             throw new NotificationServiceException("No subscribed users!");
         }
     }
-
-
 
     private SimpleMailMessage buildMessage(String emailAddress, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();

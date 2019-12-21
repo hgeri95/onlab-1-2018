@@ -13,10 +13,10 @@
     <name>User service</name>
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>bme.cateringunitmonitor</groupId>
             <artifactId>catering-unit-api</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>bme.cateringunitmonitor</groupId>
             <artifactId>user-service-api</artifactId>

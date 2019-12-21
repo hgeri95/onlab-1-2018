@@ -46,9 +46,9 @@ public interface IUserController {
     @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_TECHNICAL, Role.Values.ROLE_OWNER, Role.Values.ROLE_USER})
     public UserInfoDTO getUserInfoByUsername(@PathVariable("username") String username);
 
-    @GetMapping(BASE_PATH + "/userinfo/bulk")
+    @GetMapping(BASE_PATH + "/userinfo/bulk/{userNames}")
     @Secured({Role.Values.ROLE_ADMIN, Role.Values.ROLE_TECHNICAL, Role.Values.ROLE_OWNER, Role.Values.ROLE_USER})
-    public List<UserInfoDTO> getUserInfosByUsernames(@RequestBody @Valid UserInfoBulkRequest userInfoBulkRequest);
+    public List<UserInfoDTO> getUserInfosByUsernames(@PathVariable("userNames") String[] userNames);
 
     @GetMapping(BASE_PATH + "/exists/{userName}")
     public Boolean checkUserExists(@PathVariable("userName") String username);

@@ -61,7 +61,7 @@ public class SearchServiceTest {
     @Test
     public void testSearchWithNotCompletedTerm() {
         List<CateringUnitDTO> result = searchService.search("burg*");
-        assertEquals(1, result.size());
+        assertEquals(2, result.size());
     }
 
     private void uploadCateringUnits() throws CateringUnitServiceException {

@@ -19,7 +19,13 @@ export const AuthReducer = (state, action) => {
             role: action.payload.role
           };
       case Constants.LOGOUT:
-          return state;
+          return {
+              ...state,
+              isAuthenticated: false,
+              username: null,
+              refreshToken: null,
+              role: null
+          };
       case Constants.ERROR:
           return {
               ...state,

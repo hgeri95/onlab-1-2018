@@ -1,0 +1,1413 @@
+{
+	"info": {
+		"_postman_id": "df5795ab-ad2f-db08-1cd4-5b9f7511f1dc",
+		"name": "Catering-Unit",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign-Up User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "409dd6ae-511e-41bf-91bf-35568b054029",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"johnd\",\r\n  \"password\": \"12345\",\r\n  \"roles\": [\r\n\t\t\"ROLE_USER\"\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/users/sign-up",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-Up Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "409dd6ae-511e-41bf-91bf-35568b054029",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"owner\",\r\n  \"password\": \"12345\",\r\n  \"roles\": [\r\n\t\t\"ROLE_OWNER\"\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/users/sign-up",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "151ac3ca-16ea-4059-b840-e60fb525d9d0",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.accessToken);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"12345\",\n\t\"username\": \"owner\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/authenticate/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authenticate",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set UserInfo Badly",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d72a6b7f-2df6-4ffb-80b1-567ec9d40ae7",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"city\": \"Budapest\",\r\n  \"birthDate\": \"2018-04-12T22:53:00.733Z\",\r\n  \"email\": \"aa.com\",\r\n  \"fullName\": \"John Daniel\",\r\n  \"gender\": \"MALE\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/users/userinfo",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set UserInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "547790bc-6b0b-474d-88b9-a50454049db5",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"city\": \"Budapest\",\r\n  \"birthDate\": \"2018-04-12T22:53:00.733Z\",\r\n  \"email\": \"o@o.com\",\r\n  \"fullName\": \"Owner Johny\",\r\n  \"gender\": \"MALE\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/users/userinfo",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get UserInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9c8308fa-2e7d-4e97-8bfe-4ec136c259b0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/users/userinfo",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update UserInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eba88744-bbad-42b7-88c5-59e0a89041ef",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"city\": \"Győr\",\r\n  \"birthDate\": \"2018-04-12T22:53:00.733Z\",\r\n  \"email\": \"o@o.com\",\r\n  \"fullName\": \"Owner Johny\",\r\n  \"gender\": \"MALE\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/users/userinfo",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Updated UserInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1c6428aa-0fc0-4639-97e6-a7a612c8be0b",
+						"exec": [
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.city).to.eql(\"Győr\");",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/users/userinfo",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Owned Caterings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "811642f7-9b6a-4eed-bda9-68c41398ff80",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.cateringUnits).to.eql([]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/cateringunit/owned",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"owned"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Invalid Catering",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3a334ec8-0ecd-48f0-8e4d-1b96a9ea714a",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"address\": {\r\n    \"country\": \"Hun\",\r\n    \"number\": 12,\r\n    \"otherInformation\":\"\",\r\n    \"street\": \"Magyar tudósok\"\r\n  },\r\n  \"categoryParameters\": [\r\n    {\r\n      \"key\": \"Size\",\r\n      \"value\": \"102\"\r\n    }\r\n  ],\r\n  \"description\": \"Best pub\",\r\n  \"name\": \"ASD pub\",\r\n  \"openingHours\": [\r\n    {\r\n      \"close\": \"20:00\",\r\n      \"open\": \"16:00\",\r\n      \"weekDay\": \"MONDAY\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/cateringunit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Catering",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7b032358-f605-4afc-b500-6042d33e1d76",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"address\": {\r\n    \"address\": \"Andrássy street 6.\",\r\n    \"coordinate\": {\r\n      \"latitude\": 0,\r\n      \"longitude\": 0\r\n    },\r\n    \"otherInformation\": \"Entrance in back\"\r\n  },\r\n  \"categoryParameters\": [\r\n    {\r\n      \"key\": \"type\",\r\n      \"value\": \"retaurant\"\r\n    }\r\n  ],\r\n  \"description\": \"Best in the town\",\r\n  \"name\": \"McDonalds\",\r\n  \"openingHours\": [\r\n    {\r\n      \"close\": \"12:00\",\r\n      \"open\": \"14:00\",\r\n      \"weekDay\": \"MONDAY\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/cateringunit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Owned Caterings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "811642f7-9b6a-4eed-bda9-68c41398ff80",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.cateringUnits[0].name).to.eql(\"McDonalds\");",
+							"    pm.expect(jsonData.cateringUnits[0].description).to.eql(\"Best in the town\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/cateringunit/owned",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"owned"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Cateringunit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c5497b8c-99bd-4bd0-9822-bc1d6459bcb0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n            \"name\": \"McDonalds\",\r\n            \"description\": \"Updated description\",\r\n            \"openingHours\": [\r\n                {\r\n                    \"weekDay\": \"MONDAY\",\r\n                    \"open\": \"14:00\",\r\n                    \"close\": \"12:00\"\r\n                }\r\n            ],\r\n            \"address\": {\r\n                \"address\": \"Andrássy street 6.\",\r\n                \"coordinate\": {\r\n                    \"latitude\": 0.0,\r\n                    \"longitude\": 0.0\r\n                },\r\n                \"otherInformation\": \"Entrance in back\"\r\n            },\r\n            \"categoryParameters\": [\r\n                {\r\n                    \"key\": \"type\",\r\n                    \"value\": \"retaurant\"\r\n                }\r\n            ]\r\n        }"
+				},
+				"url": {
+					"raw": "{{url}}/cateringunit/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Updated Catering",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "454d1a4b-f1a3-4a47-8e88-e589041e6afb",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.eql(\"McDonalds\");",
+							"    pm.expect(jsonData.description).to.eql(\"Updated description\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/cateringunit/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "719ee568-fc57-4c45-af41-65b275136eff",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.accessToken);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"12345\",\n\t\"username\": \"johnd\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/authenticate/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authenticate",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set UserInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5baa4e8b-3f77-4a6c-be3d-d60b306c7757",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"city\": \"Budapest\",\r\n  \"birthDate\": \"2018-04-12T22:53:00.733Z\",\r\n  \"email\": \"a@a.com\",\r\n  \"fullName\": \"John Daniel\",\r\n  \"gender\": \"MALE\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/users/userinfo",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Caterings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.cateringUnits[0].name).to.eql(\"McDonalds\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/cateringunit/all",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Catering",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.eql(\"McDonalds\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/cateringunit/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Catering",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].name).to.eql(\"McDonalds\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/cateringunit/search/?term=\"McDonalds\"",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"search",
+						""
+					],
+					"query": [
+						{
+							"key": "term",
+							"value": "\"McDonalds\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rate Catering",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cateringUnitName\": \"McDonalds\",\r\n  \"comment\": \"Great place\",\r\n  \"rate\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/rating/rate",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"rating",
+						"rate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Catering Rating",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.rate).to.eql(4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cateringUnitName\": \"McDonalds\",\r\n  \"comment\": \"Great place\",\r\n  \"rate\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/rating/rate",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"rating",
+						"rate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Rating",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].rate).to.eql(4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/rating/McDonalds",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"rating",
+						"McDonalds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subscribe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/notification/subscribe/McDonalds",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"notification",
+						"subscribe",
+						"McDonalds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check subscription",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/notification/isSubscribed/McDonalds",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"notification",
+						"isSubscribed",
+						"McDonalds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "151ac3ca-16ea-4059-b840-e60fb525d9d0",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.accessToken);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"12345\",\n\t\"username\": \"owner\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/authenticate/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authenticate",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send notification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "151ac3ca-16ea-4059-b840-e60fb525d9d0",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.accessToken);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"message\": \"Hello world!\",\r\n  \"subject\": \"hi\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/notification/email/subscribed/McDonalds",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"notification",
+						"email",
+						"subscribed",
+						"McDonalds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.accessToken);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"12345\",\n\t\"username\": \"admin\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/authenticate/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authenticate",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Catering",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/cateringunit/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "719ee568-fc57-4c45-af41-65b275136eff",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.accessToken);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"12345\",\n\t\"username\": \"johnd\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/authenticate/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authenticate",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Caterings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "382e9d19-b891-4768-a836-04b7cd22687d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.cateringUnits).to.eql([]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/cateringunit/all",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"cateringunit",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a47e7e60-6111-406e-9854-9300de5f4008",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/authenticate/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"authenticate",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

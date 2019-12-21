@@ -18,21 +18,21 @@ public interface INotificationController {
 
     @PostMapping(BASE_PATH + "/email")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_TECHNICAL})
-    public CompletableFuture<NotificationResponse> sendMail(
+    public NotificationResponse sendMail(
             @RequestBody @Valid NotificationRequest notificationRequest);
 
     @PostMapping(BASE_PATH + "/email/bulk")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_TECHNICAL})
-    public CompletableFuture<NotificationResponse> sendBulkMails(
+    public NotificationResponse sendBulkMails(
             @RequestBody @Valid NotificationBulkRequest notificationRequest);
 
     @PostMapping(BASE_PATH + "/email/direct")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_USER, Role.Values.ROLE_TECHNICAL})
-    public CompletableFuture<String> sendDirectMail(@RequestBody @Valid NotificationDirectRequest notificationRequest);
+    public String sendDirectMail(@RequestBody @Valid NotificationDirectRequest notificationRequest);
 
-    @PostMapping(BASE_PATH + "/email/subscribed/{cateringUnitName}")
+    @PutMapping(BASE_PATH + "/email/subscribed/{cateringUnitName}")
     @Secured({Role.Values.ROLE_OWNER, Role.Values.ROLE_ADMIN, Role.Values.ROLE_TECHNICAL})
-    public CompletableFuture<NotificationResponse> sendSubscribed(@PathVariable("cateringUnitName") String cateringUnitName,
+    public NotificationResponse sendSubscribed(@PathVariable("cateringUnitName") String cateringUnitName,
     @RequestBody @Valid NotificationSubscribedRequest notificationRequest);
 
     @PutMapping(BASE_PATH + "/subscribe/{cateringUnitName}")

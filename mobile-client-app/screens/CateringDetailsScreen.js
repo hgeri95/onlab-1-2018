@@ -20,7 +20,7 @@ export const CateringDetailsScreen = ({navigation}) => {
         const id = navigation.getParam('id', "");
         const name = navigation.getParam('name', "");
         if (id !== "")
-            API.get('/cateringunit/get/' + id)
+            API.get('/cateringunit/' + id)
                 .then(res => {
                     console.log(res.data);
                     setCatering(res.data);

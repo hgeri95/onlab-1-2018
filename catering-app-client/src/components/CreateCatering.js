@@ -6,47 +6,53 @@ import {
     createCateringUnit,
     deleteCateringUnit, deleteImage,
     getCateringUnit,
-    getImageIds,
+    getImageIds, sendNotification,
     updateCateringUnit,
     uploadImage
 } from "../action_creators/catering";
 import {renderError} from "./ErrorAlert";
 import {baseUrl} from "../utils/api";
 
+const defaultState = () =>  ({
+    cateringUnit: {
+        name: "",
+        description: "",
+        openingHours: [
+            {
+                weekDay: "",
+                open: "",
+                close: ""
+            }
+        ],
+        address: {
+            address: "",
+            coordinate: {
+                latitude: 0,
+                longitude: 0
+            },
+            otherInformation: ""
+        },
+        categoryParameters: [
+            {
+                key: "",
+                value: ""
+            }
+        ]
+    },
+    selectedFile: null,
+    imageIds: [],
+    notification: {
+        subject: "",
+        message: ""
+    },
+    errorMessage: ""
+});
+
 class CreateCatering extends Component {
+
     constructor(props) {
         super(props);
-
-        this.state = {
-            cateringUnit: {
-                name: "",
-                description: "",
-                openingHours: [
-                    {
-                        weekDay: "",
-                        open: "",
-                        close: ""
-                    }
-                ],
-                address: {
-                    address: "",
-                    coordinate: {
-                        latitude: 0,
-                        longitude: 0
-                    },
-                    otherInformation: ""
-                },
-                categoryParameters: [
-                    {
-                        key: "",
-                        value: ""
-                    }
-                ]
-            },
-            selectedFile: null,
-            imageIds: [],
-            errorMessage: ""
-        };
+        this.state = { ...defaultState()};
 
         this.handleChange = this.handleChange.bind(this);
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -59,12 +65,20 @@ class CreateCatering extends Component {
         this.deleteOpeningHour = this.deleteOpeningHour.bind(this);
         this.deleteCategoryParameter = this.deleteCategoryParameter.bind(this);
         this.handleCoordinateChange = this.handleCoordinateChange.bind(this);
+        this.handleNotificationChange = this.handleNotificationChange.bind(this);
+        this.refreshImages = this.refreshImages.bind(this);
     }
 
     handleChange(event) {
         let cateringUnit = {...this.state.cateringUnit};
         cateringUnit[event.target.name] = event.target.value;
         this.setState({cateringUnit});
+    }
+
+    handleNotificationChange(event) {
+        let notification = {...this.state.notification};
+        notification[event.target.name] = event.target.value;
+        this.setState({notification});
     }
 
     handleAddressChange(event) {
@@ -128,7 +142,6 @@ class CreateCatering extends Component {
     };
 
     handleSubmit = event => {
-        event.preventDefault();
         let cateringUnit = this.state.cateringUnit;
         let id = this.props.match.params.id;
         if (typeof id !== "undefined") {
@@ -136,6 +149,17 @@ class CreateCatering extends Component {
         } else {
             this.props.createCateringUnit(cateringUnit);
         }
+        this.props.history.push("/list-all-catering");
+        event.preventDefault();
+    };
+
+    sendNotification = event => {
+      let notification = this.state.notification;
+      let cateringName = this.state.cateringUnit.name;
+
+      this.props.sendNotification(cateringName, notification);
+      this.setState({notification: {subject: "", message: ""}});
+      event.preventDefault();
     };
 
     componentWillReceiveProps(nextProps) {
@@ -155,6 +179,10 @@ class CreateCatering extends Component {
         this.props.getImageIds(cateringName);
     }
 
+    refreshImages() {
+        this.getImages(this.state.cateringUnit.name);
+    }
+
     createUrlFromImgId(id) {
         return baseUrl + '/api/v1/cateringunit/image/download/' + id;
     }
@@ -169,6 +197,8 @@ class CreateCatering extends Component {
         let id = this.props.match.params.id;
         if (typeof id !== "undefined") {
             this.props.getCateringUnit(id);
+        } else {
+            this.setState({...defaultState()});
         }
     }
 
@@ -179,6 +209,7 @@ class CreateCatering extends Component {
 
     uploadHandler = () => {
         this.props.uploadImage(this.state.selectedFile, this.state.cateringUnit.name);
+        this.getImages(this.state.cateringUnit.name);
     };
 
     render() {
@@ -308,8 +339,8 @@ class CreateCatering extends Component {
                 </Container>
                 {isDefined && <ImageView imageIds={this.state.imageIds} fileChangedHandler={this.fileChangedHandler}
                                          uploadHandler={this.uploadHandler} createUrlFromImgId={this.createUrlFromImgId}
-                                         deleteImage={this.props.deleteImage}/>}
-                {isDefined && <NotificationView/>}
+                                         deleteImage={this.props.deleteImage} refreshImages={this.refreshImages}/>}
+                {isDefined && <NotificationView sendNotification={this.sendNotification} handleNotificationChange={this.handleNotificationChange} notification={this.state.notification}/>}
             </div>
         );
     }
@@ -335,18 +366,22 @@ function ImageView(props) {
             </tbody>
         </Table>
         <Input type="file" onChange={props.fileChangedHandler}/>
-        <Button onClick={props.uploadHandler}>Upload</Button>
+        <br/>
+        <Button onClick={props.uploadHandler}>Upload</Button>&nbsp;&nbsp;&nbsp;
+        <Button onClick={props.refreshImages}>Refresh</Button>
     </Container>;
 }
 
 function NotificationView(props) {
     return <Container>
         <br/>
-        <Form>
+        <Form onSubmit={props.sendNotification}>
             <h1>Notification sending</h1>
             <FormGroup>
+                <Label for="subject">Notification subject</Label>
+                <Input type="text" name="subject" id="subject" onChange={props.handleNotificationChange} value={props.notification.subject}/>
                 <Label for="message">Notification message</Label>
-                <Input type="textarea" name="message" id="message"/>
+                <Input type="textarea" name="message" id="message" onChange={props.handleNotificationChange} value={props.notification.message}/>
             </FormGroup>
             <FormGroup>
                 <Button color="info">Send</Button>
@@ -367,5 +402,6 @@ export default connect(mapStateToProps, {
     updateCateringUnit,
     uploadImage,
     getImageIds,
-    deleteImage
+    deleteImage,
+    sendNotification
 })(CreateCatering)

@@ -18,10 +18,35 @@ export const authenticate = (data, dispatch) => {
         });
 };
 
+export const logout = (navigation, dispatch) => {
+    console.log("Logout");
+    API.post('/authenticate/logout')
+        .then(res => {
+            console.log(res.data);
+            unsetLocalStorage()
+            dispatch({type: Constants.LOGOUT, payload: res});
+            navigation.navigate('Login');
+        })
+        .catch(err => {
+            console.log(err.response);
+            unsetLocalStorage()
+            dispatch({type: Constants.LOGOUT, payload: err});
+            navigation.navigate('Login');
+        });
+};
+
 export const setLocalStorage = (accessToken, refreshToken, loggedInUser, role) => {
     localStorage.setItem(Constants.JWTTOKEN, accessToken);
     localStorage.setItem(Constants.REFRESHTOKEN, refreshToken);
     localStorage.setItem(Constants.USERNAME, loggedInUser);
     localStorage.setItem(Constants.ROLES, role);
+};
+
+
+const unsetLocalStorage = () => {
+    localStorage.removeItem(Constants.JWTTOKEN);
+    localStorage.removeItem(Constants.REFRESHTOKEN);
+    localStorage.removeItem(Constants.USERNAME);
+    localStorage.removeItem(Constants.ROLES);
 };
 
