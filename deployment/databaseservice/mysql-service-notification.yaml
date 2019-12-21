@@ -6,7 +6,8 @@ metadata:
     app: mysql-notification
 spec:
   ports:
-  - port: 3306
-  - targetPort: 3307
+    - protocol: TCP
+      port: 3307
+      targetPort: 3306
   selector:
     app: mysql-notification

@@ -1,9 +1,10 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql-catering
   labels:
     app: mysql-catering
+    visualize: "true"
 spec:
   replicas: 1
   selector:
@@ -24,7 +25,7 @@ spec:
           value: app
         ports:
         - containerPort: 3306
-          name: mysql
+          name: mysql-catering
         volumeMounts:
         # name must match the volume name below
         - name: mysql-persistent-storage

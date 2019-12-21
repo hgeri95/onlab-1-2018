@@ -26,6 +26,8 @@ spec:
           value: http://notification-service:8084
         - name: ratingServiceUrl
           value: http://rating-service:8085
+        - name: statisticServiceUrl
+          value: http://statistic-service:8086
         image: eu.gcr.io/cateringunitmonitorproject/api-gateway-service-build
         name: gateway-service
         ports:
