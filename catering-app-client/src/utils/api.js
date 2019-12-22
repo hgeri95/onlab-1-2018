@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {authConstants} from "../constants/actionTypes";
 
-export const baseUrl = 'http://gateway-service:8080';
+export const baseUrl = 'http://localhost:8080';
 
 const instance = axios.create({
     baseURL: baseUrl + '/api/v1',
