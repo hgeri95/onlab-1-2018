@@ -21,7 +21,7 @@ spec:
         - name: smtpPort
           value: "25"
         - name: smtpUrl
-          value: fakesmtp
+          value: fakesmtp-service
         - name: userServiceUrl
           value: http://user-service:8081
         image: eu.gcr.io/cateringunitmonitorproject/notification-service-build

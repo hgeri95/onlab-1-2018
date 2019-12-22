@@ -15,7 +15,7 @@ spec:
         app: catering-ui
     spec:
       containers:
-      - image: eu.gcr.io/cateringunitmonitor/catering-ui
+      - image: eu.gcr.io/cateringunitmonitorproject/catering-ui
         name: catering-ui
         ports:
         - name: http
